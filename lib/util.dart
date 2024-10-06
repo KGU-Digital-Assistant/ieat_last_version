@@ -7,8 +7,6 @@ import 'package:ieat/provider.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:intl/intl.dart';
 
-
-
 String today = getCurrentDateAsString();
 String todayStrkr = getCurrentDateAsStringkr();
 var dio = Dio();

@@ -69,7 +69,7 @@ class Ieat extends StatefulWidget {
 class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
   late List<Widget> _userpages;
   bool isLoading = false;
-  String initialRouteStr = "login";
+  String initialRouteStr = "home";
 
   //바텀바
   final _userNavigatorKeyList =
@@ -80,9 +80,9 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     loginTest();
-    _userpages = [const Home_Sf(),const Placeholder(), const TrackSf()];  //MealMain_Sf  TrackSf
+    _userpages = [const Home_Sf(),const Moose(), const TrackSf()];  //MealMain_Sf  TrackSf
   }
-
+//
   // 인스턴스 생성
   final storage = const FlutterSecureStorage();
 
@@ -158,11 +158,12 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
           '/': (context) => const Init_Sf(),
           '/login': (context) => const loginMain_Sf(),
           '/home': (context) => WillPopScope(
-                onWillPop: () async {
-                  return !(await _userNavigatorKeyList[_currentIndex]
-                      .currentState!
-                      .maybePop());
-                },
+            onWillPop: () async {
+              // 각 탭의 내비게이션 상태를 관리하는 기존 로직
+              return !(await _userNavigatorKeyList[_currentIndex]
+                  .currentState!
+                  .maybePop());
+            },
                 child: DefaultTabController(
                   length: 3,
                   child: Scaffold(

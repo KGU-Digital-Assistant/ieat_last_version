@@ -416,48 +416,101 @@ class _CreateID_1_IdentityChkState extends State<CreateID_1_IdentityChk> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-            child: Container(
-              width: 25,
-              height: 25,
-              child: IconButton(
-                  onPressed: () {
-                    bottomShow(context);
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.chevron_left)),
+    return SingleChildScrollView(
+      child: Scaffold(
+          appBar: AppBar(
+            leading: Padding(
+              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+              child: Container(
+                width: 25,
+                height: 25,
+                child: IconButton(
+                    onPressed: () {
+                      bottomShow(context);
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.chevron_left)),
+              ),
+            ),
+            scrolledUnderElevation: 0,
+            //스크롤 내렸을 때 appbar색상 변경되는 거
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Text(
+              "새로운 ID 생성",
+              style: Text17BoldBlack,
             ),
           ),
-          scrolledUnderElevation: 0,
-          //스크롤 내렸을 때 appbar색상 변경되는 거
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            "새로운 ID 생성",
-            style: Text17BoldBlack,
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(20),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 100,
-                ),
-                Text('휴대폰 번호를 인증해주세요.', style: TextTitle),
-                SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  children: [
+          body: Padding(
+            padding: EdgeInsets.all(20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Text('휴대폰 번호를 인증해주세요.', style: TextTitle),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: getWidthRatioFromScreenSize(context, 0.7),
+                        height: 50,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                          child: TextField(
+                              controller: _phoneController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: ' ex) 010-1234-5678')),
+                        ),
+                      ),
+                      Spacer(),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 13, vertical: 0),
+                          side: BorderSide(width: 1, color: Colors.grey),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          minimumSize: Size(
+                            getWidthRatioFromScreenSize(context, 0.2),
+                            58,
+                          ),
+                        ).copyWith(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent), // overlayColor 설정
+                        ),
+                        onPressed: () {
+                          requestSMSCode(_phoneController.text);
+                        },
+                        child: Text(
+                          '요청',
+                          style: Text17BoldBlack,
+                        ),
+                      )
+                      ,
+                    ],
+                  ),
+                  phoneErrorMessage.isNotEmpty
+                      ? Padding(
+                    padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                    child: Text(phoneErrorMessage,
+                        textAlign: TextAlign.left, style: redAlertText),
+                  )
+                      : SizedBox(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  if (showCodeInput) ...[
                     Container(
-                      width: getWidthRatioFromScreenSize(context, 0.7),
+                      width: getWidthRatioFromScreenSize(context, 1),
                       height: 50,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey, width: 1),
@@ -465,86 +518,35 @@ class _CreateID_1_IdentityChkState extends State<CreateID_1_IdentityChk> {
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
                         child: TextField(
-                            controller: _phoneController,
+                            controller: _codeController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: ' ex) 010-1234-5678')),
+                                hintText: '  인증번호를 입력해주세요.')),
                       ),
                     ),
-                    Spacer(),
-                    OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(horizontal: 13, vertical: 0),
-                        side: BorderSide(width: 1, color: Colors.grey),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        minimumSize: Size(
-                          getWidthRatioFromScreenSize(context, 0.2),
-                          58,
-                        ),
-                      ).copyWith(
-                        overlayColor: MaterialStateProperty.all(Colors.transparent), // overlayColor 설정
-                      ),
-                      onPressed: () {
-                        requestSMSCode(_phoneController.text);
-                      },
-                      child: Text(
-                        '요청',
-                        style: Text17BoldBlack,
-                      ),
+                    Text(verificationErrorMessage,
+                        textAlign: TextAlign.left, style: redAlertText),
+                    SizedBox(
+                      height: 210,
+                    ),
+                    Center(
+                      child: OutlinedButton(
+                          child: Text(
+                            '다음',
+                            style: OutlinedButtonTextSty_1,
+                          ),
+                          style: OutBtnSty,
+                          onPressed: () {
+                            sendSMSCode(
+                                _phoneController.text, _codeController.text);
+                          }),
                     )
-                    ,
-                  ],
-                ),
-                phoneErrorMessage.isNotEmpty
-                    ? Padding(
-                  padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                  child: Text(phoneErrorMessage,
-                      textAlign: TextAlign.left, style: redAlertText),
-                )
-                    : SizedBox(),
-                SizedBox(
-                  height: 30,
-                ),
-                if (showCodeInput) ...[
-                  Container(
-                    width: getWidthRatioFromScreenSize(context, 1),
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey, width: 1),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
-                      child: TextField(
-                          controller: _codeController,
-                          decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '  인증번호를 입력해주세요.')),
-                    ),
-                  ),
-                  Text(verificationErrorMessage,
-                      textAlign: TextAlign.left, style: redAlertText),
-                  SizedBox(
-                    height: 210,
-                  ),
-                  Center(
-                    child: OutlinedButton(
-                        child: Text(
-                          '다음',
-                          style: OutlinedButtonTextSty_1,
-                        ),
-                        style: OutBtnSty,
-                        onPressed: () {
-                          sendSMSCode(
-                              _phoneController.text, _codeController.text);
-                        }),
-                  )
-                ]
-              ],
+                  ]
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 
@@ -560,58 +562,60 @@ class CreateID_2_Agree extends StatefulWidget {
 class _CreateID_2_Agree extends State<CreateID_2_Agree> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: EdgeInsets.all(20),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 100,
-                ),
-                Text(
-                  '이용약관에 대한 동의가 필요해요.',
-                  style: TextTitle,
-                ),
-                Text(
-                  '전체 동의',
-                  style: TextStyle(fontSize: 15),
-                ),
-                Text(
-                    '------------------------------------------------------------------------------------------------------------'),
-                SizedBox(
-                  height: 200,
-                ),
-                Center(
-                  child: OutlinedButton(
-                      child: Text(
-                        '다음',
-                        style: OutlinedButtonTextSty_1,
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                            getWidthRatioFromScreenSize(context, 0.42),
-                            vertical: 27),
-                        side: BorderSide(width: 1, color: Colors.black),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                      ),
-                      onPressed: () {
-                        print(widget.phoneNumber);
-                        NvgToNxtPage(
-                            context,
-                            CreateID_3_signinfo(
-                                phoneNumber: widget.phoneNumber));
-                      }),
-                )
-              ],
+    return SingleChildScrollView(
+      child: Scaffold(
+          appBar: AppBar(),
+          body: Padding(
+            padding: EdgeInsets.all(20),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Text(
+                    '이용약관에 대한 동의가 필요해요.',
+                    style: TextTitle,
+                  ),
+                  Text(
+                    '전체 동의',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Text(
+                      '------------------------------------------------------------------------------------------------------------'),
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Center(
+                    child: OutlinedButton(
+                        child: Text(
+                          '다음',
+                          style: OutlinedButtonTextSty_1,
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                              getWidthRatioFromScreenSize(context, 0.42),
+                              vertical: 27),
+                          side: BorderSide(width: 1, color: Colors.black),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0)),
+                        ),
+                        onPressed: () {
+                          print(widget.phoneNumber);
+                          NvgToNxtPage(
+                              context,
+                              CreateID_3_signinfo(
+                                  phoneNumber: widget.phoneNumber));
+                        }),
+                  )
+                ],
+              ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 
@@ -910,251 +914,253 @@ class _CreateID_3_signinfoState extends State<CreateID_3_signinfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Form(
-                    key: _uCreKey,
-                    child: SingleChildScrollView(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text('가입정보를 입력해주세요.', style: TextTitle),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text('아이디'),
-                            Container(
-                                width: double.maxFinite,
-                                height: 50,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: getWidthRatioFromScreenSize(
-                                          context, 0.65),
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey, width: 1),
-                                          borderRadius:
-                                          BorderRadius.circular(10)),
-                                      child: Padding(
-                                        padding:
-                                        EdgeInsets.fromLTRB(13, 0, 0, 0),
-                                        child: TextFormField(
-                                            controller: _idCtr,
-                                            decoration: InputDecoration(
-                                                border: InputBorder.none,
-                                                hintText: ' 사용하실 아이디'),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.isEmpty) {
-                                                return '아이디를 입력해주세요';
-                                              }
-                                              // 정규 표현식으로 아이디 유효성 검사
-                                              String pattern =
-                                                  r'^[a-zA-Z0-9@_-]+$';
-                                              RegExp regex = RegExp(pattern);
-                                              if (!regex.hasMatch(value)) {
-                                                return '아이디는 대소문자, 숫자, @, _, - 만 사용 가능합니다.';
-                                              }
-                                              return null;
-                                            }),
-                                      ),
-                                    ),
-                                    Spacer(),
-                                    OutlinedButton(
-                                        onPressed: getusername_GET,
-                                        child: Text(
-                                          '중복확인',
-                                          style: Text17BoldBlack,
+    return SingleChildScrollView(
+      child: Scaffold(
+          appBar: AppBar(),
+          body: Padding(
+              padding: EdgeInsets.all(20),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Form(
+                      key: _uCreKey,
+                      child: SingleChildScrollView(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text('가입정보를 입력해주세요.', style: TextTitle),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text('아이디'),
+                              Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: getWidthRatioFromScreenSize(
+                                            context, 0.65),
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                            borderRadius:
+                                            BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding:
+                                          EdgeInsets.fromLTRB(13, 0, 0, 0),
+                                          child: TextFormField(
+                                              controller: _idCtr,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: ' 사용하실 아이디'),
+                                              validator: (value) {
+                                                if (value == null ||
+                                                    value.isEmpty) {
+                                                  return '아이디를 입력해주세요';
+                                                }
+                                                // 정규 표현식으로 아이디 유효성 검사
+                                                String pattern =
+                                                    r'^[a-zA-Z0-9@_-]+$';
+                                                RegExp regex = RegExp(pattern);
+                                                if (!regex.hasMatch(value)) {
+                                                  return '아이디는 대소문자, 숫자, @, _, - 만 사용 가능합니다.';
+                                                }
+                                                return null;
+                                              }),
                                         ),
-                                        style: OutlinedButton.styleFrom(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 13, vertical: 0),
-                                            side: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                BorderRadius.circular(10)),
-                                            minimumSize: Size(
-                                                getWidthRatioFromScreenSize(
-                                                    context, 0.25),
-                                                58))),
-                                  ],
-                                )),
-                            usernameErrorMessage == '' ? SizedBox(height: 5,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(usernameErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text('닉네임'),
-                            Container(
+                                      ),
+                                      Spacer(),
+                                      OutlinedButton(
+                                          onPressed: getusername_GET,
+                                          child: Text(
+                                            '중복확인',
+                                            style: Text17BoldBlack,
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 13, vertical: 0),
+                                              side: BorderSide(
+                                                  width: 1, color: Colors.grey),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(10)),
+                                              minimumSize: Size(
+                                                  getWidthRatioFromScreenSize(
+                                                      context, 0.25),
+                                                  58))),
+                                    ],
+                                  )),
+                              usernameErrorMessage == '' ? SizedBox(height: 5,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(usernameErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text('닉네임'),
+                              Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    border:
+                                    Border.all(color: Colors.grey, width: 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                                    child: TextFormField(
+                                        controller: _nnmCtr,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: ' ex. 복숭아엎드려납작'),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '닉네임을 입력해주세요';
+                                          }
+                                          return null;
+                                        }),
+                                  )),
+                              nicknameErrorMessage == '' ? SizedBox(height: 5,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(nicknameErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text('이메일'),
+                              Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                                    child: TextFormField(
+                                        keyboardType: TextInputType.emailAddress,
+                                        controller: _emailCtr,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: ' ex. example@domain.com'),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '이메일을 입력해주세요';
+                                          }
+                                          // 이메일 형식 유효성 검사
+                                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                              .hasMatch(value)) {
+                                            return '이메일 형식을 맞춰주세요';
+                                          }
+                                          return null;
+                                        }),
+                                  )),
+                              emailErrorMessage == '' ? SizedBox(height: 5,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(emailErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text('비밀번호'),
+                              Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                                    child: TextFormField(
+                                        obscureText: true,
+                                        controller: _pwdCtr,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: ' 영문,숫자,특수문자 혼합 10자 이상'),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '비밀번호를 입력해주세요';
+                                          }
+                                          // 정규 표현식으로 비밀번호 유효성 검사
+                                          String pattern =
+                                              r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$&*~]).{10,}$';
+                                          RegExp regex = RegExp(pattern);
+                                          if (!regex.hasMatch(value)) {
+                                            return '비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.';
+                                          }
+                                          return null;
+                                        }),
+                                  )),
+                              passwordErrorMessage == '' ? SizedBox(height: 5,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(passwordErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              Container(
                                 width: double.maxFinite,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  border:
-                                  Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
-                                  child: TextFormField(
-                                      controller: _nnmCtr,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: ' ex. 복숭아엎드려납작'),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return '닉네임을 입력해주세요';
-                                        }
-                                        return null;
-                                      }),
-                                )),
-                            nicknameErrorMessage == '' ? SizedBox(height: 5,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(nicknameErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text('이메일'),
-                            Container(
-                                width: double.maxFinite,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
-                                  child: TextFormField(
-                                      keyboardType: TextInputType.emailAddress,
-                                      controller: _emailCtr,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: ' ex. example@domain.com'),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return '이메일을 입력해주세요';
-                                        }
-                                        // 이메일 형식 유효성 검사
-                                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                                            .hasMatch(value)) {
-                                          return '이메일 형식을 맞춰주세요';
-                                        }
-                                        return null;
-                                      }),
-                                )),
-                            emailErrorMessage == '' ? SizedBox(height: 5,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(emailErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text('비밀번호'),
-                            Container(
-                                width: double.maxFinite,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
+                                    border:
+                                    Border.all(color: Colors.grey, width: 1),
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
                                   child: TextFormField(
                                       obscureText: true,
-                                      controller: _pwdCtr,
+                                      controller: _pwdReCtr,
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: ' 영문,숫자,특수문자 혼합 10자 이상'),
+                                          hintText: ' 비밀번호 재입력'),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return '비밀번호를 입력해주세요';
                                         }
-                                        // 정규 표현식으로 비밀번호 유효성 검사
-                                        String pattern =
-                                            r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#\$&*~]).{10,}$';
-                                        RegExp regex = RegExp(pattern);
-                                        if (!regex.hasMatch(value)) {
-                                          return '비밀번호는 영문, 숫자, 특수문자를 포함하여 10자 이상이어야 합니다.';
-                                        }
                                         return null;
                                       }),
-                                )),
-                            passwordErrorMessage == '' ? SizedBox(height: 5,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(passwordErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            Container(
-                              width: double.maxFinite,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  border:
-                                  Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
-                                child: TextFormField(
-                                    obscureText: true,
-                                    controller: _pwdReCtr,
-                                    decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: ' 비밀번호 재입력'),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '비밀번호를 입력해주세요';
-                                      }
-                                      return null;
-                                    }),
+                                ),
                               ),
-                            ),
-                            generalErrorMessage == '' ? SizedBox(height: 5,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(generalErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            cellphoneErrorMessage == '' ? SizedBox(height: 30,)
-                                :Padding(
-                              padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                              child: Text(cellphoneErrorMessage,
-                                  textAlign: TextAlign.left,
-                                  style: redAlertText),
-                            ),
-                            Center(
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    print('회원가입 함수 호출');
-                                    await _createID();
-                                  },
-                                  child: Text(
-                                    '가입하기',
-                                    style: Text17BoldBlack,
-                                  ),
-                                  style: OutBtnSty,
-                                ))
-                          ]),
-                    )))));
+                              generalErrorMessage == '' ? SizedBox(height: 5,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(generalErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              cellphoneErrorMessage == '' ? SizedBox(height: 30,)
+                                  :Padding(
+                                padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                                child: Text(cellphoneErrorMessage,
+                                    textAlign: TextAlign.left,
+                                    style: redAlertText),
+                              ),
+                              Center(
+                                  child: OutlinedButton(
+                                    onPressed: () async {
+                                      print('회원가입 함수 호출');
+                                      await _createID();
+                                    },
+                                    child: Text(
+                                      '가입하기',
+                                      style: Text17BoldBlack,
+                                    ),
+                                    style: OutBtnSty,
+                                  ))
+                            ]),
+                      ))))),
+    );
   }
 }
 

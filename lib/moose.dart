@@ -1,289 +1,18 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ieat/init.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'constants.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:ui';
-import 'package:file_picker/file_picker.dart';
+import 'dart:ui' as ui;
 
-class MooseSelectImg_Sf extends StatefulWidget {
-  const MooseSelectImg_Sf({super.key});
+/**
+ * loadingMoose() : 사진 촬영 후 로딩 화면(he 500)
+ * Moose() : 무스 화면 총체[Camera(),SearchMeal()]
+ * */
 
-  @override
-  State<MooseSelectImg_Sf> createState() => _MooseSelectImg_SfState();
-}
-
-class _MooseSelectImg_SfState extends State<MooseSelectImg_Sf> {
-  Map<String, dynamic> res = {};
-  PlatformFile? filePath = null;
-
-  int statusCode = 0;
-
-
-
-  Future<void> readFile(File file) async {
-    final contents = await file.readAsString();
-    print('File contents: $contents');
-  }
-
-  void _uploadFile() async {
-    String? tk = await getTk();
-    // Loading_Bottom_ALert(context);
-
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile == null) {
-      print('No file selected');
-      return;
-    }
-
-    final file = File(pickedFile.path);
-
-    final uri = Uri.parse('$url/meal_hour/upload_temp');
-    final request = http.MultipartRequest('POST', uri);
-
-    // 파일을 `http.MultipartFile`로 변환
-    final multipartFile = http.MultipartFile(
-      'file',
-      file.readAsBytes().asStream(),
-      await file.length(),
-      filename: file.uri.pathSegments.last,
-      contentType: MediaType('image', 'png'), // MIME 타입 지정
-    );
-
-    request.headers['Authorization'] = 'Bearer $tk';
-    request.headers['accept'] = 'application/json';
-    request.headers['Content-Type'] = 'multipart/form-data';
-    request.files.add(multipartFile);
-
-    try {
-      final response = await request.send();
-      final resFS = await http.Response.fromStream(response);
-
-      setState(() {
-        res = jsonDecode(resFS.body);
-      });
-
-      if (response.statusCode == 200) {
-        Navigator.of(context).pop();
-        print(response);
-        setState(() {
-          statusCode = 200;
-        });
-        print(res);
-        print("File uploaded successfully");
-        Fin_Moose_Bottom_ALert(context, res, false);
-      } else {
-        print("File upload failed: ${response.statusCode}");
-        Fin_Moose_Bottom_ALert(context, res, false);
-      }
-    } catch (e) {
-      print("Error uploading file: $e");
-      Fin_Moose_Bottom_ALert(context, res, false);
-    }
-  }
-
-  Future<void> Loading_Bottom_ALert(BuildContext context) async {
-    // 생성, 수정, 생성실패,수정실패
-    bool _isLoading = true;
-    return showModalBottomSheet<void>(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        if (_isLoading) {
-          return Container(
-              width: double.maxFinite,
-              height: getHeightRatioFromScreenSize(context, 0.7),
-              padding: EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    top: BorderSide(color: Colors.white, width: 2.5), // 위쪽 테두리
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  )),
-              child: Container(
-                  width: getWidthRatioFromScreenSize(context, 0.7),
-                  child: Column(
-                    children: [
-                      SizedBox(height: 50),
-                      // Image.asset(
-                      //   'assets/gif/mooseloading.gif',
-                      //   width: 200,
-                      //   height: 200,
-                      //   fit: BoxFit.cover,
-                      // ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        '영양소를 분석하고 있어요.',
-                        style: Text35Bold,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        '잠시만 기다려주세요.',
-                        style: Text15BoldGrey,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )));
-        }
-      },
-    );
-  }
-
-  Future<void> Fin_Moose_Bottom_ALert(
-      BuildContext context, Map<String, dynamic> res, bool issuc) async {
-    return showModalBottomSheet<void>(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-            width: double.maxFinite,
-            height: getHeightRatioFromScreenSize(context, 0.7),
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  top: BorderSide(color: Colors.white, width: 2.5), // 위쪽 테두리
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                )),
-            child: Container(
-                width: getWidthRatioFromScreenSize(context, 0.7),
-                child: issuc
-                    ? Column(
-                        //수정
-                        children: [
-                          SizedBox(height: 40),
-                          Image.asset(
-                            'assets/alertimg/qrcode.png',
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            '영양소 분석에 성공하였습니다.',
-                            style: Text25BoldBlack,
-                          ),
-                          SizedBox(height: 50),
-                          SizedBox(
-                            width: getWidthRatioFromScreenSize(context, 0.8),
-                            child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  //widget.pageType == 0?NvgToNxtPage(context, Moose_Detail_Sf(res: res)):NvgToNxtPage(context, MealDetail_Sf(res: res));
-                                },
-                                style: OutBtnSty,
-                                child: Text(
-                                  '식단 등록하기',
-                                  style: Text20BoldBlack,
-                                )),
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          SizedBox(height: 20),
-                          Image.asset(
-                            'assets/alertimg/fail.png',
-                            width: 250,
-                            height: 250,
-                            fit: BoxFit.cover,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            '문제가 발생하였습니다.',
-                            style: Text25BoldBlack,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            '잠시 후 다시 이용해주세요.',
-                            style: Text20BoldBlack,
-                          ),
-                          SizedBox(height: 20),
-                          SizedBox(
-                            width: getWidthRatioFromScreenSize(context, 0.8),
-                            child: OutlinedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  bottomShow(context);
-                                },
-                                style: OutBtnSty,
-                                child: Text(
-                                  '닫기',
-                                  style: Text20BoldBlack,
-                                )),
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      )));
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        //스크롤 내렸을 때 appbar색상 변경되는 거
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Moose'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _uploadFile,
-              child: Text("Upload File"),
-            ),
-            statusCode == 200
-                ? OutlinedButton(
-                    onPressed: () {
-                      print('성공');
-                    },
-                    child: Text('상세페이지로 이동'),
-                    style: OutBtnSty,
-                  )
-                : Text('업로드 전')
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 
 class Moose extends StatefulWidget {
@@ -293,23 +22,197 @@ class Moose extends StatefulWidget {
   State<Moose> createState() => _MooseState();
 }
 
-class _MooseState extends State<Moose> {
+class _MooseState extends State<Moose>  with SingleTickerProviderStateMixin {
+  late AnimationController _modeController;
+  late Animation<double> _modeAnimation;
+  late Animation<double> _modeLeftPageAnimation;
+  late Animation<double> _modeRightPageAnimation;
+  bool _isMoved = false;
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _modeController = AnimationController(
+      duration: const Duration(milliseconds: 350),
+      vsync: this,
+    );
+    _modeAnimation = Tween<double>(begin: 0, end: 78).animate(
+      CurvedAnimation(parent: _modeController, curve: Curves.easeInOut),
+    );
+    _modeLeftPageAnimation = Tween<double>(begin: 0, end: -1000).animate(
+      CurvedAnimation(parent: _modeController, curve: Curves.easeInOut),
+    );
+    _modeRightPageAnimation = Tween<double>(begin: 1000, end: 0).animate(
+      CurvedAnimation(parent: _modeController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _modeController.dispose();
+    super.dispose();
+  }
+
+  //func list
+  void _moveWidget() {
+    setState(() {
+      if (_isMoved) {
+        _modeController.reverse(); // 원래 위치로 돌아가기
+      } else {
+        _modeController.forward(); // 오른쪽으로 이동
+      }
+      _isMoved = !_isMoved;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
+      body: SizedBox(
+        width:  MediaQuery.sizeOf(context).width,
+        height:  MediaQuery.sizeOf(context).height,
+        child: Stack(
           children: [
-            Text("구현 중"),
-            TextButton(onPressed: (){
-              bottomSheetType500(context, loadingMoose(context));
-            }, child: Text("촬영 이후 화면 미리보기"))
+            Stack(
+              children: [
+                Stack(
+                  children: [
+                    AnimatedBuilder(
+                      animation: _modeLeftPageAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(_modeLeftPageAnimation.value, 0),
+                          child: Padding(
+                              padding: const EdgeInsets.all(0),
+                              child: Container(
+                                width:  MediaQuery.sizeOf(context).width,
+                                height:  MediaQuery.sizeOf(context).height,
+                                child: const Camera(),
+                              )),
+                        );
+                      },
+                    ),
+                    AnimatedBuilder(
+                      animation: _modeRightPageAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(_modeRightPageAnimation.value, 0),
+                          child: Padding(
+                              padding: const EdgeInsets.all(0),
+                              child: Container(
+                                width:  MediaQuery.sizeOf(context).width,
+                                height:  MediaQuery.sizeOf(context).height,
+                                child: const SearchMeal(),
+                              )),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(padding:
+                  EdgeInsets.all(5),
+                      child: IconButton(
+                        onPressed: () {
+                          bottomShow(context);
+                        },
+                        icon: Icon(Icons.chevron_left, size: 30,color: mainBlack,),
+                      )),
+                ),
+      SizedBox(
+        width:  MediaQuery.sizeOf(context).width,
+        height:  MediaQuery.sizeOf(context).height,
+                child : Padding(
+                  padding: EdgeInsets.only(
+                    bottom: getHeightRatioFromScreenSize(context, 0.02),
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child:Stack(
+                      children: [
+                        Container(
+                          height: 60,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            color: Color(0xff787880).withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        AnimatedBuilder(
+                          animation: _modeAnimation,
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(_modeAnimation.value, 0),
+                              child: Padding(
+                                  padding: EdgeInsets.all(3),
+                                  child: Container(
+                                    height: 54,
+                                    width: 65,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFD0FFCF),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  )),
+                            );
+                          },
+                        ),
+                        Container(
+                          height: 60,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                onPressed: _moveWidget,
+                                style: ButtonStyle(
+                                  overlayColor: MaterialStateProperty.all(
+                                      Colors.transparent), // Hover 효과 없애기
+                                ),
+                                child: const Text(
+                                  "촬영",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              TextButton(
+                                  onPressed: _moveWidget,
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(
+                                        Colors.transparent), // Hover 효과 없애기
+                                  ),
+                                  child: const Text(
+                                    "검색",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 13,
+                                        color: Colors.black),
+                                  ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+      )
+              ],
+            )
           ],
         ),
-      ),
+      )
     );
   }
 }
+
 
 Widget loadingMoose(BuildContext context) {
   Future.delayed(Duration(seconds: 2), () {
@@ -342,8 +245,8 @@ Widget loadingMoose(BuildContext context) {
                 padding: MaterialStateProperty.all<EdgeInsets>(
                   EdgeInsets.fromLTRB(10, 5, 10, 5),
                 ),
-                minimumSize: MaterialStateProperty.all<Size>(
-                  Size(40, 40),
+                minimumSize: MaterialStateProperty.all<ui.Size>(
+                  ui.Size(40, 40),
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
                   Colors.white, // ColorMainBack에 해당하는 색으로 변경
@@ -388,9 +291,6 @@ Widget loadingMoose(BuildContext context) {
     ),
   );
 }
-
-
-
 Widget newMealSave(BuildContext context){
   bottomHide(context);
   return Consumer<OneMealDetailInfoProvider>(
@@ -561,8 +461,8 @@ Widget newMealSave(BuildContext context){
                   padding: MaterialStateProperty.all<EdgeInsets>(
                     EdgeInsets.fromLTRB(10, 5, 10, 5),
                   ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(90, 55),
+                  minimumSize: MaterialStateProperty.all<ui.Size>(
+                    ui.Size(90, 55),
                   ),
                   backgroundColor: MaterialStateProperty.all<Color>(
                     priColor1BAF79,
@@ -593,4 +493,237 @@ Widget newMealSave(BuildContext context){
       );
     }
   );
+}
+
+
+
+
+
+class Camera extends StatefulWidget {
+  const Camera({super.key});
+
+  @override
+  State<Camera> createState() => _CameraState();
+}
+class _CameraState extends State<Camera> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container( //카메라
+          width:  MediaQuery.sizeOf(context).width,
+          height:  MediaQuery.sizeOf(context).height,
+          color: Colors.amberAccent,
+        ),
+        Align(  //stack으로 텍스트 및 버튼 배치
+            alignment: Alignment.topCenter,
+            child: Container(
+              width:  MediaQuery.sizeOf(context).width,
+              height:  MediaQuery.sizeOf(context).height,
+              child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // SizedBox(height: getHeightRatioFromScreenSize(context, 0.08),),
+                  // Text("무엇이든 스캔 가능!", style: Text10w500Grey),
+                  // Text("너의 영양소가 궁금해!", style: Text20BoldGrey),
+                  // SizedBox(height: getHeightRatioFromScreenSize(context, 0.58)),
+                  SizedBox(height: getHeightRatioFromScreenSize(context, 0.67)),
+                  ElevatedButton(
+                      onPressed: (){simpleAlert("사진 촬영");},
+                      style :  ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          EdgeInsets.all(0),
+                        ),
+                        minimumSize: MaterialStateProperty.all<ui.Size>(
+                          ui.Size(65, 65),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          ColorMainBack,
+                        ),
+                        elevation: MaterialStateProperty.all<double>(0),
+                        shadowColor: MaterialStateProperty.all<Color>(
+                          Colors.black,
+                        ),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(48),
+                          ),
+                        ),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                          Colors.transparent,
+                        ),
+                      ),
+                      child: Icon(Icons.document_scanner,size: 30,color: Color(0xff20C387),)),
+                  SizedBox(height: 15),
+                ],
+              ),
+            )
+        ),
+      ],
+    );
+  }
+}
+
+
+
+class SearchMeal extends StatefulWidget {
+  const SearchMeal({super.key});
+  @override
+  State<SearchMeal> createState() => _SearchMealState();
+}
+class _SearchMealState extends State<SearchMeal> {
+  TextEditingController _searchTextController = TextEditingController();
+  bool isSearchTextonChanged = false;
+  bool _isloading = false;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text("식단검색", style: Text14BlackBold,),
+      ),
+      body: Container(
+        width:  MediaQuery.sizeOf(context).width,
+        height:  MediaQuery.sizeOf(context).height,
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Container(
+                  width: getWidthRatioFromScreenSize(context, 0.95),
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Color(0xffF2F4F5),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Color(0xffF2F4F5),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: getWidthRatioFromScreenSize(context, 0.95),
+                  height: 40,
+                  padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search_rounded,size: 20),
+                      Expanded(child: Padding(padding: EdgeInsets.only(
+                          left: 5,
+                          bottom: 20
+                      ),
+                        child: TextField(
+                          style: TextStyle(
+                            color: Colors.grey, // 힌트 텍스트 색상
+                            fontSize: 16, // 힌트 텍스트 크기
+                            fontWeight: FontWeight.w500, // 힌트 텍스트 두께
+                          ),
+                          controller: _searchTextController,
+                          decoration: InputDecoration(
+                            hintText: '음식이름을 입력해주세요',
+                            hintStyle: TextStyle(
+                              color: Colors.grey, // 힌트 텍스트 색상
+                              fontSize: 16, // 힌트 텍스트 크기
+                              fontWeight: FontWeight.w500, // 힌트 텍스트 두께
+                            ),
+                            border: InputBorder.none, // 모든 테두리 제거
+                          ),
+                          onChanged: (value){
+                            setState(() {
+                              _isloading = true;
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),))
+                    ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Expanded(child: SingleChildScrollView(
+              child:_isloading
+              ? Container(
+                width:  MediaQuery.sizeOf(context).width,
+                height:  MediaQuery.sizeOf(context).height,
+                child : Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      bottom: getWidthRatioFromScreenSize(context, 0.1)
+                    ),
+                    child: CircularProgressIndicator(),
+                  )
+                )
+              )
+              : Container(
+                width:  MediaQuery.sizeOf(context).width,
+                height:  MediaQuery.sizeOf(context).height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(padding: EdgeInsets.fromLTRB(14, 15, 10, 5),
+                      child: Text("최근 검색한 음식",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xff818181),
+                          fontWeight: FontWeight.bold,
+                        ),),),
+                    Column(
+                      children: List.generate(1,
+                              (idx) => Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                padding: MaterialStateProperty.all<EdgeInsets>(
+                                  const EdgeInsets.fromLTRB(0, 5, 15, 5),
+                                ),
+                                minimumSize: MaterialStateProperty.all<Size>(
+                                  Size(getWidthRatioFromScreenSize(context, 0.95), 60),
+                                ),
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  ColorMainBack, // 버튼 배경색
+                                ),
+                                elevation: MaterialStateProperty.all<double>(2),
+                                shadowColor: MaterialStateProperty.all<Color>(mainBlack.withOpacity(0.5)),
+                                shape: MaterialStateProperty.all<OutlinedBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    side: BorderSide(
+                                      color: Color(0xffCDCFD0), // 테두리 색상
+                                      width: 1, // 테두리 두께
+                                    ),
+                                  ),
+                                ),
+                                overlayColor: MaterialStateProperty.all<Color>(
+                                  Colors.transparent, // hover 색상 제거
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: SizedBox(
+                                width: getWidthRatioFromScreenSize(context, 0.86),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start, // 텍스트 왼쪽 정렬
+                                  children: [
+                                    Text("음식명", style: Text16BoldBlack),
+                                    Text("음식정보", style: Text14w500Grey),
+                                  ],
+                                ),
+                              ),
+                            )
+                              )),
+                    )
+                  ],
+                ),
+              ),
+            ))
+          ],
+        ),
+      )
+    );
+  }
 }

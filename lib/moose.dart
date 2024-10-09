@@ -515,6 +515,8 @@ class _SearchMealState extends State<SearchMeal> {
   }
 }
 
+
+//한 음식 상세보기, 무스 결과, 음식 등록 3개의 페이지에서 사용하는 class
 class MooseDetail extends StatefulWidget {
   const MooseDetail({super.key, this.type, this.save});
 
@@ -556,9 +558,9 @@ class _MooseDetailState extends State<MooseDetail> {
                   ),
                   leading: IconButton(
                     onPressed: () {
-                      Navigator.pop(context);
                       bottomShow(context);
-                      widget.save ?null :pv.clear(); //식단 등록에서 넘어온 경우 클리어하지 않고 데이터 사용함
+                      Navigator.pop(context);
+                      widget.save ? null :pv.clear(); //식단 등록에서 넘어온 경우 클리어하지 않고 데이터 사용함
                     },
                     icon: Icon(Icons.chevron_left, size: 30),
                   ),

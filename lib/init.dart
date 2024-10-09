@@ -702,6 +702,7 @@ class _CreateID_3_signinfoState extends State<CreateID_3_signinfo> {
       if (response.statusCode == 200) {
         print("Profile Create successfully");
         Get.defaultDialog(
+          title: '',
           content: Column(
             children: [
               Text(

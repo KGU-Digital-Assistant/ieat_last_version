@@ -67,7 +67,8 @@ int tid = -1;
                     ),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    bottomShow(context);
+                    popWithSlideAnimation(context, 2);
                   },
                 )),
             body: SingleChildScrollView(

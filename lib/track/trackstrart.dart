@@ -45,9 +45,11 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
       onTap: (){},
       child: Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
+          automaticallyImplyLeading: false,
           leading : IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            popWithSlideAnimation(context, 2);
             bottomShow(context);
           },
           icon: Icon(Icons.chevron_left, size: 30),
@@ -55,7 +57,7 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
         body: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 '트랙 시작',
@@ -71,7 +73,7 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
                   width: 150,
                   height: 150,
                   child: Image.asset(
-                    'assets/pixcap/startrackPickDay.png',
+                    'pixcap/startrackPickDay.png',
                     fit: BoxFit.cover,
                   )
               ),
@@ -122,7 +124,7 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
                           trackStartDayPickProvider.setMonday(0);
                         });
                       }
-                      //startTrack_POST(context, tid);
+                      startTrack_POST(context, widget.tid);
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:dio/dio.dart';
@@ -23,7 +25,7 @@ class _Setting_SfState extends State<Setting_Sf> {
   String gym = '';
   String mentor_name = '';
   String textToCopy = "";
-
+  String? nnm;
   //getCreateDay Get
   Future<void> getCreateDay() async {
     String? tk = await getTk();
@@ -89,8 +91,14 @@ class _Setting_SfState extends State<Setting_Sf> {
   void initState() {
     getCreateDay();
     getUser();
+    initAsyncFunctions();
   }
-
+  Future<void> initAsyncFunctions() async {
+    String? nickname = await getNickNm();
+    setState(() {
+      nnm = nickname;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     bottomHide(context);
@@ -116,6 +124,11 @@ class _Setting_SfState extends State<Setting_Sf> {
                     bottomShow(context);
                     Navigator.pop(context);
                   },
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(
+                      Colors.transparent,
+                    ),
+                  ),
                   icon: Icon(Icons.close)),
             ),
           )),
@@ -200,7 +213,7 @@ class _Setting_SfState extends State<Setting_Sf> {
                                   :SizedBox(height: 10,),
                               RichText(
                                 text: TextSpan(children: [
-                                  TextSpan(text: '$name', style: Text35Bold),
+                                  TextSpan(text: '$nnm', style: Text35Bold),
                                   TextSpan(
                                       text: ' 님',
                                       style: TextStyle(
@@ -239,11 +252,8 @@ class _Setting_SfState extends State<Setting_Sf> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SendCommentsToDev_List()));
-              },
+               NvgToNxtPageSlide(context, SendCommentsToDev_List());
+                },
               child: Container(
                 height: 50,
                 width: double.infinity,
@@ -611,19 +621,20 @@ class _SendCommentsToDevState extends State<SendCommentsToDev> {
       if (response.statusCode == 200) {
         print('postSuggestion received successfully');
         setState(() {
-          simpleAlert(context, "의견을 전송하였습니다.\n감사합니다.");
+          simpleAlert("성공적으로 전달되었습니다.");
+          popWithSlideAnimation(context, 2);
         });
       } else {
         print(
             'Failed to postSuggestion: ${response.statusCode}, ${response.data}');
         setState(() {
-          simpleAlert(context, "의견 전송 중 오류가 발생했습니다.");
+          simpleAlert("오류가 발생했습니다.");
         });
       }
     } catch (e) {
       print('Error: $e');
       setState(() {
-        simpleAlert(context, "의견 전송 중 오류가 발생했습니다.");
+        simpleAlert("오류가 발생했습니다.");
       });
     }
   }
@@ -652,47 +663,46 @@ class _SendCommentsToDevState extends State<SendCommentsToDev> {
       if (response.statusCode == 200) {
         print('updateSuggestion received successfully');
         setState(() {
-          simpleAlert(context, "의견을 수정하였습니다.\n감사합니다.");
+          simpleAlert("성공적으로 수정하였습니다.");
         });
       } else {
         print(
             'Failed to updateSuggestion: ${response.statusCode}, ${response.data}');
         setState(() {
-          simpleAlert(context, "의견 수정 중 오류가 발생했습니다.");
+          simpleAlert("오류가 발생했습니다.");
         });
       }
     } catch (e) {
       print('Error: $e');
       setState(() {
-        simpleAlert(context, "의견 수정 중 오류가 발생했습니다.");
+        simpleAlert( "오류가 발생했습니다.");
       });
     }
   }
-
-  void simpleAlert(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text("확인"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
         backgroundColor: settingBackGround,
+          centerTitle: true,
+          title: Text(
+            "$_titleText",
+            style: Text14BlackBold,
+          ),
+          leading: IconButton(
+          onPressed: () {
+  popWithSlideAnimation(context, 2);
+    },
+      icon: Icon(Icons.chevron_left, size: 30),
+            style: ButtonStyle(
+              overlayColor:
+              MaterialStateProperty.all<Color>(
+                Colors.transparent, // hover 색상 제거
+              ),
+            ),
+    ),
       ),
       body: Container(
         color: settingBackGround,
@@ -703,13 +713,6 @@ class _SendCommentsToDevState extends State<SendCommentsToDev> {
             children: [
               SizedBox(
                 height: 80,
-              ),
-              Text(
-                '$_titleText',
-                style: Text25BoldBlack,
-              ),
-              SizedBox(
-                height: 20,
               ),
               Container(
                 width: double.maxFinite,
@@ -861,18 +864,13 @@ class _SendCommentsToDev_ListState extends State<SendCommentsToDev_List> {
       var utf8Res = utf8.decode(response.bodyBytes);
       final data = json.decode(utf8Res);
       if (response.statusCode < 500) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SendCommentsToDev(
-              initialComment: {
-                'cmtTitle': data['title'],
-                'content': data['content']
-              },
-              commentId: id, // 수정할 의견의 ID 전달
-            ),
-          ),
-        );
+        NvgToNxtPageSlide(context, SendCommentsToDev(
+          initialComment: {
+            'cmtTitle': data['title'],
+            'content': data['content']
+          },
+          commentId: id, // 수정할 의견의 ID 전달
+        ));
       } else {
         print('getSuggestionContent Error: ${response.statusCode}');
       }
@@ -898,142 +896,178 @@ class _SendCommentsToDev_ListState extends State<SendCommentsToDev_List> {
         print('Suggestion removed successfully');
         setState(() {
           cmtList.removeWhere((item) => item['id'] == suggest_id);
-          // simpleAlert(context, "의견을 삭제하였습니다.\n감사합니다.");
+          simpleAlert("성공적으로 삭제하였습니다.");
         });
       } else {
         print(
             'Failed to remove Suggestion: ${response.statusCode}, ${response.body}');
-        setState(() {
-          // simpleAlert(context, "의견 삭제 중 오류가 발생했습니다.");
-        });
+          simpleAlert("오류가 발생하였습니다.");
       }
     } catch (e) {
       print('Error: $e');
-      setState(() {
-        // simpleAlert(context, "의견 삭제 중 오류가 발생했습니다.");
-      });
+      simpleAlert("오류가 발생하였습니다.");
     }
   }
 
-  void askAlert(BuildContext context, String message, int suggest_id) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text("확인"),
-              onPressed: () {
-                deleteSuggestion(suggest_id);
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("취소"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: settingBackGround,
+        scrolledUnderElevation: 0,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          '의견 보내기',
+          style: Text14BlackBold,
+        ),
+        leading: IconButton(
+          onPressed: (){
+            popWithSlideAnimation(context, 2);
+          },
+            icon: Icon(Icons.chevron_left, size: 30),
+            style: ButtonStyle(
+              overlayColor:
+              MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
+            )
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                NvgToNxtPageSlide(context, SendCommentsToDev());
+              },
+              icon: Icon(
+                Icons.add,
+                size: 30,
+              ),
+              style: ButtonStyle(
+                overlayColor:
+                MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
+              )),
+        ],
       ),
       body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         color: settingBackGround,
         padding: EdgeInsets.all(20),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(
-            height: 50,
-          ),
-          Row(
-            children: [
-              Text(
-                '전달된 의견 리스트',
-                style: Text25BoldBlack,
-              ),
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: IconButton(
-                    onPressed: () {
-                      NvgToNxtPage(context, SendCommentsToDev());
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      size: 30,
-                    )),
+        child: cmtList.length == 0
+            ? Align(
+          alignment: Alignment.topCenter,
+          child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("i-EAT에 대해 말씀해주신 소중한 의견은", style: Text16BoldBlack,),
+                  Text("버전 업그레이드 시에", style: Text16BoldBlack),
+                  Text("반영될 수 있도록 노력하겠습니다.", style: Text16BoldBlack),
+                  Text("감사합니다.", style: Text16BoldBlack),
+                ],
               )
-            ],
           ),
-          SizedBox(
-            height: 10,
-          ),
-          cmtList.length == 0
-              ? Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text("아이잇에 대해 말씀해주신 소중한 의견은"),
-                    Text("버전 업그레이드 시에"),
-                    Text("반영될 수 있도록 노력하겠습니다."),
-                    Text("감사합니다."),
-                  ],
-                )
-            ),
-          )
-              : Expanded(
-            child: ListView.builder(
-              itemCount: cmtList.length,
-              itemBuilder: (c, i) {
-                final _cmt = cmtList[i];
-                return Container(
-                    child: Slidable(
-                      key: ValueKey(_cmt['id']),
-                      endActionPane: ActionPane(
-                        extentRatio: 0.2,
-                        motion: ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              askAlert(context, "삭제할까요?", _cmt['id']);
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: '삭제',
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          _cmt['cmtTitle'] ?? '',
-                          style: Text15Bold,
+        )
+            : Expanded(
+          child: ListView.builder(
+            itemCount: cmtList.length,
+            itemBuilder: (c, i) {
+              final _cmt = cmtList[i];
+              return Container(
+                  child: Slidable(
+                    key: ValueKey(_cmt['id']),
+                    endActionPane: ActionPane(
+                      extentRatio: 0.2,
+                      motion: ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {
+                            Get.defaultDialog(
+                              content: Column(
+                                children: [
+                                  Text(
+                                    "삭제할까요?",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Get.back(); // 다이얼로그 닫기
+                                        },
+                                        style: ElevatedButton
+                                            .styleFrom(
+                                          minimumSize: Size(70, 40),
+                                          backgroundColor:
+                                          Color(0xffCBFF89),
+                                          elevation: 0,
+                                          shadowColor: Colors.black,
+                                          shape:
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(5),
+                                          ),
+                                        ),
+                                        child: Text('닫기', style: Text14BlackBold),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Get.back(); // 다이얼로그 닫기
+                                          deleteSuggestion(_cmt['id']);
+                                        },
+                                        style: ElevatedButton
+                                            .styleFrom(
+                                          minimumSize: Size(70, 40),
+                                          backgroundColor:
+                                          Color(0xffCBFF89),
+                                          elevation: 0,
+                                          shadowColor: Colors.black,
+                                          shape:
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius
+                                                .circular(5),
+                                          ),
+                                        ),
+                                        child: Text('삭제하기', style: Text14BlackBold),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
+                              backgroundColor: Colors.white, // 다이얼로그 배경색
+                              radius: 10, // 모서리 둥글기
+                            );
+                          },
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: '삭제',
                         ),
-                        onTap: () async {
-                          await getSuggestionContent(_cmt['id']);
-                        },
-                      ),
+                      ],
                     ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(width: 1, color: Colors.black),
-                        borderRadius: BorderRadius.circular(20)));
-              },
-            ),
-          )
-        ]),
+                    child: ListTile(
+                      title: Text(
+                        _cmt['cmtTitle'] ?? '',
+                        style: Text15Bold,
+                      ),
+                      onTap: () async {
+                        await getSuggestionContent(_cmt['id']);
+                      },
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(20)));
+            },
+          ),
+        ),
       ),
     );
   }

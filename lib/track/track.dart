@@ -206,106 +206,6 @@ class _TrackSfState extends State<TrackSf> {
     }
   }
 
-  //진행 중인 트랙 있는지 확인
-  Future<void> checkUserTrackStatus_GET(BuildContext context, int tid) async {
-    String? tk = await getTk();
-    String funNm = 'checkUserTrackStatus_GET';
-    //회원 검색함수 - 돋보기 클릭 시 작동
-    print("tk : $tk");
-    print('$funNm - 요청시작');
-    String uri = '$url/track/group/get/my_group';
-    try {
-      final response = await dio.get(
-        uri,
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'Authorization': 'Bearer $tk',
-          },
-          validateStatus: (status) {
-            print('${status}');
-            return status != null && status < 500; // 상태 확인을 명확하게
-          },
-        ),
-      );
-
-      final res = response.data;
-      print(res);
-      if (response.statusCode == 200) {
-        await Get.defaultDialog(
-          title: "",
-          content: Column(
-            children: [
-              Text(
-                "기존 트랙을 중단하고\n 새로운 트랙을 시작할까요? ",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back(); // 다이얼로그 닫기
-                    },
-                    style: ElevatedButton
-                        .styleFrom(
-                      minimumSize: Size(70, 40),
-                      backgroundColor:
-                      Color(0xffCBFF89),
-                      elevation: 0,
-                      shadowColor: Colors.black,
-                      shape:
-                      RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(5),
-                      ),
-                    ),
-                    child: Text('닫기', style: Text14BlackBold),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back(); // 다이얼로그 닫기
-                      bottomHide(context);
-                      NvgToNxtPageSlide(context, StartTrack_Sf(tid: tid));
-                    },
-                    style: ElevatedButton
-                        .styleFrom(
-                      minimumSize: Size(70, 40),
-                      backgroundColor:
-                      Color(0xffCBFF89),
-                      elevation: 0,
-                      shadowColor: Colors.black,
-                      shape:
-                      RoundedRectangleBorder(
-                        borderRadius:
-                        BorderRadius
-                            .circular(5),
-                      ),
-                    ),
-                    child: Text('중단', style: Text14BlackBold),
-                  )
-                ],
-              ),
-            ],
-          ),
-          barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
-          backgroundColor: Colors.white, // 다이얼로그 배경색
-          radius: 10, // 모서리 둥글기
-        );
-      } else if (response.statusCode == 404) {
-        bottomHide(context);
-        NvgToNxtPageSlide(context, StartTrack_Sf(tid: tid));
-      } else {
-        print(' $funNm Error(statusCode): ${response.statusCode}');
-      }
-    } catch (e) {
-// 오류 처리
-      print('$funNm Error: $e');
-    }
-  }
-
   Widget trackStartSuc(BuildContext context) => Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -533,16 +433,16 @@ class _TrackSfState extends State<TrackSf> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
-                              Text("트랙 마켓",
+                              const Text("트랙 마켓",
                                   style: TextStyle(
                                     fontSize: 20,
                                     color: mainBlack,
                                     fontWeight: FontWeight.bold,
                                   )),
-                              Text("1위 박나래 2주 5kg 순삭루트",
+                              const Text("1위 박나래 2주 5kg 순삭루트",
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: Color(0xff7AD64F),
@@ -551,386 +451,70 @@ class _TrackSfState extends State<TrackSf> {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
+                                children: List.generate(6,
+                                    (idx)=> SizedBox(
+                                        width: MediaQuery.of(context).size.width /
+                                            7, // 화면 크기에 맞춰 균등 분할
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 8.0, 0.0, 0.0),
+                                          child: Container(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                    width: 60,
+                                                    height: 60,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                      const Color(0xffEFEFEF),
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          14),
+                                                      border: Border.all(
+                                                        color: const Color(
+                                                            0xFFE6E6E6),
+                                                        width: 1,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "day",
+                                                        style: TextStyle(
+                                                            color: const Color(
+                                                                0xff1E1E1E)
+                                                                .withOpacity(0.3),
+                                                            fontWeight:
+                                                            FontWeight.bold),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
+                                                const SizedBox(
+                                                  height: 3,
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
+                                                Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text('1일 차',
+                                                      textAlign: TextAlign.center,
                                                       style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
+                                                        color: mainBlack,
+                                                        fontSize: 10,
+                                                        fontFamily:
+                                                        'Noto Sans KR',
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                        FontWeight.w600,
+                                                      )),
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width /
-                                          7, // 화면 크기에 맞춰 균등 분할
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 8.0, 0.0, 0.0),
-                                        child: Container(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xffEFEFEF),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: const Color(
-                                                          0xFFE6E6E6),
-                                                      width: 1,
-                                                    ),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "day",
-                                                      style: TextStyle(
-                                                          color: const Color(
-                                                                  0xff1E1E1E)
-                                                              .withOpacity(0.3),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 3,
-                                              ),
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Text('1일 차',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: mainBlack,
-                                                      fontSize: 10,
-                                                      fontFamily:
-                                                          'Noto Sans KR',
-                                                      letterSpacing: 0.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                ],
+                                        )))
                               )
                             ],
                           )),
@@ -1182,8 +766,6 @@ class _TrackSfState extends State<TrackSf> {
                                                   child: ElevatedButton(
                                                     onPressed: () {
                                                       // trackStart(context,2);
-                                                      startTrack_inviteMe_POST(
-                                                          context, 2);
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
@@ -1224,10 +806,8 @@ class _TrackSfState extends State<TrackSf> {
                                                 Center(
                                                   child: ElevatedButton(
                                                     onPressed: () {
-                                                      checkUserTrackStatus_GET(
-                                                          context,
-                                                          list[idx]
-                                                              ['track_id']);
+                                                      bottomHide(context);
+                                                      NvgToNxtPageSlide(context, StartTrack_Sf(tid :list[idx]['track_id']));
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
@@ -1591,7 +1171,7 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
               ),
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  popWithSlideAnimation(context, 2);
                   bottomShow(context);
                 },
                 icon: Icon(Icons.chevron_left, size: 30),
@@ -1686,489 +1266,6 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
                 ],
               ),
             )));
-  }
-}
-
-String fomatDay(int idx) {
-  String day = "";
-  switch (idx) {
-    case 0:
-      day = "월";
-    case 1:
-      day = "화";
-    case 2:
-      day = "수";
-    case 3:
-      day = "목";
-    case 4:
-      day = "금";
-    case 5:
-      day = "토";
-    case 6:
-      day = "일";
-  }
-  return day;
-}
-
-int getTrackDayCnt(int week, int weekdayidx) {
-  int result = 1;
-  return result * week + weekdayidx;
-}
-
-Future<void> trackStart(BuildContext context, int tid) async {
-  List<bool> res = [false, false, false, false, false, false, false, false];
-
-  try {
-
-    var response1 = await oneTrackInfo_GET(context, tid);
-    res[0] = response1.statusCode == 200 ||
-        response1.statusCode == 204; // 성공 상태 코드 체크
-
-    var response2 = await calenderInfo_GET(context, tid);
-    res[1] = response2.statusCode == 200 || response2.statusCode == 204;
-
-    var response3 = await trackNmDDay_GET(context, tid);
-    res[2] = response3.statusCode == 200 || response3.statusCode == 204;
-
-    var response4 = await mealDayCalorieToday_GET(context);
-    res[3] = response4.statusCode == 200 || response4.statusCode == 204;
-
-    var response5 = await dateWeek_GET(context, tid);
-    res[4] = response5.statusCode == 200 || response5.statusCode == 204;
-
-    var response6 = await trackRoutineList_GET(context, tid);
-    res[5] = response6.statusCode == 200 || response6.statusCode == 204;
-
-    var response7 = await routineGetWeek_GET(context, tid);
-    res[6] = response7.statusCode == 200 || response7.statusCode == 204;
-
-    var response8 = await allTrackListup_GET(context);
-    res[7] = response8.statusCode == 200 || response8.statusCode == 204;
-
-    // 모든 요청이 성공했는지 확인
-    if (res.every((element) => element == true)) {
-      bottomSheetType500(context, suc500_1(context));
-
-      // getStart(); // 모든 API 호출 성공 시 getStart() 함수 호출
-    } else {
-      // 실패한 경우, 각 API 호출 결과를 로그로 남기거나 처리
-      print('Some requests failed: $res');
-    }
-  } catch (e) {
-    bottomSheetType500(context, fail500_1(context));
-  }
-}
-
-Future<diodart.Response> oneTrackInfo_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'OneTrackInfo_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  try {
-    final response = await dio.get(
-      '$url/track/get/$tid/Info',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    //   // pv.setTrack(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> calenderInfo_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'calenderInfo_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  int? uid = await getUserId();
-  print("$tk, $uid");
-  try {
-    final response = await dio.get('$url/meal_day/get/calender/$uid',
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'Authorization': 'Bearer $tk',
-          },
-          validateStatus: (status) {
-            print('${status}');
-            return status != null && status < 500; // 상태 확인을 명확하게
-          },
-        ),
-        queryParameters: {"month ": 9, "year  ": 2024});
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> trackNmDDay_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'trackNmDDay_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/track/group/get/$today/name_dday',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> mealDayCalorieToday_GET(BuildContext context) async {
-  String? tk = await getTk();
-  print("tk : $tk");
-  String funNm = 'mealDayCalorieToday_GET';
-  print('$funNm - 요청시작');
-  String uri = '$url/meal_day/get/calorie_today';
-  try {
-    final response = await dio.get(
-      uri,
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-    // final data = jsonDecode(response.data);
-    print(response.data);
-    // if (response.statusCode == 200) {
-    //   final res = response.data;
-    //   if (res.length == 0) {}
-    // } else if (response.statusCode == 404) {
-    //   //기록된 내역이 없음
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> dateWeek_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'dateWeek_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  try {
-    final response = await dio.get(
-      '$url/track/name/date',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> trackRoutineList_GET(
-    BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'trackRoutineList_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  try {
-    final response = await dio.get('$url/track/routine/list/$tid',
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'Authorization': 'Bearer $tk',
-          },
-          validateStatus: (status) {
-            print('${status}');
-            return status != null && status < 500; // 상태 확인을 명확하게
-          },
-        ),
-        queryParameters: {
-          'week ': 1,
-          'weekday ': "월",
-        });
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> routineGetWeek_GET(
-    BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'routineGetWeek_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/clear/routine/get_week',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> dailyTargetCalorie_GET(
-    BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'routineGetWeek_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/clear/routine/get_week',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> allTrackListup_GET(BuildContext context) async {
-  //[{track_id: 1, name: 새로운 식단 트랙, create_time: 2024-09-14T00:37:46.923792, using: false}]
-  String? tk = await getTk();
-  String funNm = 'allTrackListup_GET';
-  //회원 검색함수 - 돋보기 클릭 시 작동
-  print("tk : $tk");
-  print('$funNm - 요청시작');
-  String uri = '$url/track/get/alltracks';
-  try {
-    final response = await dio.get(
-      uri,
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-    final res = response.data;
-    print(res);
-    if (response.statusCode == 200) {
-      // setState(() {
-      //   _isloading = false;
-      //   var all_TrackList = List<Map<String, dynamic>>.from(res);
-      //   print(all_TrackList);
-      //   final trackListProvider =
-      //   Provider.of<TrackProvider>(context, listen: false);
-      //   trackListProvider.listInsert(all_TrackList);
-      // });
-    } else if (response.statusCode == 404) {
-      //트랙 없는 상태
-    } else {
-      print(' $funNm Error(statusCode): ${response.statusCode}');
-    }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-
-//트랙 시작
-Future<void> startTrack_inviteMe_POST(BuildContext context, int tid) async {
-  String? tk = await getTk();
-  String funcname = 'startTrack_inviteMe_POST';
-  print('$funcname - 요청시작');
-  String uri = '$url/track/group/invite-me';
-  setupDio();
-  try {
-    final response = await dio.request(
-      uri,
-      options: Options(
-        method: 'POST',
-        headers: {'accept': '*/*', 'Authorization': 'Bearer $tk'},
-        validateStatus: (status) {
-          print('$funcname : $status');
-          return status! < 500;
-        },
-      ),
-    );
-    print(response.data);
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      trackStart(context, tid);
-    } else if (response.statusCode == 401) {
-      bottomSheetType500(context, onlyCanStartMonday(context));
-    } else {
-      bottomSheetType500(context, fail500_1(context));
-    }
-  } catch (e) {
-// 오류 처리
-    print('$funcname Error: $e');
   }
 }
 
@@ -2498,69 +1595,7 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
             ),
             leading: IconButton(
               onPressed: () {
-                Get.defaultDialog(
-                  content: Column(
-                    children: [
-                      Text(
-                        "페이지 이탈 시 내용이 저장되지 않습니다.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.back(); // 다이얼로그 닫기
-                              Navigator.pop(context);
-                              if(widget.pagetype == "생성") Navigator.pop(context);
-                              bottomShow(context);
-                            },
-                            style: ElevatedButton
-                                .styleFrom(
-                              minimumSize: Size(70, 40),
-                              backgroundColor:
-                              Color(0xffCBFF89),
-                              elevation: 0,
-                              shadowColor: Colors.black,
-                              shape:
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius
-                                    .circular(5),
-                              ),
-                            ),
-                            child: Text('나가기', style: Text14BlackBold),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              Get.back(); // 다이얼로그 닫기
-                            },
-                            style: ElevatedButton
-                                .styleFrom(
-                              minimumSize: Size(70, 40),
-                              backgroundColor:
-                              Color(0xffCBFF89),
-                              elevation: 0,
-                              shadowColor: Colors.black,
-                              shape:
-                              RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius
-                                    .circular(5),
-                              ),
-                            ),
-                            child: Text('돌아가기', style: Text14BlackBold),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
-                  backgroundColor: Colors.white, // 다이얼로그 배경색
-                  radius: 10, // 모서리 둥글기
-                );
+                popWithSlideAnimation(context, 2);
               },
               icon: Icon(Icons.chevron_left, size: 30),
               style: ButtonStyle(
@@ -2587,8 +1622,69 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
           ),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
-              bottomShow(context);
+              Get.defaultDialog(
+                title: '',
+                content: Column(
+                  children: [
+                    Text(
+                      "잠깐!\n지금 페이지에서 나가면\n내용이 저장되지 않아요.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                            popWithSlideAnimation(context, 2);
+                            bottomShow(context);
+                          },
+                          style: ElevatedButton
+                              .styleFrom(
+                            minimumSize: Size(70, 40),
+                            backgroundColor:
+                            Color(0xffCBFF89),
+                            elevation: 0,
+                            shadowColor: Colors.black,
+                            shape:
+                            RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(5),
+                            ),
+                          ),
+                          child: Text('나가기', style: Text14BlackBold),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          style: ElevatedButton
+                              .styleFrom(
+                            minimumSize: Size(70, 40),
+                            backgroundColor:
+                            Color(0xffCBFF89),
+                            elevation: 0,
+                            shadowColor: Colors.black,
+                            shape:
+                            RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius
+                                  .circular(5),
+                            ),
+                          ),
+                          child: Text('돌아가기', style: Text14BlackBold),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
+                backgroundColor: Colors.white, // 다이얼로그 배경색
+                radius: 10, // 모서리 둥글기
+              );
             },
             style: ButtonStyle(
               overlayColor:
@@ -2633,25 +1729,22 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
                               ),
                               child: Text('닫기', style: Text14BlackBold),
                             ),
-                            // ElevatedButton(
-                            //   onPressed: () async{
-                            //     Get.back(); // 다이얼로그 닫기
-                            //     final tpv = Provider.of<TrackProvider>(context, listen: false);
-                            //     tpv.removeTrackById(pv.oneTrackInfo['tid']);
-                            //     await simpleAlert("성공적으로 삭제하였습니다.");
-                            //     Navigator.pop(context);
-                            //   },
-                            //   style: ElevatedButton.styleFrom(
-                            //     minimumSize: Size(70, 40),
-                            //     backgroundColor: Color1BAF79,
-                            //     elevation: 0,
-                            //     shadowColor: Colors.black,
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(5),
-                            //     ),
-                            //   ),
-                            //   child: Text('삭제', style: Text14BlackBold),
-                            // )
+                            ElevatedButton(
+                              onPressed: () async{
+                                Get.back(); // 다이얼로그 닫기
+                                deleteOneTrack(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(70, 40),
+                                backgroundColor: Color1BAF79,
+                                elevation: 0,
+                                shadowColor: Colors.black,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              child: Text('삭제', style: Text14BlackBold),
+                            )
                           ],
                         )
                       ],
@@ -3756,16 +2849,6 @@ Widget saveTrackSuc(BuildContext context) => Container(
 //트랙수정 - 아이템 변경
 //트랙수정 - 트랙명 변경
 
-List<String> icons = [
-  "Melting face",
-  "Disguised face",
-  "Dotted line face",
-  "Speak-no-evil monkey",
-  "Cat with wry smile",
-  "Alien",
-  "Pink heart",
-  "Black heart",
-];
 
 Widget saveTrackFail(BuildContext context) => Container(
   child: Consumer<OneTrackDetailInfoProvider>(

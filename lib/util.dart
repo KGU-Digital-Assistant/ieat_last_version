@@ -17,6 +17,44 @@ List<String> timeList = ['아침','아점','점심','점저','저녁','야식','
 var dio = Dio();
 
 
+List<String> icons = [
+  "Melting face",
+  "Disguised face",
+  "Dotted line face",
+  "Speak-no-evil monkey",
+  "Cat with wry smile",
+  "Alien",
+  "Pink heart",
+  "Black heart",
+];
+
+int getTrackDayCnt(int week, int weekdayidx) {
+  int result = 1;
+  return result * week + weekdayidx;
+}
+
+String fomatDay(int idx) {
+  String day = "";
+  switch (idx) {
+    case 0:
+      day = "월";
+    case 1:
+      day = "화";
+    case 2:
+      day = "수";
+    case 3:
+      day = "목";
+    case 4:
+      day = "금";
+    case 5:
+      day = "토";
+    case 6:
+      day = "일";
+  }
+  return day;
+}
+
+
 
 void setupDio() {
   dio.interceptors.add(InterceptorsWrapper(

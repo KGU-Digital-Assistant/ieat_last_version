@@ -38,7 +38,7 @@ Future<void> createRoutine_1_POST(BuildContext context, int tid) async {
   String? tk = await getTk();
   final tabpv = Provider.of<trackDetailTabProvider>(context, listen: false);
 
-  String funcname = 'createRoutine_POST';
+  String funcname = 'createRoutine_1_POST';
   String uri = '$url/track/routine/create/$tid';
   setupDio();
 

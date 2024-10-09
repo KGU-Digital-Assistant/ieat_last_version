@@ -51,15 +51,20 @@ class _MealSaveState extends State<MealSave> {
 
     int hour = now.hour;
     int minute = now.minute;
+    String formattedHour = hour.toString().padLeft(2, '0');
+    String formattedMinute = minute.toString().padLeft(2, '0');
     print('$hour$minute');
 
-    String uri = '$url/meal_hour/register_meal/$today${mpv.selectedTime}/$hour$minute';
+    String uri = '$url/meal_hour/register_meal/$today${mpv.selectedTime}/$formattedHour$formattedMinute';
     try {
       final response = await dio.request(
         uri,
         options: Options(
           method: 'POST',
-          headers: {'accept': '*/*', 'Authorization': 'Bearer $tk'},
+          headers: {
+            'accept': '*/*',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer $tk'},
           validateStatus: (status) {
             print('$funcname : $status');
             return status! < 500;
@@ -67,8 +72,8 @@ class _MealSaveState extends State<MealSave> {
         ),
         data: {
           "file_path" : "${opv.foodInfo['image_url']}",
-          "food_info" : opv.foodInfo['food_info'],
-          "text" : "${mpv.text}"
+          "food_info" : "${opv.foodInfo['food_info']}",
+          "text" : "null"
         }
       );
       print(response.data);
@@ -81,14 +86,17 @@ class _MealSaveState extends State<MealSave> {
         setState(() {
           _loading = false;
         });
+        simpleAlert("로그인을 다시 진행해주세요.");
       } else {
         setState(() {
           _loading = false;
         });
+        simpleAlert("오류가 발생하였습니다.");
       }
     } catch (e) {
 // 오류 처리
       print('$funcname Error: $e');
+      simpleAlert("오류가 발생하였습니다.");
     }
   }
 
@@ -119,228 +127,237 @@ class _MealSaveState extends State<MealSave> {
                   ),
                   body: Stack(
                     children: [
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 60,
-                                padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                                child: Row(children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: SizedBox(
-                                        width: 30,
-                                        child: Image.asset(
-                                          'assets/pixcap/gifs/Laptop3D.gif',
-                                          fit: BoxFit.cover,
-                                        )),
-                                  ),
-                                  SizedBox(width: 10),
-                                  SizedBox(
-                                    height: 30,
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "${getNowTime()}",
-                                            style: TextStyle(
-                                                fontSize: 9, fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Text("$nnm",
-                                              style: Text14BlackBold),
-                                        ),
-                                      ],
+                      SingleChildScrollView(
+                        child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 60,
+                                  padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                  child: Row(children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: SizedBox(
+                                          width: 30,
+                                          child: Image.asset(
+                                            'assets/pixcap/gifs/Laptop3D.gif',
+                                            fit: BoxFit.cover,
+                                          )),
                                     ),
-                                  )
-                                ]),
-                              ),
-                              pv.foodInfo['image_url'] !="String"
-                                  ?Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.width,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(0),
-                                  // shape: BoxShape.circle,
-                                ),
-                                child: Image.network(
-                                  '${pv.foodInfo['image_url']}',
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                                  :SizedBox(),
-                              SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Stack(
+                                    SizedBox(width: 10),
+                                    SizedBox(
+                                      height: 30,
+                                      child: Stack(
                                         children: [
-                                          Container(
+                                          Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "${getNowTime()}",
+                                              style: TextStyle(
+                                                  fontSize: 9, fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Text("$nnm",
+                                                style: Text14BlackBold),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                                pv.foodInfo['image_url'] !="String"
+                                    ?Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.width,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(0),
+                                    // shape: BoxShape.circle,
+                                  ),
+                                  child: Image.network(
+                                    '${pv.foodInfo['image_url']}',
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                                    :SizedBox(),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Container(
+                                                width: 50,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: mainGrey.withOpacity(0.1)
+                                                )
+                                            ),
+                                            SizedBox(
                                               width: 50,
                                               height: 50,
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: mainGrey.withOpacity(0.1)
-                                              )
-                                          ),
-                                          SizedBox(
-                                            width: 50,
-                                            height: 50,
-                                            child: Center(
-                                              child: IconButton(
-                                                icon: Icon(
-                                                  Icons.add,
-                                                  size: 30,
-                                                  color: mainBlack,
+                                              child: Center(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    size: 30,
+                                                    color: mainBlack,
+                                                  ),
+                                                  style: ButtonStyle(
+                                                    overlayColor: MaterialStateProperty.all<Color>(
+                                                      Colors.transparent,
+                                                    ),
+                                                  ),
+                                                  onPressed: (){
+                                                    pv.foodInfo['image_url'] == "String"
+                                                        ?NvgToNxtPageSlide(context, MealSaveCamera())
+                                                        :simpleAlert("현재는 한 개의 음식 등록만 지원하고 있습니다.");
+                                                  },
                                                 ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Text("")
+                                      ],
+                                    ),
+                                    SizedBox(width: 10),
+                                    pv.foodInfo['image_url'] =="String" //한 식단만 등록 가능하게 제어함(추후 변경가능성 있음)
+                                        ? SizedBox()
+                                        :Column(
+                                      children: [
+                                        Container(
+                                          width: 50,
+                                          decoration: BoxDecoration(
+                                              color: ColorBackGround,
+                                              borderRadius: BorderRadius.circular(50),
+                                              border: Border.all(
+                                                color: Color(0xFFE6E6E6),
+                                                width: 1,
+                                              )),
+                                          child: Image.network(
+                                            '${pv.foodInfo['image_url']}',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Text('${pv.foodInfo['food_info']['name']}', style: Text14Black,)
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 70,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFE6E6E6),
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: TextButton(
+                                        onPressed: (){
+                                          bottomSheetType500(context, select_MealSave_Time(context));
+                                        },
+                                        child: Consumer<MealSaveProvider>(
+                                          builder: (context,pv,child){
+                                            return Text(pv.selectedTime, style: Text14BlackBold,);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Container(
+                                    constraints: BoxConstraints(
+                                      minHeight: 170, // 최소 높이
+                                    ),
+                                    padding:const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color:const Color(0xFFE6E6E6),
+                                      borderRadius: BorderRadius.circular(30),),
+                                    child: Stack(
+                                      children: [
+                                        TextField(
+                                          controller: _textController,
+                                          decoration: const InputDecoration(
+                                            hintText: 'ex) 오랜만에 먹는 카레라이스',
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey, // 힌트 텍스트 색상
+                                              fontSize: 16, // 힌트 텍스트 크기
+                                              fontWeight: FontWeight.bold, // 힌트 텍스트 두께
+                                            ),
+                                            border: InputBorder.none, // 모든 테두리 제거
+                                          ),
+                                          keyboardType: TextInputType.text,
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width,
+                                            constraints: BoxConstraints(
+                                              minHeight: 170, // 최소 높이
+                                            ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(0),
+                                            child: Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: ElevatedButton(
                                                 style: ButtonStyle(
+                                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                                    EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                                  ),
+                                                  minimumSize: MaterialStateProperty.all<ui.Size>(
+                                                    ui.Size(90, 55),
+                                                  ),
+                                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                                    Colors.transparent,
+                                                  ),
+                                                  elevation: MaterialStateProperty.all<double>(0),
+                                                  shadowColor: MaterialStateProperty.all<Color>(
+                                                    Colors.black,
+                                                  ),
+                                                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                  ),
                                                   overlayColor: MaterialStateProperty.all<Color>(
                                                     Colors.transparent,
                                                   ),
                                                 ),
-                                                onPressed: (){
-                                                  pv.foodInfo['image_url'] == "String"
-                                                      ?NvgToNxtPageSlide(context, MealSaveCamera())
-                                                      :simpleAlert("현재는 한 개의 음식 등록만 지원하고 있습니다.");
+                                                onPressed: () async {
+                                                  final mpv = Provider.of<MealSaveProvider>(context,listen: false);
+                                                  final opv = Provider.of<OneFoodDetail>(context,listen: false);
+                                                  opv.foodInfo['image_url'] == "String"
+                                                      ? simpleAlert("사진을 등록해주세요.")
+                                                      : mpv.selectedTime == "시간대"
+                                                      ? simpleAlert("시간대를 선택해주세요.")
+                                                      :setState(() {
+                                                    _loading = true;
+                                                    mpv.setText(_textController.text);
+                                                    mealSave_POST(context);  //해당 클래스 안에 위치해야 함(로딩 제어)
+                                                  });
                                                 },
+                                                child: Text('저장', style: Text16BoldBlack),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                      Text("")
-                                    ],
-                                  ),
-                                  SizedBox(width: 10),
-                                  pv.foodInfo['image_url'] =="String" //한 식단만 등록 가능하게 제어함(추후 변경가능성 있음)
-                                      ? SizedBox()
-                                      :Column(
-                                    children: [
-                                      Container(
-                                        width: 50,
-                                        decoration: BoxDecoration(
-                                            color: ColorBackGround,
-                                            borderRadius: BorderRadius.circular(50),
-                                            border: Border.all(
-                                              color: Color(0xFFE6E6E6),
-                                              width: 1,
-                                            )),
-                                        child: Image.network(
-                                          '${pv.foodInfo['image_url']}',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      Text('${pv.foodInfo['food_info']['name']}', style: Text14Black,)
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFFE6E6E6),
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    child: TextButton(
-                                      onPressed: (){
-                                        bottomSheetType500(context, select_MealSave_Time(context));
-                                      },
-                                      child: Consumer<MealSaveProvider>(
-                                        builder: (context,pv,child){
-                                          return Text(pv.selectedTime, style: Text14BlackBold,);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Expanded(
-                                  child: Container(
-                                      padding:const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        color:const Color(0xFFE6E6E6),
-                                        borderRadius: BorderRadius.circular(30),),
-                                      child: TextField(
-                                        controller: _textController,
-                                        decoration: const InputDecoration(
-                                          hintText: 'ex) 오랜만에 먹는 카레라이스',
-                                          hintStyle: TextStyle(
-                                            color: Colors.grey, // 힌트 텍스트 색상
-                                            fontSize: 16, // 힌트 텍스트 크기
-                                            fontWeight: FontWeight.bold, // 힌트 텍스트 두께
                                           ),
-                                          border: InputBorder.none, // 모든 테두리 제거
-                                        ),
-                                        keyboardType: TextInputType.text,
-                                      ))),
-                            ],
-                          )),
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: ColorBackGround,
-                        ),
-                        padding: EdgeInsets.all(10),
-                        child: SizedBox(),
+                                        )
+                                      ],
+                                    )),
+                                const SizedBox(height: 20),
+                              ],
+                            )),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 20, 23),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.all<EdgeInsets>(
-                                EdgeInsets.fromLTRB(10, 5, 10, 5),
-                              ),
-                              minimumSize: MaterialStateProperty.all<ui.Size>(
-                                ui.Size(90, 55),
-                              ),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent,
-                              ),
-                              elevation: MaterialStateProperty.all<double>(0),
-                              shadowColor: MaterialStateProperty.all<Color>(
-                                Colors.black,
-                              ),
-                              shape: MaterialStateProperty.all<OutlinedBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              overlayColor: MaterialStateProperty.all<Color>(
-                                Colors.transparent,
-                              ),
-                            ),
-                            onPressed: () async {
-                              final mpv = Provider.of<MealSaveProvider>(context,listen: false);
-                              final opv = Provider.of<OneFoodDetail>(context,listen: false);
-                              opv.foodInfo['image_url'] == "String"
-                                  ? simpleAlert("사진을 등록해주세요.")
-                                  : mpv.selectedTime == "시간대"
-                                    ? simpleAlert("시간대를 선택해주세요.")
-                                    :setState(() {
-                                      _loading = true;
-                                      mpv.setText(_textController.text);
-                                      mealSave_POST(context);  //해당 클래스 안에 위치해야 함(로딩 제어)
-                                    });
-                            },
-                            child: Text('저장', style: Text16BoldBlack),
-                          ),
-                        ),
-                      )
+
                     ],
                   )),
               if(_loading) Container(

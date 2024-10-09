@@ -150,7 +150,7 @@ class HomeSave with ChangeNotifier {
   };
 
   Map<int, dynamic> _homeOfTheWeek = {
-    //트랙 시작되어야 기록할 수 있음
+    //트랙 시작되어야 사용하는 변수
     1: {"월": {}, "화": {}, "수": {}, "목": {}, "금": {}, "토": {}, "일": {}},
     2: {"월": {}, "화": {}, "수": {}, "목": {}, "금": {}, "토": {}, "일": {}},
     3: {"월": {}, "화": {}, "수": {}, "목": {}, "금": {}, "토": {}, "일": {}},
@@ -422,6 +422,8 @@ class TrackProvider with ChangeNotifier {
   //트랙 삭제
   void removeTrackById(int tid) {
     _trackList.removeWhere((track) => track['track_id'] == tid);
+    print(_trackList);
+    notifyListeners();
   }
 }
 
@@ -650,7 +652,7 @@ class OneTrackDetailInfoProvider with ChangeNotifier {
       "group_finish_day": today,
       "real_finish_day": today,
       "duration": 14,
-      "delete": true,
+      "delete": false,
       "alone": true,
       "count": 0,
       "coffee": 0,

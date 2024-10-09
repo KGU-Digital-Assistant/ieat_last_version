@@ -11,6 +11,7 @@ import 'package:ieat/util.dart';
 import 'package:provider/provider.dart';
 
 import '../meal/mealsave.dart';
+import '../track/trackaction.dart';
 import 'home.dart';
 import 'homeaction.dart';
 import 'homecalender.dart';
@@ -291,7 +292,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                 ),
                 onPressed: () {
                   bottomHide(context);
-                  NvgToNxtPage(context, const HomeboardCalender_Sf());
+                  NvgToNxtPageSlide(context, const HomeboardCalender_Sf());
                 },
               ),
               IconButton(
@@ -307,7 +308,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                 ),
                 onPressed: () {
                   bottomHide(context);
-                  NvgToNxtPage(context, const Setting_Sf());
+                  NvgToNxtPageSlide(context, const Setting_Sf());
                 },
               ),
               SizedBox(
@@ -397,8 +398,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                     // "${formatNumberWithComma(todaymealInfo['todaycalorie'])}",
                                     "2,980",
                                     style: GoogleFonts.racingSansOne(
-
-                                      decoration: TextDecoration.underline,
+                                      // decoration: TextDecoration.underline,
                                       fontSize: 89, // 폰트 크기 조절
                                       color: Colors.black, // 폰트 색상
                                       fontWeight: FontWeight.bold, // 굵기 조절
@@ -635,8 +635,6 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                         SizedBox(height: 8,),
                         ElevatedButton(
                           onPressed: () {
-                            bottomHide(context);
-                            bottomSheetType500(context, todayWeight());
                           },
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsets>(
@@ -691,7 +689,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                       child: Consumer<HomeSave>(
                                         builder: (context, pv, child) {
                                           return Text(
-                                              '${formatNumberWithComma(pv.todayWeightCalories['weight']!)}',
+                                              '${formatNumberWithComma(pv.todayWeightCalories['takeCalorie']!)}',
                                               style: TextStyle(
                                                 color: mainBlack,
                                                 fontFamily: 'Readex Pro',
@@ -759,7 +757,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Align(
+                                const Align(
                                   alignment: AlignmentDirectional(0, 0),
                                   child: Text('소모칼로리',
                                       textAlign: TextAlign.start,
@@ -778,7 +776,7 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                       child: Consumer<HomeSave>(
                                         builder: (context, pv, child) {
                                           return Text(
-                                              '${formatNumberWithComma(pv.todayWeightCalories['weight']!)}',
+                                              '${formatNumberWithComma(pv.todayWeightCalories['burnCalorie']!)}',
                                               style: TextStyle(
                                                 color: mainBlack,
                                                 fontFamily: 'Readex Pro',
@@ -1170,7 +1168,6 @@ class _WeekSfState extends State<WeekSf> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             ElevatedButton(onPressed: (){
-                                              bottomHide(context);
                                               final mpv = Provider.of<OneFoodDetail>(context, listen: false);
                                               // mpv.setimg(imgs[idx-1]);
                                               // mpv.settime("06:04");
@@ -1234,3 +1231,29 @@ class _WeekSfState extends State<WeekSf> {
     );
   }
 }
+
+
+/**
+ *
+ * homeMainTopPart()
+ * 트랙명, 일차
+ * 목표 칼로리,
+ * 오늘 섭취칼로리
+ * 오늘 탄단지
+ * 총 섭취
+ * 소모
+ * 몸무게
+ *
+ */
+Future<void> homeMainTopPart(BuildContext context) async {
+  await trackNmDDay_GET(context);
+  await mealDayCalorieToday_GET(context);
+  await dailyTargetCalorie_GET(context); //
+  await mealDayCalorieToday_GET(context); //
+}
+
+
+Future<void> homeMainBottomPart() async {
+
+}
+

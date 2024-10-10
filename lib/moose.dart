@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http_parser/http_parser.dart' as htpar;
 
 import 'package:http/http.dart' as http;
-import 'dart:html' as html;
+//import 'dart:html' as html;
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +100,7 @@ class _MooseState extends State<Moose> with SingleTickerProviderStateMixin {
                             child: Container(
                               width: MediaQuery.sizeOf(context).width,
                               height: MediaQuery.sizeOf(context).height,
-                              child: webTestCamera(),
+                              child: Camera(),
                               //child: Camera(fstCamera : widget.fstCamera),
                             )),
                       );
@@ -686,88 +686,88 @@ class _MooseDetailState extends State<MooseDetail> {
     );
   }
 }
-
-class webTestCamera extends StatefulWidget {
-  const webTestCamera({super.key});
-
-  @override
-  State<webTestCamera> createState() => _webTestCameraState();
-}
-
-class _webTestCameraState extends State<webTestCamera> {
-  html.File? _file;
-  Map<String, dynamic> res = {};
-
-  void _pickFile() {
-    print("_pickFile");
-    final html.FileUploadInputElement uploadInput =
-        html.FileUploadInputElement();
-    uploadInput.accept = 'image/*';
-    uploadInput.click();
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      print(files);
-      if (files != null && files.isNotEmpty) {
-        final pv = Provider.of<OneFoodDetail>(context, listen: false);
-
-        NvgToNxtPageSlide(context, MooseDetail(type: "영양소 분석", save: false,));
-        setState(() {
-          _file = files[0];
-          pv.setfile(_file);
-          print("$_file");
-        });
-      }
-    });
-  }
-
-  int statusCode = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        //스크롤 내렸을 때 appbar색상 변경되는 거
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Moose'),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            bottomShow(context);
-          },
-          icon: Icon(Icons.chevron_left, size: 30),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: _pickFile,
-              child: Text("Pick File"),
-            ),
-            SizedBox(height: 20),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     //uploadFile(context);
-            //   },
-            //   child: Text("Upload File"),
-            // ),
-            // statusCode == 200
-            //     ? OutlinedButton(
-            //         onPressed: () {},
-            //         child: Text('상세페이지로 이동'),
-            //         style: OutBtnSty,
-            //       )
-            //     : Text('업로드 전')
-          ],
-        ),
-      ),
-    );
-  }
-}
+//
+// class webTestCamera extends StatefulWidget {
+//   const webTestCamera({super.key});
+//
+//   @override
+//   State<webTestCamera> createState() => _webTestCameraState();
+// }
+//
+// class _webTestCameraState extends State<webTestCamera> {
+//   html.File? _file;
+//   Map<String, dynamic> res = {};
+//
+//   void _pickFile() {
+//     print("_pickFile");
+//     final html.FileUploadInputElement uploadInput =
+//         html.FileUploadInputElement();
+//     uploadInput.accept = 'image/*';
+//     uploadInput.click();
+//
+//     uploadInput.onChange.listen((e) {
+//       final files = uploadInput.files;
+//       print(files);
+//       if (files != null && files.isNotEmpty) {
+//         final pv = Provider.of<OneFoodDetail>(context, listen: false);
+//
+//         NvgToNxtPageSlide(context, MooseDetail(type: "영양소 분석", save: false,));
+//         setState(() {
+//           _file = files[0];
+//           pv.setfile(_file);
+//           print("$_file");
+//         });
+//       }
+//     });
+//   }
+//
+//   int statusCode = 0;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         scrolledUnderElevation: 0,
+//         //스크롤 내렸을 때 appbar색상 변경되는 거
+//         automaticallyImplyLeading: false,
+//         centerTitle: true,
+//         title: Text('Moose'),
+//         leading: IconButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//             bottomShow(context);
+//           },
+//           icon: Icon(Icons.chevron_left, size: 30),
+//         ),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             ElevatedButton(
+//               onPressed: _pickFile,
+//               child: Text("Pick File"),
+//             ),
+//             SizedBox(height: 20),
+//             // ElevatedButton(
+//             //   onPressed: () {
+//             //     //uploadFile(context);
+//             //   },
+//             //   child: Text("Upload File"),
+//             // ),
+//             // statusCode == 200
+//             //     ? OutlinedButton(
+//             //         onPressed: () {},
+//             //         child: Text('상세페이지로 이동'),
+//             //         style: OutBtnSty,
+//             //       )
+//             //     : Text('업로드 전')
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 Widget loadingMoose(BuildContext context) {
   Future.delayed(Duration(seconds: 2), () {

@@ -1,4 +1,4 @@
-import 'dart:html' as html;
+//import 'dart:html' as html;
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -217,7 +217,7 @@ class _MealSaveState extends State<MealSave> {
                                                   ),
                                                   onPressed: (){
                                                     pv.foodInfo['image_url'] == "String"
-                                                        ?NvgToNxtPageSlide(context, MealSaveCamera())
+                                                        ?NvgToNxtPageSlide(context, Moose())  //MealSaveCamera
                                                         :simpleAlert("현재는 한 개의 음식 등록만 지원하고 있습니다.");
                                                   },
                                                 ),
@@ -379,74 +379,74 @@ class _MealSaveState extends State<MealSave> {
 
 
 
-
-class MealSaveCamera extends StatefulWidget {
-  const MealSaveCamera({super.key});
-
-  @override
-  State<MealSaveCamera> createState() => _MealSaveCameraState();
-}
-
-class _MealSaveCameraState extends State<MealSaveCamera> {
-  html.File? _file;
-  Map<String, dynamic> res = {};
-
-  void _pickFile() {
-    print("_pickFile");
-    final html.FileUploadInputElement uploadInput =
-    html.FileUploadInputElement();
-    uploadInput.accept = 'image/*';
-    uploadInput.click();
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      print(files);
-      if (files != null && files.isNotEmpty) {
-        final pv = Provider.of<OneFoodDetail>(context, listen: false);
-        NvgToNxtPageSlide(context, const MooseDetail(type: "영양소 분석", save : true));
-        setState(() {
-          _file = files[0];
-          pv.setfile(_file);
-          print("$_file");
-        });
-      }
-    });
-  }
-
-  int statusCode = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        //스크롤 내렸을 때 appbar색상 변경되는 거
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Moose'),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-            bottomShow(context);
-          },
-          icon: Icon(Icons.chevron_left, size: 30),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: _pickFile,
-              child: Text("Pick File"),
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//
+// class MealSaveCamera extends StatefulWidget {
+//   const MealSaveCamera({super.key});
+//
+//   @override
+//   State<MealSaveCamera> createState() => _MealSaveCameraState();
+// }
+//
+// class _MealSaveCameraState extends State<MealSaveCamera> {
+//   html.File? _file;
+//   Map<String, dynamic> res = {};
+//
+//   void _pickFile() {
+//     print("_pickFile");
+//     final html.FileUploadInputElement uploadInput =
+//     html.FileUploadInputElement();
+//     uploadInput.accept = 'image/*';
+//     uploadInput.click();
+//
+//     uploadInput.onChange.listen((e) {
+//       final files = uploadInput.files;
+//       print(files);
+//       if (files != null && files.isNotEmpty) {
+//         final pv = Provider.of<OneFoodDetail>(context, listen: false);
+//         NvgToNxtPageSlide(context, const MooseDetail(type: "영양소 분석", save : true));
+//         setState(() {
+//           _file = files[0];
+//           pv.setfile(_file);
+//           print("$_file");
+//         });
+//       }
+//     });
+//   }
+//
+//   int statusCode = 0;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         scrolledUnderElevation: 0,
+//         //스크롤 내렸을 때 appbar색상 변경되는 거
+//         automaticallyImplyLeading: false,
+//         centerTitle: true,
+//         title: Text('Moose'),
+//         leading: IconButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//             bottomShow(context);
+//           },
+//           icon: Icon(Icons.chevron_left, size: 30),
+//         ),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             ElevatedButton(
+//               onPressed: _pickFile,
+//               child: Text("Pick File"),
+//             ),
+//             SizedBox(height: 20),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 Container select_MealSave_Time(BuildContext context) {
   late List<String> time_odd=[];

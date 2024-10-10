@@ -1,5 +1,5 @@
 
-import 'dart:html' as html;
+//import 'dart:html' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -970,11 +970,11 @@ class OneFoodDetail with ChangeNotifier {
     },
     "image_url": "String"  //[image_url 주의 필요] String일 경우에 api호출이 비정상이거나 비어있는 상태로 판단 후 화면을 다르게 보이는 부분이 있음
   };
-  html.File? _file;
+  // html.File? _file;
   bool _moosesuc = false;
 
   Map<String,dynamic> get foodInfo => _foodInfo;
-  html.File? get file=>_file;
+  // html.File? get file=>_file;
   bool get moosesuc => _moosesuc;
   //provider 비우기
   void clear(){
@@ -994,7 +994,7 @@ class OneFoodDetail with ChangeNotifier {
       },
       "image_url": "String"
     };
-    _file = null;
+    // _file = null;
     _moosesuc = false;
   notifyListeners();
   }
@@ -1006,10 +1006,10 @@ class OneFoodDetail with ChangeNotifier {
     notifyListeners();
   }
 //provider에 파일 데이터 세팅(식단 등록이 아닌 무스에서 오는 경우 파일을 Provider에 저장하고 페이지 이동 후 API 요청을 보냄)
-  void setfile(html.File? data){
-    _file = data;
-    notifyListeners();
-  }
+//   void setfile(html.File? data){
+//     _file = data;
+//     notifyListeners();
+//   }
   void setMooseSuc(bool res){
     _moosesuc = res;
     notifyListeners();

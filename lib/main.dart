@@ -84,7 +84,7 @@ class Ieat extends StatefulWidget {
 class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
   late List<Widget> _userpages;
   bool isLoading = false;
-  String initialRouteStr = "home";
+  String initialRouteStr = "login";
 
   //바텀바
   final _userNavigatorKeyList =
@@ -94,7 +94,7 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    loginTest();
+    // loginTest();
     _userpages = [const Home_Sf(),Moose(), const TrackSf()];
     //_userpages = [const Home_Sf(),Moose(fstCamera : widget.fstCamera), const TrackSf()];  //MealMain_Sf  TrackSf
   }

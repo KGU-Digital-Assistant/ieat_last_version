@@ -217,7 +217,7 @@ class _MealSaveState extends State<MealSave> {
                                                   ),
                                                   onPressed: (){
                                                     pv.foodInfo['image_url'] == "String"
-                                                        ?NvgToNxtPageSlide(context, Moose())  //MealSaveCamera
+                                                        ?simpleAlert("현재는 한 개의 음식 등록만 지원하고 있습니다.")//NvgToNxtPageSlide(context, Moose())  //MealSaveCamera
                                                         :simpleAlert("현재는 한 개의 음식 등록만 지원하고 있습니다.");
                                                   },
                                                 ),

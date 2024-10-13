@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
-import 'package:ieat/styleutil.dart';
 import 'package:ieat/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class loginMain_Sf extends StatefulWidget {
   const loginMain_Sf({super.key});
@@ -100,7 +98,7 @@ class _loginMain_SfState extends State<loginMain_Sf> {
                     height: 130,
                   ),
                   Image.asset(
-                    'i-eat_Text_Logo.png', // 여기에 이미지 경로를 입력하세요.
+                    'assets/i-eat_Text_Logo.png', // 여기에 이미지 경로를 입력하세요.
                     fit: BoxFit.cover, // 이미지가 화면을 꽉 채우도록 설정
                     width: 130, // 이미지의 가로 길이를 설정
                     height: 35, // 이미지의 세로 길이를 설정
@@ -418,6 +416,7 @@ class _CreateID_1_IdentityChkState extends State<CreateID_1_IdentityChk> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Scaffold(
+        backgroundColor: ColorMainBack,
           appBar: AppBar(
             leading: Padding(
               padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
@@ -441,24 +440,78 @@ class _CreateID_1_IdentityChkState extends State<CreateID_1_IdentityChk> {
               style: Text17BoldBlack,
             ),
           ),
-          body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 100,
-                  ),
-                  Text('휴대폰 번호를 인증해주세요.', style: TextTitle),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    children: [
+          body: Container(
+            color: ColorMainBack,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                    ),
+                    Text('휴대폰 번호를 인증해주세요.', style: TextTitle),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: getWidthRatioFromScreenSize(context, 0.7),
+                          height: 50,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
+                            child: TextField(
+                                controller: _phoneController,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: ' ex) 010-1234-5678')),
+                          ),
+                        ),
+                        Spacer(),
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 13, vertical: 0),
+                            side: BorderSide(width: 1, color: Colors.grey),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            minimumSize: Size(
+                              getWidthRatioFromScreenSize(context, 0.2),
+                              58,
+                            ),
+                          ).copyWith(
+                            overlayColor: MaterialStateProperty.all(Colors.transparent), // overlayColor 설정
+                          ),
+                          onPressed: () {
+                            requestSMSCode(_phoneController.text);
+                          },
+                          child: Text(
+                            '요청',
+                            style: Text17BoldBlack,
+                          ),
+                        )
+                        ,
+                      ],
+                    ),
+                    phoneErrorMessage.isNotEmpty
+                        ? Padding(
+                      padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+                      child: Text(phoneErrorMessage,
+                          textAlign: TextAlign.left, style: redAlertText),
+                    )
+                        : SizedBox(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    if (showCodeInput) ...[
                       Container(
-                        width: getWidthRatioFromScreenSize(context, 0.7),
+                        width: getWidthRatioFromScreenSize(context, 1),
                         height: 50,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
@@ -466,83 +519,32 @@ class _CreateID_1_IdentityChkState extends State<CreateID_1_IdentityChk> {
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
                           child: TextField(
-                              controller: _phoneController,
+                              controller: _codeController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: ' ex) 010-1234-5678')),
+                                  hintText: '  인증번호를 입력해주세요.')),
                         ),
                       ),
-                      Spacer(),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 13, vertical: 0),
-                          side: BorderSide(width: 1, color: Colors.grey),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          minimumSize: Size(
-                            getWidthRatioFromScreenSize(context, 0.2),
-                            58,
-                          ),
-                        ).copyWith(
-                          overlayColor: MaterialStateProperty.all(Colors.transparent), // overlayColor 설정
-                        ),
-                        onPressed: () {
-                          requestSMSCode(_phoneController.text);
-                        },
-                        child: Text(
-                          '요청',
-                          style: Text17BoldBlack,
-                        ),
+                      Text(verificationErrorMessage,
+                          textAlign: TextAlign.left, style: redAlertText),
+                      SizedBox(
+                        height: 210,
+                      ),
+                      Center(
+                        child: OutlinedButton(
+                            child: Text(
+                              '다음',
+                              style: OutlinedButtonTextSty_1,
+                            ),
+                            style: OutBtnSty,
+                            onPressed: () {
+                              sendSMSCode(
+                                  _phoneController.text, _codeController.text);
+                            }),
                       )
-                      ,
-                    ],
-                  ),
-                  phoneErrorMessage.isNotEmpty
-                      ? Padding(
-                    padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
-                    child: Text(phoneErrorMessage,
-                        textAlign: TextAlign.left, style: redAlertText),
-                  )
-                      : SizedBox(),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  if (showCodeInput) ...[
-                    Container(
-                      width: getWidthRatioFromScreenSize(context, 1),
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey, width: 1),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(13, 0, 0, 0),
-                        child: TextField(
-                            controller: _codeController,
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '  인증번호를 입력해주세요.')),
-                      ),
-                    ),
-                    Text(verificationErrorMessage,
-                        textAlign: TextAlign.left, style: redAlertText),
-                    SizedBox(
-                      height: 210,
-                    ),
-                    Center(
-                      child: OutlinedButton(
-                          child: Text(
-                            '다음',
-                            style: OutlinedButtonTextSty_1,
-                          ),
-                          style: OutBtnSty,
-                          onPressed: () {
-                            sendSMSCode(
-                                _phoneController.text, _codeController.text);
-                          }),
-                    )
-                  ]
-                ],
+                    ]
+                  ],
+                ),
               ),
             ),
           )),

@@ -1,21 +1,14 @@
-import 'dart:convert';
 
-import 'package:http_parser/http_parser.dart' as htpar;
-
-import 'package:http/http.dart' as http;
 //import 'dart:html' as html;
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ieat/init.dart';
 import 'package:ieat/meal/mealsave.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
-
-import 'constants.dart';
 import 'mooseaction.dart';
 
 /**
@@ -25,10 +18,10 @@ import 'mooseaction.dart';
 
 class Moose extends StatefulWidget {
   const Moose({
-    super.key,
+    super.key,required this.fstCamera
   }); //required this.fstCamera
 
-  // final CameraDescription fstCamera;
+  final CameraDescription fstCamera;
   @override
   State<Moose> createState() => _MooseState();
 }

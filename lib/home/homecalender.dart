@@ -1,15 +1,10 @@
 
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
-import 'package:dio/dio.dart';
-import 'package:dio/dio.dart' as diodart;
 import 'package:flutter/material.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../constants.dart';
 import '../provider.dart';
 import 'homecalenderapi.dart';
 
@@ -29,8 +24,7 @@ class _HomeboardCalender_SfState extends State<HomeboardCalender_Sf> {
 // 예시 데이터
 
   bool selectedDayType = false;  //false : 클릭 x, true : 클릭,
-  
-  String _selectedEvent = '';
+
 int tid = -1;
 @override
   void initState() {

@@ -3,20 +3,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ieat/meal/mealdetail.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/setting.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
 import 'package:provider/provider.dart';
-
 import '../meal/mealsave.dart';
 import '../track/trackaction.dart';
-import 'home.dart';
 import 'homeaction.dart';
 import 'homecalender.dart';
-import 'homecalenderapi.dart';
-import 'homemeal.dart';
 import 'package:ieat/moose.dart';
 
 class Home_Sf extends StatefulWidget {

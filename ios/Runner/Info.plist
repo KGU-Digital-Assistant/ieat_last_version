@@ -2,7 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>ITSAppUsesNonExemptEncryption</key> <No>
+  <key>NSAllowsArbitraryLoads</key> <true/>
+  <key>NSAllowsArbitraryLoadsInWebContent</key> <true/>
+    <key>FirebaseAppDelegateProxyEnabled</key>
+    <false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -31,6 +34,13 @@
 	<string>음식 사진 스캔을 위해 카메라 권한을 요청합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>음식 사진 스캔을 위해 사진라이브러리의 접근 권한을 요청합니다.</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<true/>
+		<key>UISceneConfigurations</key>
+		<dict/>
+	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

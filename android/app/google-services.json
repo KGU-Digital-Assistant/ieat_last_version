@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "930910604925",
+    "project_id": "ieat-187e5",
+    "storage_bucket": "ieat-187e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930910604925:android:14f377ac2cb23e5819eb14",
+        "android_client_info": {
+          "package_name": "kgu.numate.ieat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoqEQe5YA-ohjSoKKAQWgmWJB1wrTn8hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

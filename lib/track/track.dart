@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
@@ -9,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart' as diodart;
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:ieat/track/trackaction.dart';
 import 'package:ieat/track/trackroutine.dart';
 import 'package:ieat/track/trackstrart.dart';
@@ -870,8 +871,8 @@ class TrackCreate_Sf_1 extends StatefulWidget {
 }
 
 class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
-  final CarouselController _controller = CarouselController();
-  final CarouselController _tabcontroller = CarouselController();
+  final CarouselSliderController? _controller = CarouselSliderController();
+  final CarouselSliderController? _tabcontroller = CarouselSliderController();
   TextEditingController _trackNmController = TextEditingController();
   TextEditingController _goalCalController = TextEditingController();
   Map<String, dynamic> createTrackInitInfo = {
@@ -966,7 +967,7 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
                                 setState(() {
                                   errmsg = "";
                                 }); // 오류 메시지 초기화
-                              _tabcontroller.nextPage();
+                              _tabcontroller?.nextPage();
                               setState(() {
                                 createTrackInitInfo['track name'] =
                                     _trackNmController.text;
@@ -2421,128 +2422,131 @@ class _routinTab_byweek_SFState extends State<routinTab_byweek_SF> {
   }
 }
 
-final CarouselController _controller = CarouselController();
+
 //dialog에 넣어서 사용(CarouselController선언이 필요해서 class안에 넣어둠)
-Widget chgTrackIcon(BuildContext context) => Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "아이콘 선택",
-            style: Text15Bold,
-          ),
-          SizedBox(
-            width: 200,
-            child: CarouselSlider(
-              items: List.generate(
-                  8,
-                  (i) => ElevatedButton(
-                      onPressed: () {},
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(70, 70),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          ColorMainBack, // 버튼 배경색
-                        ),
-                        elevation: MaterialStateProperty.all<double>(0),
-                        shadowColor:
-                            MaterialStateProperty.all<Color>(Colors.black),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        overlayColor: MaterialStateProperty.all<Color>(
-                          Colors.transparent, // hover 색상 제거
+Widget chgTrackIcon(BuildContext context){
+  final CarouselSliderController? _controller = CarouselSliderController();
+  return Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "아이콘 선택",
+          style: Text15Bold,
+        ),
+        SizedBox(
+          width: 200,
+          child: CarouselSlider(
+            items: List.generate(
+                8,
+                    (i) => ElevatedButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                        const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      ),
+                      minimumSize: MaterialStateProperty.all<Size>(
+                        Size(70, 70),
+                      ),
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        ColorMainBack, // 버튼 배경색
+                      ),
+                      elevation: MaterialStateProperty.all<double>(0),
+                      shadowColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: SizedBox(
-                        width: 70,
-                        child: Image.asset(
-                          'assets/icons/track/${icons[i]}.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ))),
-              options: CarouselOptions(
-                scrollDirection: Axis.horizontal,
-                viewportFraction: 0.26,
-                // 아이콘의 크기에 맞게 조정
-                height: 80,
-                // 아이콘의 높이에 맞게 조정
-                enlargeCenterPage: true,
-                // 중앙 아이콘을 강조
-                autoPlay: false,
-                // 자동 재생 여부
-                onPageChanged: (idx, reason) {
-                  final pv = Provider.of<OneTrackDetailInfoProvider>(context,
-                      listen: false);
-                  pv.setIcon(icons[idx]);
-                },
-              ),
-              carouselController: _controller,
-            ),
-          ),
-          SizedBox(height: 40),
-          Center(
-            child: SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {
-                  bottomShow(context);
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(40, 40),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    ColorMainBack,
-                  ),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shadowColor: MaterialStateProperty.all<Color>(
-                    Colors.black,
-                  ),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      overlayColor: MaterialStateProperty.all<Color>(
+                        Colors.transparent, // hover 색상 제거
+                      ),
                     ),
-                  ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
+                    child: SizedBox(
+                      width: 70,
+                      child: Image.asset(
+                        'assets/icons/track/${icons[i]}.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ))),
+            options: CarouselOptions(
+              scrollDirection: Axis.horizontal,
+              viewportFraction: 0.26,
+              // 아이콘의 크기에 맞게 조정
+              height: 80,
+              // 아이콘의 높이에 맞게 조정
+              enlargeCenterPage: true,
+              // 중앙 아이콘을 강조
+              autoPlay: false,
+              // 자동 재생 여부
+              onPageChanged: (idx, reason) {
+                final pv = Provider.of<OneTrackDetailInfoProvider>(context,
+                    listen: false);
+                pv.setIcon(icons[idx]);
+              },
+            ),
+            carouselController: _controller,
+          ),
+        ),
+        SizedBox(height: 40),
+        Center(
+          child: SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              onPressed: () {
+                bottomShow(context);
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  EdgeInsets.fromLTRB(10, 5, 10, 5),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(40, 40),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  ColorMainBack,
+                ),
+                elevation: MaterialStateProperty.all<double>(0),
+                shadowColor: MaterialStateProperty.all<Color>(
+                  Colors.black,
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xffCBFF89),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color(0xFFE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "저장",
-                        style: Text22BoldBlack,
-                      ),
-                    )),
+                overlayColor: MaterialStateProperty.all<Color>(
+                  Colors.transparent,
+                ),
               ),
+              child: Container(
+                  width: double.maxFinite,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xffCBFF89),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Color(0xFFE6E6E6),
+                      width: 1,
+                    ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "저장",
+                      style: Text22BoldBlack,
+                    ),
+                  )),
             ),
-          )
-        ],
-      ),
-    );
+          ),
+        )
+      ],
+    ),
+  );
+}
 
 TextEditingController _trackNmController = TextEditingController();
 

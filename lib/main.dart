@@ -1,4 +1,7 @@
-import 'dart:math' as math;
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+// import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,38 +12,59 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/track/track.dart';
-import 'package:ieat/track/trackroutine.dart';
 import 'package:ieat/util.dart';
-import 'package:intl/date_symbol_data_file.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
-import 'home/home.dart';
-import 'home/homecalender.dart';
 import 'home/homemain.dart';
 import 'init.dart';
 import 'moose.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async{
 
   // Flutter의 위젯 바인딩 보장
   WidgetsFlutterBinding.ensureInitialized();
-  // final camera = await availableCameras();
-  // final fstCamera = camera.first;   //카메라 목록에서 첫 번째 카메라(일반적으로 후면 카메라)
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform, // Firebase 초기화
+  // );
+  final camera = await availableCameras();
+  final fstCamera = camera.first;   //카메라 목록에서 첫 번째 카메라(일반적으로 후면 카메라)
 
   //first카메라가 아닌 특정 카메라 선택(전면 카메라 등)
   //final CameraDescription frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
 
   // await Firebase.initializeApp();  - fcm
-  // runApp(Provider(fstCamera: fstCamera));  //fstCamera
-  runApp(Provider());
+  runApp(Provider(fstCamera: fstCamera));  //fstCamera
+  // runApp(MaterialApp(
+  //   routes: <String, WidgetBuilder>{
+  //     '/': (BuildContext context) {
+  //       return testmain();
+  //     }
+  //   },
+  // ));
 }
 
-class Provider extends StatelessWidget {
-  const Provider({super.key,});  // required this.fstCamera
 
-  // final CameraDescription fstCamera;
+class testmain extends StatelessWidget {
+  const testmain({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.pink,
+        child: Center(
+          child: Text('test'),
+        ),
+      ),
+    );
+  }
+}
+
+
+class Provider extends StatelessWidget {
+  const Provider({super.key,required this.fstCamera});  // required this.fstCamera
+
+  final CameraDescription fstCamera;
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +89,17 @@ class Provider extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RunningTrack()),  //사용(현재 사용자가 진행중인 트랙)
         ChangeNotifierProvider(create: (context) => OneFoodDetail()),  //사용(한 음식 디테일)
       ],
-      // child: Ieat(fstCamera : fstCamera),
-    child: Ieat(),
+      child: Ieat(fstCamera : fstCamera),
+    // child: Ieat(),
     );
 
   }
 }
 
 class Ieat extends StatefulWidget {
-  const Ieat({super.key,});   //required this.fstCamera
+  const Ieat({super.key,required this.fstCamera});   //required this.fstCamera
 
-  // final CameraDescription fstCamera;
+  final CameraDescription fstCamera;
 
   @override
   State<Ieat> createState() => _IeatState();
@@ -95,8 +119,8 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     // loginTest();
-    _userpages = [const Home_Sf(),Moose(), const TrackSf()];
-    //_userpages = [const Home_Sf(),Moose(fstCamera : widget.fstCamera), const TrackSf()];  //MealMain_Sf  TrackSf
+    // _userpages = [const Home_Sf(),Moose(), const TrackSf()];
+    _userpages = [const Home_Sf(),Moose(fstCamera : widget.fstCamera), const TrackSf()];  //MealMain_Sf  TrackSf
   }
 //
   // 인스턴스 생성
@@ -201,7 +225,7 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
                             ? Stack(
                           children: [
                             Container(
-                              height: 49,
+                              height: 70,
                               decoration: const BoxDecoration(
                                   border: Border(
                                     top: BorderSide(

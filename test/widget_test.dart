@@ -22,7 +22,7 @@ void main() {
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(Ieat()); // fstCamera 전달  //fstCamera: mockCamera
+    await tester.pumpWidget(Ieat(fstCamera: mockCamera)); // fstCamera 전달  //fstCamera: mockCamera
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

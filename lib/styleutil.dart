@@ -35,10 +35,16 @@ Color Color1BAF79 = Color(0xFF1BAF79);
 const Color settingBackGround = Color(0xFFE6E6E6);
 const Color Colorkakao = Color(0xFFF9E000);
 const Color ColorMealMainBodyBack = Color(0xFFD8D8D8);
+const Color calenderClearRoutine = Color(0xFF14AE5C);
+const Color calenderSaveRoutine = Color(0xFFECFCE5);
+
+const TextAppbar = TextStyle(fontSize: 17, fontWeight: FontWeight.bold,color: mainBlack);
+
 var Text10w500Grey =  TextStyle(fontSize: 10, fontWeight : FontWeight.w500,color: Color(0xff7F7F7F));
 var Text10 = TextStyle(fontSize: 10);
 var Text10Black =  TextStyle(fontSize: 10, color: Colors.black);
 var Text10BoldBlack = TextStyle(fontSize: 10,fontWeight: FontWeight.bold, color: Colors.black);
+var Text11Black =  TextStyle(fontSize: 11, color: Colors.black);
 var Text14w500Grey =  TextStyle(fontSize: 14, fontWeight : FontWeight.w500,color: Color(0xff7F7F7F));
 var Text17 = TextStyle(fontSize: 17);
 var TextBold = TextStyle(fontWeight: FontWeight.bold);

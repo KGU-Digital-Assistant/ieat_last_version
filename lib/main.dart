@@ -1,10 +1,7 @@
 
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 // import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -14,6 +11,7 @@ import 'package:ieat/styleutil.dart';
 import 'package:ieat/track/track.dart';
 import 'package:ieat/util.dart';
 import 'package:provider/provider.dart';
+
 import 'constants.dart';
 import 'home/homemain.dart';
 import 'init.dart';
@@ -21,26 +19,18 @@ import 'moose.dart';
 
 void main() async{
 
-  // Flutter의 위젯 바인딩 보장
   WidgetsFlutterBinding.ensureInitialized();
+  // Flutter의 위젯 바인딩 보장
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform, // Firebase 초기화
   // );
-  final camera = await availableCameras();
-  final fstCamera = camera.first;   //카메라 목록에서 첫 번째 카메라(일반적으로 후면 카메라)
+
 
   //first카메라가 아닌 특정 카메라 선택(전면 카메라 등)
   //final CameraDescription frontCamera = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
 
   // await Firebase.initializeApp();  - fcm
-  runApp(Provider(fstCamera: fstCamera));  //fstCamera
-  // runApp(MaterialApp(
-  //   routes: <String, WidgetBuilder>{
-  //     '/': (BuildContext context) {
-  //       return testmain();
-  //     }
-  //   },
-  // ));
+  runApp(Provider());  //fstCamera
 }
 
 
@@ -49,22 +39,23 @@ class testmain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.pink,
-        child: Center(
-          child: Text('test'),
+    return GetMaterialApp(
+      home: Scaffold(
+        body: Container(
+          color: Colors.pink,
+          child: Center(
+            child: Text('test'),
+          ),
         ),
       ),
     );
   }
 }
 
-
+//
 class Provider extends StatelessWidget {
-  const Provider({super.key,required this.fstCamera});  // required this.fstCamera
+  const Provider({super.key});  // required this.fstCamera
 
-  final CameraDescription fstCamera;
 
   @override
   Widget build(BuildContext context) {
@@ -89,17 +80,16 @@ class Provider extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => RunningTrack()),  //사용(현재 사용자가 진행중인 트랙)
         ChangeNotifierProvider(create: (context) => OneFoodDetail()),  //사용(한 음식 디테일)
       ],
-      child: Ieat(fstCamera : fstCamera),
-    // child: Ieat(),
+      child: Ieat(),
+      // child: Ieat(),
     );
 
   }
 }
 
 class Ieat extends StatefulWidget {
-  const Ieat({super.key,required this.fstCamera});   //required this.fstCamera
+  const Ieat({super.key});   //required this.fstCamera
 
-  final CameraDescription fstCamera;
 
   @override
   State<Ieat> createState() => _IeatState();
@@ -112,7 +102,7 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
 
   //바텀바
   final _userNavigatorKeyList =
-      List.generate(3, (index) => GlobalKey<NavigatorState>());
+  List.generate(3, (index) => GlobalKey<NavigatorState>());
   int _currentIndex = 0;
 
   @override
@@ -120,7 +110,7 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
     super.initState();
     // loginTest();
     // _userpages = [const Home_Sf(),Moose(), const TrackSf()];
-    _userpages = [const Home_Sf(),Moose(fstCamera : widget.fstCamera), const TrackSf()];  //MealMain_Sf  TrackSf
+    _userpages = [const Home_Sf(),Moose(), const TrackSf()];  //MealMain_Sf  TrackSf
   }
 //
   // 인스턴스 생성
@@ -159,6 +149,7 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
     }
   }
 
+  DateTime? _lastTapped;  // 마지막 탭 클릭 시간을 기록하는 변수
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -204,83 +195,93 @@ class _IeatState extends State<Ieat> with SingleTickerProviderStateMixin {
                   .currentState!
                   .maybePop());
             },
-                child: DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                      body: TabBarView(
-                        children: _userpages.map(
-                          (page) {
-                            int index = _userpages.indexOf(page);
-                            return CustomNavigator(
-                              page: page,
-                              navigatorKey: _userNavigatorKeyList[index],
-                            );
-                          },
-                        ).toList(),
-                      ),
-                      bottomNavigationBar: Consumer<BottomBarVisibility>(
-                          //바텀바 상태관리를 위함
-                          builder: (context, bottomBarVisibility, child) {
-                        return bottomBarVisibility.isVisible
-                            ? Stack(
-                          children: [
-                            Container(
-                              height: 70,
-                              decoration: const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                        color: ColorMainStroke,
-                                        width: 1), // 위쪽 테두리
-                                  ),
-                                  // borderRadius: BorderRadius.only(
-                                  //   topLeft: Radius.circular(50),
-                                  //   topRight: Radius.circular(50),
-                                  // )
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TabBar(
-                                    isScrollable: false,
-                                    automaticIndicatorColorAdjustment: true,
-                                    indicatorColor: Colors.transparent,  // Remove the bottom line
-                                    indicator: const BoxDecoration(
-                                    ),
-                                    labelColor: Colors.black,
-                                    onTap: (index) => setState(() {
-                                      _currentIndex = index;
-                                      print(index);
-                                    }),
-                                    tabs: const [
-                                      Tab(
-                                        icon: Icon(
-                                          Icons.home,
-                                          size: 30,
-                                        ),
-                                      ),
-                                      Tab(
-                                        icon: Icon(
-                                          Icons.camera_alt,
-                                          size: 30,
-                                        ),
-                                      ),
-                                      Tab(
-                                        icon: Icon(
-                                          Icons.run_circle_outlined,
-                                          size: 30,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+            child: DefaultTabController(
+              length: 3,
+              child: Scaffold(
+                body: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  children: _userpages.map(
+                        (page) {
+                      int index = _userpages.indexOf(page);
+                      return CustomNavigator(
+                        page: page,
+                        navigatorKey: _userNavigatorKeyList[index],
+                      );
+                    },
+                  ).toList(),
+                ),
+                bottomNavigationBar: Consumer<BottomBarVisibility>(
+                  builder: (context, bottomBarVisibility, child) {
+                    return bottomBarVisibility.isVisible
+                        ? Stack(
+                      children: [
+                        Container(
+                          height: 70,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: ColorMainStroke,
+                                width: 1,
+                              ), // 위쪽 테두리
                             ),
-                          ],
-                        )
-                            : SizedBox();
-                      })),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TabBar(
+                                overlayColor: null,
+                                dividerColor: Colors.transparent,
+                                isScrollable: false,
+                                automaticIndicatorColorAdjustment: true,
+                                indicatorColor: Colors.transparent, // Remove the bottom line
+                                indicator: const BoxDecoration(),
+                                labelColor: Colors.black,
+                                onTap: (index) {
+                                  print('tapclick idx : ${index}');
+                                  DateTime now = DateTime.now();
+                                  // 더블 클릭 감지 (1초 이내에 동일한 탭을 두 번 클릭했는지 확인)
+                                  if (_currentIndex == index && _lastTapped != null && now.difference(_lastTapped!) < Duration(seconds: 1)) {
+                                    print('tap double click idx: ${index}');
+                                    // 더블 클릭 처리 - 해당 탭의 메인 페이지로 돌아감
+                                    _userNavigatorKeyList[index].currentState?.popUntil((route) => route.isFirst);
+                                  }
+
+                                  // 현재 탭을 기록
+                                  _currentIndex = index;
+                                  _lastTapped = now;
+                                },
+                                tabs: const [
+                                  Tab(
+                                    icon: Icon(
+                                      Icons.home,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Tab(
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Tab(
+                                    icon: Icon(
+                                      Icons.run_circle_outlined,
+                                      size: 25,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                        : SizedBox();
+                  },
                 ),
               ),
+            )
+          ),
         });
   }
 }

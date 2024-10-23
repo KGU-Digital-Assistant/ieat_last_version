@@ -450,6 +450,8 @@ class RoutinListProvider with ChangeNotifier {
 
 //루틴 리스트
   void setList(List<Map<String, dynamic>> data) {
+    print('루틴 리스트 povider 삽입');
+    print(data);
     _routineList = data;
     _routineList.insert(0, {}); //index 0인 조건에 루틴 생성 버튼 배치
     _isRoutine = data.isEmpty ? false : true;
@@ -482,17 +484,20 @@ class RoutinListProvider with ChangeNotifier {
 
   //루틴생성으로 리스트에 추가
   void addList(int rid, int rdateid, Map<String, dynamic> data) {
+    print('addList');
+
     Map<String, dynamic> getData = {
       "routine_id": rid,
       "routine_date_id": rdateid,
       "calorie": data['calorie'],
       "weekday": data['weekday'],
       "week": data['week'],
-      "time": 1, //data['time']가 맞는데 버그라서 1로 하드코딩해둠(수정 필요)
+      "time": data['time'], //data['time']가 맞는데 버그라서 1로 하드코딩해둠(수정 필요)
       "title": data['title'],
       "clock": data['clock']
     };
     _routineList.add(getData); //index 0인 조건에 루틴 생성 버튼 배치
+    print(_routineList);
     notifyListeners(); // 상태 변경을 알림
   }
 }
@@ -569,6 +574,7 @@ class OneTrackDetailInfoProvider with ChangeNotifier {
     "coffee": 0,
     "alcohol": 0,
     "water": 0,
+    "delete": false,
     "cheating_cnt": 0,
     "repeatroutin": [],
     "soloroutin": []
@@ -597,6 +603,7 @@ class OneTrackDetailInfoProvider with ChangeNotifier {
       "group_finish_day": null,
       "real_finish_day": null,
       "duration": 14,
+      "delete": false,
       "calorie": 0,
       "count": 0,
       "coffee": 0,
@@ -697,7 +704,7 @@ class OneTrackDetailInfoProvider with ChangeNotifier {
 //달력에서 선택된 일자에 대한 데이터
 class CalenderSelectedProvider with ChangeNotifier {
 //월마다 바뀌는 데이터
-  final Map<String, dynamic> _monthlyInfo = {
+   Map<String, dynamic> _monthlyInfo = {
     "recordDay": {
       "record_cnt": 0,
       "all_cnt": 31,
@@ -710,40 +717,9 @@ class CalenderSelectedProvider with ChangeNotifier {
       "save_calorie": 0,
       "goal_calorie": 0,
     },
-    "calendar": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
-    ]
+    "highlightedDays": []
   };
-  final Map<String, dynamic> _dailyInfo = {
+   Map<String, dynamic> _dailyInfo = {
     "selectedDay": today, //날짜
     "isTracking": false,
     "selectedDayTrackTitle": {
@@ -776,6 +752,82 @@ class CalenderSelectedProvider with ChangeNotifier {
 
   Map<String, dynamic> get dailyInfo => _dailyInfo;
 
+
+  void clear(){
+    _monthlyInfo = {
+      "recordDay": {
+        "record_cnt": 0,
+        "all_cnt": 31,
+      },
+      "routine": {
+        "success_cnt": 0,
+        "all_cnt": 0,
+      },
+      "avgCalorieOfDay": {
+        "save_calorie": 0,
+        "goal_calorie": 0,
+      },
+      "highlightedDays": []
+    };
+     _dailyInfo = {
+      "selectedDay": today, //날짜
+      "isTracking": false,
+      "selectedDayTrackTitle": {
+        "TNm": "", //트랙명
+        "TCountingDay": 0 //몇 일차
+      }, //트랙명
+      "health": {
+        "totalCalorie": 0, //이 날의 칼로리
+        "goalCalorie": 0, //목표 칼로리
+        "saveCalorie": 0, //섭취 칼로리
+        "burnCalorie": 0, //소모 칼로리
+        "Weight": 0, //몸무게
+      },
+      "routine": {
+        {
+          "follow": false, //루틴지킴여부
+          "time": "", //시간
+          "rNm": "", //루틴명
+        },
+        {
+          "follow": false, //루틴지킴여부
+          "time": "", //시간
+          "rNm": "", //루틴명
+        }
+      },
+      "save": [] //picture, date
+    };
+
+    notifyListeners();
+  }
+
+
+//[월별데이터] : 달력에 백그라운드 표시할 기록한 날짜
+  void setMonthRecordDayInfo(Map<String, dynamic> data) {
+    for(var entry in data.entries) {
+      if (entry.value.containsKey('date')) {
+        try {
+          // API의 date 문자열을 DateTime으로 변환
+          DateTime parsedDate = DateTime.parse(entry.value['date']);
+
+          // highlightedDays가 List<DateTime>이라 가정하고 추가
+          if (_monthlyInfo.containsKey('highlightedDays') && _monthlyInfo['highlightedDays'] is List<DateTime>) {
+            (_monthlyInfo['highlightedDays'] as List<DateTime>).add(parsedDate);
+          } else {
+            // 만약 highlightedDays가 없으면 리스트 생성 후 추가
+            _monthlyInfo['highlightedDays'] = [parsedDate];
+          }
+        } catch (e) {
+          print("Error parsing date: $e");
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+
+
 //[월별데이터] : 기록일
   void setMonthRecordDay(Map<String, dynamic> data) {
     _monthlyInfo['recordDay']['record_cnt'] = data['record_count'];
@@ -785,7 +837,6 @@ class CalenderSelectedProvider with ChangeNotifier {
 
 //[월별데이터] : 지킨 루틴 수
   void setMonthRoutine(Map<String, dynamic> data) {
-    _monthlyInfo['calendar'] = data['calendar'];
     _monthlyInfo['routine']['success_cnt'] = data['success_cnt'];
     _monthlyInfo['routine']['all_cnt'] = data['all_cnt'];
     notifyListeners();
@@ -913,7 +964,7 @@ class OneRoutineDetailInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //[루틴 수정] 루틴명
+  //[루틴 수정] 시간
   void setColock(String type, int value) {
     switch (type) {
       case "hour":
@@ -931,6 +982,21 @@ class OneRoutineDetailInfoProvider with ChangeNotifier {
     print(_oneRoutineInfo['clock']);
     notifyListeners();
   }
+
+  //[루틴 수정] 반복 설정
+  void setRoutineRepeat(bool data) {
+    _oneRoutineInfo['repeat'] = data;
+    notifyListeners();
+  }
+
+  //[루틴 수정] 목표 칼로리
+  void setGoalKcal(String data) {
+    _oneRoutineInfo['calorie'] = data;
+    notifyListeners();
+  }
+
+
+
 }
 
 //달력에서 선택된 일자에 대한 데이터
@@ -1024,6 +1090,11 @@ class MealSaveProvider with ChangeNotifier {
   String get selectedTime => _selectedTime;
   String get text => _text;
 
+  void clear(){
+    _selectedTime= "시간대";
+    _text= "";
+    notifyListeners();
+  }
 
   void setTime(String data){
     _selectedTime= data;

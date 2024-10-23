@@ -18,10 +18,9 @@ import 'mooseaction.dart';
 
 class Moose extends StatefulWidget {
   const Moose({
-    super.key,required this.fstCamera
+    super.key
   }); //required this.fstCamera
 
-  final CameraDescription fstCamera;
   @override
   State<Moose> createState() => _MooseState();
 }
@@ -75,245 +74,313 @@ class _MooseState extends State<Moose> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SizedBox(
-      width: MediaQuery.sizeOf(context).width,
-      height: MediaQuery.sizeOf(context).height,
-      child: Stack(
-        children: [
-          Stack(
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height,
+          child: Stack(
             children: [
               Stack(
                 children: [
-                  AnimatedBuilder(
-                    animation: _modeLeftPageAnimation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(_modeLeftPageAnimation.value, 0),
-                        child: Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: Container(
-                              width: MediaQuery.sizeOf(context).width,
-                              height: MediaQuery.sizeOf(context).height,
-                              child: Camera(),
-                              //child: Camera(fstCamera : widget.fstCamera),
-                            )),
-                      );
-                    },
+                  Stack(
+                    children: [
+                      AnimatedBuilder(
+                        animation: _modeLeftPageAnimation,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(_modeLeftPageAnimation.value, 0),
+                            child: Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width,
+                                  height: MediaQuery.sizeOf(context).height,
+                                  child: Camera(),
+                                  //child: Camera(fstCamera : widget.fstCamera),
+                                )),
+                          );
+                        },
+                      ),
+                      AnimatedBuilder(
+                        animation: _modeRightPageAnimation,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(_modeRightPageAnimation.value, 0),
+                            child: Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width,
+                                  height: MediaQuery.sizeOf(context).height,
+                                  child: const SearchMeal(),
+                                )),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  AnimatedBuilder(
-                    animation: _modeRightPageAnimation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(_modeRightPageAnimation.value, 0),
-                        child: Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: Container(
-                              width: MediaQuery.sizeOf(context).width,
-                              height: MediaQuery.sizeOf(context).height,
-                              child: const SearchMeal(),
-                            )),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width,
-                height: MediaQuery.sizeOf(context).height,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    bottom: getHeightRatioFromScreenSize(context, 0.02),
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 60,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            color: Color(0xff787880).withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        AnimatedBuilder(
-                          animation: _modeAnimation,
-                          builder: (context, child) {
-                            return Transform.translate(
-                              offset: Offset(_modeAnimation.value, 0),
-                              child: Padding(
-                                  padding: EdgeInsets.all(3),
-                                  child: Container(
-                                    height: 54,
-                                    width: 65,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFD0FFCF),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  )),
-                            );
-                          },
-                        ),
-                        Container(
-                          height: 60,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              TextButton(
-                                onPressed: _moveWidget,
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(
-                                      Colors.transparent), // Hover 효과 없애기
-                                ),
-                                child: const Text(
-                                  "촬영",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13,
-                                      color: Colors.black),
-                                ),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: MediaQuery.sizeOf(context).height,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: getHeightRatioFromScreenSize(context, 0.02),
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 60,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Color(0xff787880).withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                              TextButton(
-                                  onPressed: _moveWidget,
-                                  style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(
-                                        Colors.transparent), // Hover 효과 없애기
+                            ),
+                            AnimatedBuilder(
+                              animation: _modeAnimation,
+                              builder: (context, child) {
+                                return Transform.translate(
+                                  offset: Offset(_modeAnimation.value, 0),
+                                  child: Padding(
+                                      padding: EdgeInsets.all(3),
+                                      child: Container(
+                                        height: 54,
+                                        width: 65,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFFD0FFCF),
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                      )),
+                                );
+                              },
+                            ),
+                            Container(
+                              height: 60,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  TextButton(
+                                    onPressed: _moveWidget,
+                                    style: ButtonStyle(
+                                      overlayColor: MaterialStateProperty.all(
+                                          Colors.transparent), // Hover 효과 없애기
+                                    ),
+                                    child: const Text(
+                                      "촬영",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color: Colors.black),
+                                    ),
                                   ),
-                                  child: const Text(
-                                    "검색",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13,
-                                        color: Colors.black),
-                                  ))
-                            ],
-                          ),
-                        )
-                      ],
+                                  TextButton(
+                                      onPressed: _moveWidget,
+                                      style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent), // Hover 효과 없애기
+                                      ),
+                                      child: const Text(
+                                        "검색",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13,
+                                            color: Colors.black),
+                                      ))
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  )
+                ],
               )
             ],
-          )
-        ],
-      ),
-    ));
+          ),
+        ));
   }
 }
 
 
 
 class Camera extends StatefulWidget {
-  const Camera({super.key, this.fstCamera});
+  const Camera({super.key,this.type});
 
-  final fstCamera;
+  final type;
 
   @override
   State<Camera> createState() => _CameraState();
 }
 
 class _CameraState extends State<Camera> {
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
+  bool _loading = false;
+  CameraController? _cameraController;
+  List<CameraDescription>? _cameras;
+  bool _isCameraInitialized = false;
+  bool _noCameraFound = false; // 카메라가 없는지 여부를 저장
+
+
+  // 카메라 초기화 함수
+  Future<void> _initializeCamera() async {
+    try {
+      _cameras = await availableCameras();
+
+      if (_cameras == null || _cameras!.isEmpty) {
+        setState(() {
+          _noCameraFound = true; // 카메라가 없으면 플래그 설정
+        });
+        return;
+      }
+
+      _cameraController = CameraController(
+        _cameras![0], // 첫 번째 카메라 (후면 카메라)
+        ResolutionPreset.high,
+      );
+
+      await _cameraController!.initialize();
+      setState(() {
+        _isCameraInitialized = true;
+      });
+    } catch (e) {
+      print('카메라 초기화 중 오류 발생: $e');
+    }
+  }
+
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(
-      widget.fstCamera,
-      ResolutionPreset.high,
-    );
-    _initializeControllerFuture = _controller.initialize();
+    _initializeCamera();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _cameraController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          //카메라
-          width: MediaQuery.sizeOf(context).width,
-          height: MediaQuery.sizeOf(context).height,
-          color: Colors.amberAccent,
-          child: FutureBuilder<void>(
-            future: _initializeControllerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CameraPreview(_controller);
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
+    return Scaffold(
+        appBar: widget.type == "save"
+            ? AppBar(
+          automaticallyImplyLeading: false,
+          scrolledUnderElevation: 0,
+          backgroundColor: ColorMainBack,
+          centerTitle: true,
+          title: Text('Moose', style: TextAppbar),
+          leading: IconButton(
+            onPressed: () {
+              popWithSlideAnimation(context, 2);
+              bottomShow(context);
             },
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all<Color>(
+                Colors.transparent,
+              ),
+            ),
+            icon: Icon(Icons.chevron_left, size: 30),
           ),
-        ),
-        Align(
-            //stack으로 텍스트 및 버튼 배치
-            alignment: Alignment.topCenter,
-            child: Container(
+        )
+            : null,
+      body: Stack(
+        children: [
+          Container(
+            width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height,
+            color: Colors.amberAccent,
+            child: _noCameraFound
+                ? Center(
+              child: Text(
+                "카메라를 찾을 수 없습니다.",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            )
+                : _isCameraInitialized
+                ? SizedBox(
               width: MediaQuery.sizeOf(context).width,
-              height: MediaQuery.sizeOf(context).height,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // SizedBox(height: getHeightRatioFromScreenSize(context, 0.08),),
-                  // Text("무엇이든 스캔 가능!", style: Text10w500Grey),
-                  // Text("너의 영양소가 궁금해!", style: Text20BoldGrey),
-                  // SizedBox(height: getHeightRatioFromScreenSize(context, 0.58)),
-                  SizedBox(height: getHeightRatioFromScreenSize(context, 0.67)),
-                  ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          await _initializeControllerFuture;
-                          final image = await _controller.takePicture();
-                          print('Picture saved to ${image.path}');
-                          await runMoose("${image.path}");
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(0),
-                        ),
-                        minimumSize: MaterialStateProperty.all<ui.Size>(
-                          ui.Size(65, 65),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          ColorMainBack,
-                        ),
-                        elevation: MaterialStateProperty.all<double>(0),
-                        shadowColor: MaterialStateProperty.all<Color>(
-                          Colors.black,
-                        ),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(48),
+              height: MediaQuery.sizeOf(context).width,
+              child: CameraPreview(_cameraController!),
+            )
+                : Center(child: CircularProgressIndicator()),
+          ),
+          Align(
+            //stack으로 텍스트 및 버튼 배치
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // SizedBox(height: getHeightRatioFromScreenSize(context, 0.08),),
+                    // Text("무엇이든 스캔 가능!", style: Text10w500Grey),
+                    // Text("너의 영양소가 궁금해!", style: Text20BoldGrey),
+                    // SizedBox(height: getHeightRatioFromScreenSize(context, 0.58)),
+                    SizedBox(height: getHeightRatioFromScreenSize(context, 0.67)),
+                    ElevatedButton(
+                        onPressed: () async {
+                          setState(() {
+                            _loading = true;
+                          });
+                          if (_cameraController != null && _cameraController!.value.isInitialized) {
+                            setState(() {
+                              _loading = false;
+                            });
+                            try {
+                              XFile file = await _cameraController!.takePicture();
+                              print('사진 저장 경로: ${file.path}');
+                              runMoose(context,'${file.path}',widget.type == "save" ?true : false);
+                            } catch (e) {
+                              print('사진 촬영 중 오류 발생: $e');
+                              simpleAlert("인식할 수 없는 이미지입니다.");
+                            }
+                          }else{
+                            setState(() {
+                              _loading = false;
+                            });
+                          }
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(0),
+                          ),
+                          minimumSize: MaterialStateProperty.all<ui.Size>(
+                            ui.Size(65, 65),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            ColorMainBack,
+                          ),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                            Colors.black,
+                          ),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(48),
+                            ),
+                          ),
+                          overlayColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent,
                           ),
                         ),
-                        overlayColor: MaterialStateProperty.all<Color>(
-                          Colors.transparent,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.document_scanner,
-                        size: 30,
-                        color: Color(0xff20C387),
-                      )),
-                  SizedBox(height: 15),
-                ],
-              ),
-            )),
-      ],
+                        child: Icon(
+                          Icons.document_scanner,
+                          size: 30,
+                          color: Color(0xff20C387),
+                        )),
+                    SizedBox(height: 15),
+                  ],
+                ),
+              )),
+          if(_loading)  Center(
+            child: CircularProgressIndicator(),
+          )
+        ],
+      ),
     );
   }
 }
@@ -370,31 +437,31 @@ class _SearchMealState extends State<SearchMeal> {
                         const Icon(Icons.search_rounded, size: 20),
                         Expanded(
                             child: Padding(
-                          padding: EdgeInsets.only(left: 5, bottom: 20),
-                          child: TextField(
-                            style: TextStyle(
-                              color: Colors.grey, // 힌트 텍스트 색상
-                              fontSize: 16, // 힌트 텍스트 크기
-                              fontWeight: FontWeight.w500, // 힌트 텍스트 두께
-                            ),
-                            controller: _searchTextController,
-                            decoration: InputDecoration(
-                              hintText: '음식이름을 입력해주세요',
-                              hintStyle: TextStyle(
-                                color: Colors.grey, // 힌트 텍스트 색상
-                                fontSize: 16, // 힌트 텍스트 크기
-                                fontWeight: FontWeight.w500, // 힌트 텍스트 두께
+                              padding: EdgeInsets.only(left: 5, bottom: 3),
+                              child: TextField(
+                                style: TextStyle(
+                                  color: Colors.grey, // 힌트 텍스트 색상
+                                  fontSize: 16, // 힌트 텍스트 크기
+                                  fontWeight: FontWeight.w500, // 힌트 텍스트 두께
+                                ),
+                                controller: _searchTextController,
+                                decoration: InputDecoration(
+                                  hintText: '음식이름을 입력해주세요',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey, // 힌트 텍스트 색상
+                                    fontSize: 16, // 힌트 텍스트 크기
+                                    fontWeight: FontWeight.w500, // 힌트 텍스트 두께
+                                  ),
+                                  border: InputBorder.none, // 모든 테두리 제거
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isloading = true;
+                                  });
+                                },
+                                keyboardType: TextInputType.text,
                               ),
-                              border: InputBorder.none, // 모든 테두리 제거
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                _isloading = true;
-                              });
-                            },
-                            keyboardType: TextInputType.number,
-                          ),
-                        ))
+                            ))
                       ],
                     ),
                   )
@@ -405,8 +472,8 @@ class _SearchMealState extends State<SearchMeal> {
               ),
               Expanded(
                   child: SingleChildScrollView(
-                child: _isloading
-                    ? Container(
+                    child: _isloading
+                        ? Container(
                         width: MediaQuery.sizeOf(context).width,
                         height: MediaQuery.sizeOf(context).height,
                         child: Align(
@@ -417,91 +484,91 @@ class _SearchMealState extends State<SearchMeal> {
                                       context, 0.1)),
                               child: CircularProgressIndicator(),
                             )))
-                    : Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: MediaQuery.sizeOf(context).height,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(14, 15, 10, 5),
-                              child: Text(
-                                "최근 검색한 음식",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xff818181),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        : Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: MediaQuery.sizeOf(context).height,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(14, 15, 10, 5),
+                            child: Text(
+                              "최근 검색한 음식",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color(0xff818181),
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Column(
-                              children: List.generate(
-                                  1,
-                                  (idx) => Align(
-                                      alignment: Alignment.center,
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                          padding: MaterialStateProperty.all<
-                                              EdgeInsets>(
-                                            const EdgeInsets.fromLTRB(
-                                                0, 5, 15, 5),
-                                          ),
-                                          minimumSize:
-                                              MaterialStateProperty.all<Size>(
-                                            Size(
-                                                getWidthRatioFromScreenSize(
-                                                    context, 0.95),
-                                                60),
-                                          ),
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                            ColorMainBack, // 버튼 배경색
-                                          ),
-                                          elevation:
-                                              MaterialStateProperty.all<double>(
-                                                  2),
-                                          shadowColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  mainBlack.withOpacity(0.5)),
-                                          shape: MaterialStateProperty.all<
-                                              OutlinedBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              side: BorderSide(
-                                                color: Color(0xffCDCFD0),
-                                                // 테두리 색상
-                                                width: 1, // 테두리 두께
-                                              ),
+                          ),
+                          Column(
+                            children: List.generate(
+                                1,
+                                    (idx) => Align(
+                                    alignment: Alignment.center,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        padding: MaterialStateProperty.all<
+                                            EdgeInsets>(
+                                          const EdgeInsets.fromLTRB(
+                                              0, 5, 15, 5),
+                                        ),
+                                        minimumSize:
+                                        MaterialStateProperty.all<Size>(
+                                          Size(
+                                              getWidthRatioFromScreenSize(
+                                                  context, 0.95),
+                                              60),
+                                        ),
+                                        backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                          ColorMainBack, // 버튼 배경색
+                                        ),
+                                        elevation:
+                                        MaterialStateProperty.all<double>(
+                                            2),
+                                        shadowColor:
+                                        MaterialStateProperty.all<Color>(
+                                            mainBlack.withOpacity(0.5)),
+                                        shape: MaterialStateProperty.all<
+                                            OutlinedBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8),
+                                            side: BorderSide(
+                                              color: Color(0xffCDCFD0),
+                                              // 테두리 색상
+                                              width: 1, // 테두리 두께
                                             ),
                                           ),
-                                          overlayColor:
-                                              MaterialStateProperty.all<Color>(
-                                            Colors.transparent, // hover 색상 제거
-                                          ),
                                         ),
-                                        onPressed: () {},
-                                        child: SizedBox(
-                                          width: getWidthRatioFromScreenSize(
-                                              context, 0.86),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start, // 텍스트 왼쪽 정렬
-                                            children: [
-                                              Text("음식명",
-                                                  style: Text16BoldBlack),
-                                              Text("음식정보",
-                                                  style: Text14w500Grey),
-                                            ],
-                                          ),
+                                        overlayColor:
+                                        MaterialStateProperty.all<Color>(
+                                          Colors.transparent, // hover 색상 제거
                                         ),
-                                      ))),
-                            )
-                          ],
-                        ),
+                                      ),
+                                      onPressed: () {},
+                                      child: SizedBox(
+                                        width: getWidthRatioFromScreenSize(
+                                            context, 0.86),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .start, // 텍스트 왼쪽 정렬
+                                          children: [
+                                            Text("음식명",
+                                                style: Text16BoldBlack),
+                                            Text("음식정보",
+                                                style: Text14w500Grey),
+                                          ],
+                                        ),
+                                      ),
+                                    ))),
+                          )
+                        ],
                       ),
-              ))
+                    ),
+                  ))
             ],
           ),
         ));
@@ -527,7 +594,7 @@ class _MooseDetailState extends State<MooseDetail> {
     super.initState();
     print("widget.save : ${widget.save}");
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await uploadFile(context);
+      //await uploadFile(context);
     });
   }
 
@@ -538,7 +605,7 @@ class _MooseDetailState extends State<MooseDetail> {
       child: Consumer<OneFoodDetail>(builder: (context, pv, child) {
 
         return pv.moosesuc  //무스 API에서 오류나면 로딩 화면 보여줌
-        ?Scaffold(
+            ?Scaffold(
             appBar: PreferredSize(
                 preferredSize: Size.fromHeight(47),
                 child: AppBar(
@@ -547,7 +614,7 @@ class _MooseDetailState extends State<MooseDetail> {
                   centerTitle: true,
                   title: Text(
                     "${widget.type}",
-                    style: Text14BlackBold,
+                    style: TextAppbar,
                   ),
                   leading: IconButton(
                     onPressed: () {
@@ -560,6 +627,7 @@ class _MooseDetailState extends State<MooseDetail> {
                 )),
             body: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -589,10 +657,29 @@ class _MooseDetailState extends State<MooseDetail> {
                           )
                         ],
                       )),
-                  Text(
+                  Padding(padding: EdgeInsets.only(left: 10),
+                  child: Text(
                     '${pv.foodInfo['food_info']['name']}',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
+                  ),),
+                  widget.type =="detail"
+                    ?Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Container(
+                      constraints: BoxConstraints(
+                      minHeight: 170, // 최소 높이
+                      ),
+                    decoration: BoxDecoration(
+                      color:const Color(0xFFE6E6E6),
+                      borderRadius: BorderRadius.circular(30),),
+                      ),
+                    Divider(thickness: 4, color: mainGrey,),
+                        ],
+                      ),
+                    )
+                  :SizedBox(),
                   Align(
                     alignment: Alignment.bottomLeft,
                     child: Padding(
@@ -607,12 +694,12 @@ class _MooseDetailState extends State<MooseDetail> {
                     child: Text('${pv.foodInfo['food_info']}'),
                   ),
                   widget.type == "영양소 분석"
-                  ?ElevatedButton(
+                      ?ElevatedButton(
                     onPressed: () {
-                      bottomHide(context);
+                      print('widget.save : ${widget.save}');
                       widget.save //식단등록에서 넘어온 경우 기존페이지로 이동, 무스에서 넘어온 경우 새로운 navigator인 식단등록으로 이동
                           ?popWithSlideAnimation(context, 3)
-                          :NvgToNxtPage(context, MealSave(type: "moose"));
+                          :NvgToNxtPageSlide(context, MealSave(type: "moose"));
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
@@ -648,29 +735,29 @@ class _MooseDetailState extends State<MooseDetail> {
                       ),
                     ),
                   )
-                  :SizedBox()
+                      :SizedBox()
                 ],
               ),
             ))
-        :Scaffold(
-            appBar: PreferredSize(
-                preferredSize: Size.fromHeight(47),
-                child: AppBar(
-                  scrolledUnderElevation: 0,
-                  automaticallyImplyLeading: false,
-                  centerTitle: true,
-                  title: Text(
-                    "${widget.type}",
-                    style: Text14BlackBold,
-                  ),
-                  leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      pv.clear();
-                    },
-                    icon: Icon(Icons.chevron_left, size: 30),
-                  ),
-                )),
+            :Scaffold(
+          appBar: PreferredSize(
+              preferredSize: Size.fromHeight(47),
+              child: AppBar(
+                scrolledUnderElevation: 0,
+                automaticallyImplyLeading: false,
+                centerTitle: true,
+                title: Text(
+                  "${widget.type}",
+                  style: Text14BlackBold,
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    pv.clear();
+                  },
+                  icon: Icon(Icons.chevron_left, size: 30),
+                ),
+              )),
           body: Center(
             child: CircularProgressIndicator(),
           ),
@@ -764,7 +851,7 @@ class _MooseDetailState extends State<MooseDetail> {
 
 Widget loadingMoose(BuildContext context) {
   Future.delayed(Duration(seconds: 2), () {
-    Navigator.pop(context);
+    //Navigator.pop(context);
     NvgToNxtPage(context, MooseDetail(type: "영양소 분석",save: false));
   });
 

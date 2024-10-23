@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart' as diodart;
-// import 'package:flutter/material.dart';
 import 'package:ieat/track/trackaction.dart';
 import 'package:ieat/track/trackroutine.dart';
 import 'package:ieat/track/trackstrart.dart';
@@ -91,7 +90,7 @@ class _TrackSfState extends State<TrackSf> {
           _isloading = false;
           var all_TrackList = List<Map<String, dynamic>>.from(res);
           final trackListProvider =
-              Provider.of<TrackProvider>(context, listen: false);
+          Provider.of<TrackProvider>(context, listen: false);
           trackListProvider.listInsert(all_TrackList);
         });
       } else if (response.statusCode == 404) {
@@ -176,12 +175,12 @@ class _TrackSfState extends State<TrackSf> {
         NvgToNxtPage(context, TrackCreate_Sf_1(tid: tid));
         bottomHide(context);
         final pv =
-            Provider.of<OneTrackDetailInfoProvider>(context, listen: false);
+        Provider.of<OneTrackDetailInfoProvider>(context, listen: false);
         pv.clear();
         pv.setInfoFromCreate(tid);
 
         final trackListProvider =
-            Provider.of<TrackProvider>(context, listen: false);
+        Provider.of<TrackProvider>(context, listen: false);
         trackListProvider.oneTrackInsert(tid);
         final Map<String, dynamic> _trackInfo = {
           "tid": tid,
@@ -193,7 +192,7 @@ class _TrackSfState extends State<TrackSf> {
           "alcohol": 0,
           "cheating_cnt": 0,
           "duration": 14,
-          "delete": true,
+          "delete": false,
           "alone": true,
           "start_date": today,
           "end_date": today
@@ -208,79 +207,79 @@ class _TrackSfState extends State<TrackSf> {
   }
 
   Widget trackStartSuc(BuildContext context) => Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 30),
-            SizedBox(
-              width: 170,
-              child: Image.asset(
-                'assets/icons/dialog/save_suc_1.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(height: 30),
-            Text(
-              "성공적으로 트랙이 시작되었습니다!",
-              style: Text25BoldBlack,
-            ),
-            SizedBox(height: 40),
-            Center(
-              child: SizedBox(
-                width: 340,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    bottomShow(context);
-                  },
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    ),
-                    minimumSize: MaterialStateProperty.all<Size>(
-                      Size(40, 40),
-                    ),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      ColorMainBack,
-                    ),
-                    elevation: MaterialStateProperty.all<double>(0),
-                    shadowColor: MaterialStateProperty.all<Color>(
-                      Colors.black,
-                    ),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    overlayColor: MaterialStateProperty.all<Color>(
-                      Colors.transparent,
-                    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 30),
+        SizedBox(
+          width: 170,
+          child: Image.asset(
+            'assets/icons/dialog/save_suc_1.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        SizedBox(height: 30),
+        Text(
+          "성공적으로 트랙이 시작되었습니다!",
+          style: Text25BoldBlack,
+        ),
+        SizedBox(height: 40),
+        Center(
+          child: SizedBox(
+            width: 340,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                bottomShow(context);
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  EdgeInsets.fromLTRB(10, 5, 10, 5),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(40, 40),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  ColorMainBack,
+                ),
+                elevation: MaterialStateProperty.all<double>(0),
+                shadowColor: MaterialStateProperty.all<Color>(
+                  Colors.black,
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Container(
-                      width: double.maxFinite,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color(0xffCBFF89),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Color(0xFFE6E6E6),
-                          width: 1,
-                        ),
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "닫기",
-                          style: Text22BoldBlack,
-                        ),
-                      )),
+                ),
+                overlayColor: MaterialStateProperty.all<Color>(
+                  Colors.transparent,
                 ),
               ),
-            )
-          ],
-        ),
-      );
+              child: Container(
+                  width: double.maxFinite,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xffCBFF89),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Color(0xFFE6E6E6),
+                      width: 1,
+                    ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "닫기",
+                      style: Text22BoldBlack,
+                    ),
+                  )),
+            ),
+          ),
+        )
+      ],
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -290,8 +289,8 @@ class _TrackSfState extends State<TrackSf> {
         debugShowCheckedModeBanner: false,
         title: 'loading',
         theme: ThemeData(
-            // 테마 설정
-            ),
+          // 테마 설정
+        ),
         home: Scaffold(
           body: SizedBox(),
         ),
@@ -301,15 +300,15 @@ class _TrackSfState extends State<TrackSf> {
     return Scaffold(
       body: Container(
         color: ColorMainBack,
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 60),
               const Text(
                 '트랙',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 25),
               ),
               const SizedBox(
                 height: 10,
@@ -349,7 +348,7 @@ class _TrackSfState extends State<TrackSf> {
                     const Text(
                       "짜고 지키고 목표 달성!",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w800,
                         fontSize: 11,
                         color: Color(0xffF89C1B),
                       ),
@@ -450,72 +449,72 @@ class _TrackSfState extends State<TrackSf> {
                                     fontWeight: FontWeight.bold,
                                   )),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: List.generate(6,
-                                    (idx)=> SizedBox(
-                                        width: MediaQuery.of(context).size.width /
-                                            7, // 화면 크기에 맞춰 균등 분할
-                                        child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 8.0, 0.0, 0.0),
-                                          child: Container(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Align(
-                                                  alignment: Alignment.center,
-                                                  child: Container(
-                                                    width: 60,
-                                                    height: 60,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                      const Color(0xffEFEFEF),
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          14),
-                                                      border: Border.all(
-                                                        color: const Color(
-                                                            0xFFE6E6E6),
-                                                        width: 1,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: List.generate(5,
+                                          (idx)=> SizedBox(
+                                          width: MediaQuery.of(context).size.width /
+                                              7, // 화면 크기에 맞춰 균등 분할
+                                          child: Padding(
+                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 8.0, 0.0, 0.0),
+                                            child: Container(
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Align(
+                                                    alignment: Alignment.center,
+                                                    child: Container(
+                                                      width: 60,
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                        const Color(0xffEFEFEF),
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            14),
+                                                        border: Border.all(
+                                                          color: const Color(
+                                                              0xFFE6E6E6),
+                                                          width: 1,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "day",
-                                                        style: TextStyle(
-                                                            color: const Color(
-                                                                0xff1E1E1E)
-                                                                .withOpacity(0.3),
-                                                            fontWeight:
-                                                            FontWeight.bold),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "img",
+                                                          style: TextStyle(
+                                                              color: const Color(
+                                                                  0xff1E1E1E)
+                                                                  .withOpacity(0.3),
+                                                              fontWeight:
+                                                              FontWeight.bold),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 3,
-                                                ),
-                                                Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text('1일 차',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: mainBlack,
-                                                        fontSize: 10,
-                                                        fontFamily:
-                                                        'Noto Sans KR',
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                        FontWeight.w600,
-                                                      )),
-                                                ),
-                                              ],
+                                                  const SizedBox(
+                                                    height: 3,
+                                                  ),
+                                                  Align(
+                                                    alignment: Alignment.center,
+                                                    child: Text('트랙명',
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: mainBlack,
+                                                          fontSize: 10,
+                                                          fontFamily:
+                                                          'Noto Sans KR',
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                          FontWeight.w600,
+                                                        )),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        )))
+                                          )))
                               )
                             ],
                           )),
@@ -554,7 +553,7 @@ class _TrackSfState extends State<TrackSf> {
                     EdgeInsets.fromLTRB(15, 5, 15, 5),
                   ),
                   minimumSize: MaterialStateProperty.all<Size>(
-                    Size(double.maxFinite, 55),
+                    Size(double.maxFinite, 40),
                   ),
                   backgroundColor: MaterialStateProperty.all<Color>(
                     ColorMainBack,
@@ -605,7 +604,7 @@ class _TrackSfState extends State<TrackSf> {
               //                 fontWeight: FontWeight.bold, fontSize: 14))
               //       ],
               //     )),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               Container(
                 width: MediaQuery.of(context).size.width,
                 constraints: BoxConstraints(
@@ -644,16 +643,16 @@ class _TrackSfState extends State<TrackSf> {
                     return Column(
                       children: List.generate(
                         trackListProvider.trackList.length,
-                        (idx) => Column(
+                            (idx) => Column(
                           children: [
                             Stack(
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
                                     final pv =
-                                        Provider.of<OneTrackDetailInfoProvider>(
-                                            context,
-                                            listen: false);
+                                    Provider.of<OneTrackDetailInfoProvider>(
+                                        context,
+                                        listen: false);
                                     pv.clear();
                                     pv.setInfoFromDetail(list[idx]);
                                     NvgToNxtPage(
@@ -665,21 +664,21 @@ class _TrackSfState extends State<TrackSf> {
                                   },
                                   style: ButtonStyle(
                                     padding:
-                                        MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.fromLTRB(5, 5, 10, 5),
                                     ),
                                     minimumSize:
-                                        MaterialStateProperty.all<Size>(
+                                    MaterialStateProperty.all<Size>(
                                       Size(double.infinity, 65),
                                     ),
                                     backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                    MaterialStateProperty.all<Color>(
                                       ColorMainBack,
                                     ),
                                     elevation:
-                                        MaterialStateProperty.all<double>(0),
+                                    MaterialStateProperty.all<double>(0),
                                     shadowColor:
-                                        MaterialStateProperty.all<Color>(
+                                    MaterialStateProperty.all<Color>(
                                       Colors.black,
                                     ),
                                     shape: MaterialStateProperty.all<
@@ -689,36 +688,35 @@ class _TrackSfState extends State<TrackSf> {
                                       ),
                                     ),
                                     overlayColor:
-                                        MaterialStateProperty.all<Color>(
+                                    MaterialStateProperty.all<Color>(
                                       Colors.transparent,
                                     ),
                                   ),
                                   child: Container(
-                                    padding: EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         Padding(
                                             padding:
-                                                EdgeInsets.fromLTRB(0, 3, 0, 0),
+                                            EdgeInsets.fromLTRB(0, 3, 0, 0),
                                             child: list[idx]['icon'] == null
                                                 ? SizedBox(
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      'assets/icons/track/Melting face.png',
-                                                      fit: BoxFit.cover,
-                                                    ))
+                                                width: 40,
+                                                child: Image.asset(
+                                                  'assets/icons/track/Melting face.png',
+                                                  fit: BoxFit.cover,
+                                                ))
                                                 : SizedBox(
-                                                    width: 40,
-                                                    child: Image.asset(
-                                                      'assets/icons/track/${list[idx]['icon']}.png',
-                                                      fit: BoxFit.cover,
-                                                    ))),
+                                                width: 40,
+                                                child: Image.asset(
+                                                  'assets/icons/track/${list[idx]['icon']}.png',
+                                                  fit: BoxFit.cover,
+                                                ))),
                                         const SizedBox(width: 8),
                                         Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "${list[idx]['name']}",
@@ -728,39 +726,34 @@ class _TrackSfState extends State<TrackSf> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            list[idx]['daily_calorie'] == 0
+                                            list[idx]['daily_calorie'] == null || list[idx]['daily_calorie'] == 0
                                                 ? Text(
-                                                    "00Kcal",
-                                                    style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  )
+                                              "00Kcal",
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.bold,
+                                              ),
+                                            )
                                                 : Text(
-                                                    "${list[idx]['daily_calorie']}Kcal",
-                                                    style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  )
+                                              "${list[idx]['daily_calorie']}Kcal",
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight:
+                                                FontWeight.bold,
+                                              ),
+                                            )
                                           ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 10, 5, 0),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: list[idx]['using']
-                                        ? SizedBox(
+                                        ),
+                                        Spacer(),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: list[idx]['using']
+                                              ? SizedBox(
                                             width: 70,
-                                            height: 40,
+                                            height: 35,
                                             child: Stack(
                                               children: [
                                                 Center(
@@ -772,14 +765,14 @@ class _TrackSfState extends State<TrackSf> {
                                                         .styleFrom(
                                                       minimumSize: Size(70, 40),
                                                       backgroundColor:
-                                                          Color(0xffCBFF89),
+                                                      Color(0xffCBFF89),
                                                       elevation: 0,
                                                       shadowColor: Colors.black,
                                                       shape:
-                                                          RoundedRectangleBorder(
+                                                      RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(13),
+                                                        BorderRadius
+                                                            .circular(13),
                                                       ),
                                                     ),
                                                     child: SizedBox(),
@@ -791,7 +784,7 @@ class _TrackSfState extends State<TrackSf> {
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 12,
                                                     ),
                                                   ),
@@ -799,29 +792,92 @@ class _TrackSfState extends State<TrackSf> {
                                               ],
                                             ),
                                           )
-                                        : SizedBox(
+                                              : SizedBox(
                                             width: 70,
-                                            height: 40,
+                                            height: 35,
                                             child: Stack(
                                               children: [
                                                 Center(
                                                   child: ElevatedButton(
                                                     onPressed: () {
                                                       bottomHide(context);
-                                                      NvgToNxtPageSlide(context, StartTrack_Sf(tid :list[idx]['track_id']));
+                                                      Get.defaultDialog(
+                                                        title: "",
+                                                        content: Column(
+                                                          children: [
+                                                            Text(
+                                                              "진행 중인 트랙을 종료하고 이 트랙을 시작할까요?",
+                                                              textAlign: TextAlign.center,
+                                                              style: TextStyle(fontSize: 16),
+                                                            ),
+                                                            const SizedBox(height: 20),
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                              children: [
+                                                                ElevatedButton(
+                                                                  onPressed: () {
+                                                                    Get.back(); // 다이얼로그 닫기
+                                                                    bottomShow(context);
+                                                                  },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    minimumSize: Size(70, 40),
+                                                                    backgroundColor:
+                                                                    mainGrey,
+                                                                    elevation: 0,
+                                                                    shadowColor: Colors.black,
+                                                                    shape:
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text('닫기', style: Text14BlackBold),
+                                                                ),
+                                                                ElevatedButton(
+                                                                  onPressed: () {
+                                                                    Get.back(); // 다이얼로그 닫기
+                                                                    NvgToNxtPageSlide(context, StartTrack_Sf(tid :list[idx]['track_id']));
+                                                                  },
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    minimumSize: Size(70, 40),
+                                                                    backgroundColor:
+                                                                    Color(0xffCBFF89),
+                                                                    elevation: 0,
+                                                                    shadowColor: Colors.black,
+                                                                    shape:
+                                                                    RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(5),
+                                                                    ),
+                                                                  ),
+                                                                  child: Text('시작', style: Text14BlackBold),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
+                                                        backgroundColor: Colors.white, // 다이얼로그 배경색
+                                                        radius: 10, // 모서리 둥글기
+                                                      );
+
                                                     },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                       minimumSize: Size(70, 40),
                                                       backgroundColor:
-                                                          Color(0xffF3F3F3),
+                                                      Color(0xffF3F3F3),
                                                       elevation: 0,
                                                       shadowColor: Colors.black,
                                                       shape:
-                                                          RoundedRectangleBorder(
+                                                      RoundedRectangleBorder(
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(13),
+                                                        BorderRadius
+                                                            .circular(13),
                                                       ),
                                                     ),
                                                     child: SizedBox(),
@@ -833,7 +889,7 @@ class _TrackSfState extends State<TrackSf> {
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontWeight:
-                                                          FontWeight.bold,
+                                                      FontWeight.bold,
                                                       fontSize: 12,
                                                     ),
                                                   ),
@@ -841,8 +897,11 @@ class _TrackSfState extends State<TrackSf> {
                                               ],
                                             ),
                                           ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             const SizedBox(height: 5),
@@ -896,28 +955,28 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
   Widget tabSlider(idx, context) => idx == 0 ? trackNmCal(context) : goalCal(context);
 
   Widget trackNmCal(context) => Padding(
-        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-        child: Container(
-          height: 110,
-          width: getWidthRatioFromScreenSize(context, 1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+    child: Container(
+      height: 110,
+      width: getWidthRatioFromScreenSize(context, 1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "트랙의 이름은 무엇으로 할까요?",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          Stack(
             children: [
-              Text(
-                "트랙의 이름은 무엇으로 할까요?",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
               Stack(
                 children: [
-                  Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          height: 70,
-                          width: getWidthRatioFromScreenSize(context, 0.7),
-                          decoration: const BoxDecoration(
-                              border: Border(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      height: 70,
+                      width: getWidthRatioFromScreenSize(context, 0.7),
+                      decoration: const BoxDecoration(
+                          border: Border(
                             bottom: BorderSide(
                               color: Colors.black, // 바텀 테두리 색상
                               width: 1.0, // 바텀 테두리 두께
@@ -925,120 +984,120 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
                                   .solid, // 바텀 테두리 스타일 (solid, dashed 등)
                             ),
                           )),
-                        ),
-                      ),
-                      Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: TextField(
-                              style: TextStyle(
-                                color: Colors.grey, // 입력 텍스트 색상
-                                fontSize: 30, // 입력 텍스트 크기
-                                fontWeight: FontWeight.w900, // 입력 텍스트 두께
-                              ),
-                              controller: _trackNmController,
-                              decoration: InputDecoration(
-                                hintText: '한문철식단따라잡기',
-                                hintStyle: TextStyle(
-                                  color: Colors.grey, // 힌트 텍스트 색상
-                                  fontSize: 30, // 힌트 텍스트 크기
-                                  fontWeight: FontWeight.w900, // 힌트 텍스트 두께
-                                ),
-                                border: InputBorder.none, // 모든 테두리 제거
-                              ),
-                              keyboardType: TextInputType.text,
-                            ),
-                          ))
-                    ],
-                  ),
-                  Container(
-                    height: 70,
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_trackNmController.text.isEmpty) {
-                              setState(() {
-                                errmsg = "트랙 이름을 입력해 주세요.";
-                              });
-                            } else {
-                              if (errmsg != "")
-                                setState(() {
-                                  errmsg = "";
-                                }); // 오류 메시지 초기화
-                              _tabcontroller?.nextPage();
-                              setState(() {
-                                createTrackInitInfo['track name'] =
-                                    _trackNmController.text;
-                              });
-                            }
-                          }, //여기
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                              Size(getWidthRatioFromScreenSize(context, 0.2),
-                                  60),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorMainBack, // 버튼 배경색
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            shadowColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                                ColorBackGround),
-                          ),
-                          child: Icon(Icons.arrow_forward,
-                              color: mainBlack, size: 30)),
                     ),
-                  )
+                  ),
+                  Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: TextField(
+                          style: TextStyle(
+                            color: Colors.grey, // 입력 텍스트 색상
+                            fontSize: 30, // 입력 텍스트 크기
+                            fontWeight: FontWeight.w900, // 입력 텍스트 두께
+                          ),
+                          controller: _trackNmController,
+                          decoration: InputDecoration(
+                            hintText: '한문철식단따라잡기',
+                            hintStyle: TextStyle(
+                              color: Colors.grey, // 힌트 텍스트 색상
+                              fontSize: 30, // 힌트 텍스트 크기
+                              fontWeight: FontWeight.w900, // 힌트 텍스트 두께
+                            ),
+                            border: InputBorder.none, // 모든 테두리 제거
+                          ),
+                          keyboardType: TextInputType.text,
+                        ),
+                      ))
                 ],
               ),
-              Text(
-                errmsg,
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.redAccent),
-              ),
+              Container(
+                height: 70,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (_trackNmController.text.isEmpty) {
+                          setState(() {
+                            errmsg = "트랙 이름을 입력해 주세요.";
+                          });
+                        } else {
+                          if (errmsg != "")
+                            setState(() {
+                              errmsg = "";
+                            }); // 오류 메시지 초기화
+                          _tabcontroller?.nextPage();
+                          setState(() {
+                            createTrackInitInfo['track name'] =
+                                _trackNmController.text;
+                          });
+                        }
+                      }, //여기
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        ),
+                        minimumSize: MaterialStateProperty.all<Size>(
+                          Size(getWidthRatioFromScreenSize(context, 0.2),
+                              60),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          ColorMainBack, // 버튼 배경색
+                        ),
+                        elevation: MaterialStateProperty.all<double>(0),
+                        shadowColor:
+                        MaterialStateProperty.all<Color>(Colors.black),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            ColorBackGround),
+                      ),
+                      child: Icon(Icons.arrow_forward,
+                          color: mainBlack, size: 30)),
+                ),
+              )
             ],
           ),
-        ),
-      );
+          Text(
+            errmsg,
+            style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent),
+          ),
+        ],
+      ),
+    ),
+  );
 
   Widget goalCal(context) => Padding(
-        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-        child: Container(
-          height: 110,
-          width: getWidthRatioFromScreenSize(context, 1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+    child: Container(
+      height: 110,
+      width: getWidthRatioFromScreenSize(context, 1),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "일일 목표 칼로리는 몇으로 설정할까요?",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          Stack(
             children: [
-              Text(
-                "일일 목표 칼로리는 몇으로 설정할까요?",
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
               Stack(
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Container(
-                                height: 70,
-                                width:
-                                    getWidthRatioFromScreenSize(context, 0.5),
-                                decoration: const BoxDecoration(
-                                    border: Border(
+                  Container(
+                    child: Row(
+                      children: [
+                        Container(
+                            height: 70,
+                            width:
+                            getWidthRatioFromScreenSize(context, 0.5),
+                            decoration: const BoxDecoration(
+                                border: Border(
                                   bottom: BorderSide(
                                     color: Colors.black,
                                     // 바텀 테두리 색상
@@ -1048,114 +1107,114 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
                                         .solid, // 바텀 테두리 스타일 (solid, dashed 등)
                                   ),
                                 ))),
-                            Container(
-                                height: 70,
-                                width: 100,
-                                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    'Kcal',
-                                    style: TextStyle(
-                                      color: mainBlack, // 힌트 텍스트 색상
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.w900,
-                                    ),
-                                  ),
-                                ))
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                              child: TextField(
+                        Container(
+                            height: 70,
+                            width: 100,
+                            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Kcal',
                                 style: TextStyle(
-                                  color: Colors.grey, // 힌트 텍스트 색상
-                                  fontSize: 30, // 힌트 텍스트 크기
-                                  fontWeight: FontWeight.w900, // 힌트 텍스트 두께
+                                  color: mainBlack, // 힌트 텍스트 색상
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w900,
                                 ),
-                                controller: _goalCalController,
-                                decoration: InputDecoration(
-                                  hintText: '2,000',
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey, // 힌트 텍스트 색상
-                                    fontSize: 30, // 힌트 텍스트 크기
-                                    fontWeight: FontWeight.w900, // 힌트 텍스트 두께
-                                  ),
-                                  border: InputBorder.none, // 모든 테두리 제거
-                                ),
-                                keyboardType: TextInputType.number,
                               ),
-                            )),
-                      )
-                    ],
+                            ))
+                      ],
+                    ),
                   ),
                   Container(
-                    height: 70,
                     child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (_goalCalController.text.isEmpty) {
-                              setState(() {
-                                errmsg = "목표 칼로리를 입력해 주세요.(추천 목표 칼로리 : 2,000)";
-                              });
-                            } else {
-                              if (errmsg != "")
-                                setState(() {
-                                  errmsg = "";
-                                }); // 오류 메시지 초기화
-                              final pv =
-                                  Provider.of<OneTrackDetailInfoProvider>(
-                                      context,
-                                      listen: false);
-                              pv.setName(_trackNmController.text);
-                              pv.setCalorie(int.parse(_goalCalController.text));
-                              NvgToNxtPage(context, TrackDetail_Sf(pagetype: "생성"));
-                            }
-                          }, //여기
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: TextField(
+                            style: TextStyle(
+                              color: Colors.grey, // 힌트 텍스트 색상
+                              fontSize: 30, // 힌트 텍스트 크기
+                              fontWeight: FontWeight.w900, // 힌트 텍스트 두께
                             ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                              Size(getWidthRatioFromScreenSize(context, 0.2),
-                                  60),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorMainBack, // 버튼 배경색
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            shadowColor:
-                                MaterialStateProperty.all<Color>(Colors.black),
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            controller: _goalCalController,
+                            decoration: InputDecoration(
+                              hintText: '2,000',
+                              hintStyle: TextStyle(
+                                color: Colors.grey, // 힌트 텍스트 색상
+                                fontSize: 30, // 힌트 텍스트 크기
+                                fontWeight: FontWeight.w900, // 힌트 텍스트 두께
                               ),
+                              border: InputBorder.none, // 모든 테두리 제거
                             ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                                ColorBackGround),
+                            keyboardType: TextInputType.number,
                           ),
-                          child: Icon(Icons.arrow_forward,
-                              color: mainBlack, size: 30)),
-                    ),
+                        )),
                   )
                 ],
               ),
-              Text(
-                errmsg,
-                style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.redAccent),
-              ),
+              Container(
+                height: 70,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (_goalCalController.text.isEmpty) {
+                          setState(() {
+                            errmsg = "목표 칼로리를 입력해 주세요.(추천 목표 칼로리 : 2,000)";
+                          });
+                        } else {
+                          if (errmsg != "")
+                            setState(() {
+                              errmsg = "";
+                            }); // 오류 메시지 초기화
+                          final pv =
+                          Provider.of<OneTrackDetailInfoProvider>(
+                              context,
+                              listen: false);
+                          pv.setName(_trackNmController.text);
+                          pv.setCalorie(int.parse(_goalCalController.text));
+                          NvgToNxtPage(context, TrackDetail_Sf(pagetype: "생성"));
+                        }
+                      }, //여기
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                          const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        ),
+                        minimumSize: MaterialStateProperty.all<Size>(
+                          Size(getWidthRatioFromScreenSize(context, 0.2),
+                              60),
+                        ),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          ColorMainBack, // 버튼 배경색
+                        ),
+                        elevation: MaterialStateProperty.all<double>(0),
+                        shadowColor:
+                        MaterialStateProperty.all<Color>(Colors.black),
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            ColorBackGround),
+                      ),
+                      child: Icon(Icons.arrow_forward,
+                          color: mainBlack, size: 30)),
+                ),
+              )
             ],
           ),
-        ),
-      );
+          Text(
+            errmsg,
+            style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: Colors.redAccent),
+          ),
+        ],
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -1175,330 +1234,337 @@ class _TrackCreate_Sf_1State extends State<TrackCreate_Sf_1> {
                   popWithSlideAnimation(context, 2);
                   bottomShow(context);
                 },
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(
+                      Colors.transparent,
+                    )
+                ),
                 icon: Icon(Icons.chevron_left, size: 30),
               ),
             ),
-            body: Container(
-              padding: EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                      height: 100,
-                      width: getWidthRatioFromScreenSize(context, 1),
-                      child: CarouselSlider(
-                        items: List.generate(
-                            8,
-                            (i) => ElevatedButton(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  padding:
-                                      MaterialStateProperty.all<EdgeInsets>(
-                                    const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  ),
-                                  minimumSize: MaterialStateProperty.all<Size>(
-                                    Size(double.maxFinite, 70),
-                                  ),
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                    ColorMainBack, // 버튼 배경색
-                                  ),
-                                  elevation:
-                                      MaterialStateProperty.all<double>(0),
-                                  shadowColor: MaterialStateProperty.all<Color>(
-                                      Colors.black),
-                                  shape:
-                                      MaterialStateProperty.all<OutlinedBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
+            body: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                        height: 100,
+                        width: getWidthRatioFromScreenSize(context, 1),
+                        child: CarouselSlider(
+                          items: List.generate(
+                              8,
+                                  (i) => ElevatedButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(
+                                    padding:
+                                    MaterialStateProperty.all<EdgeInsets>(
+                                      const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    ),
+                                    minimumSize: MaterialStateProperty.all<Size>(
+                                      Size(double.maxFinite, 70),
+                                    ),
+                                    backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                      ColorMainBack, // 버튼 배경색
+                                    ),
+                                    elevation:
+                                    MaterialStateProperty.all<double>(0),
+                                    shadowColor: MaterialStateProperty.all<Color>(
+                                        Colors.black),
+                                    shape:
+                                    MaterialStateProperty.all<OutlinedBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    overlayColor:
+                                    MaterialStateProperty.all<Color>(
+                                      Colors.transparent, // hover 색상 제거
                                     ),
                                   ),
-                                  overlayColor:
-                                      MaterialStateProperty.all<Color>(
-                                    Colors.transparent, // hover 색상 제거
-                                  ),
-                                ),
-                                child: SizedBox(
-                                  width: 70,
-                                  child: Image.asset(
-                                    'assets/icons/track/${icons[i]}.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ))),
-                        options: CarouselOptions(
-                          scrollDirection: Axis.horizontal,
-                          viewportFraction: 0.26,
-                          // 아이콘의 크기에 맞게 조정
-                          height: 80,
-                          // 아이콘의 높이에 맞게 조정
-                          enlargeCenterPage: true,
-                          // 중앙 아이콘을 강조
-                          autoPlay: false,
-                          // 자동 재생 여부
-                          onPageChanged: (idx, reason) {
-                            // print("$idx : ${getIconNm(idx)}");
-                            setState(() {
-                              createTrackInitInfo['track icon'] = icons[idx];
-                            });
-                            final pv = Provider.of<OneTrackDetailInfoProvider>(
-                                context,
-                                listen: false);
-                            pv.setIcon(icons[idx]);
-                          },
-                        ),
-                        carouselController: _controller,
-                      )),
-                  CarouselSlider.builder(
-                    carouselController: _tabcontroller,
-                    options: CarouselOptions(
-                        height: 400,
-                        initialPage: 0,
-                        viewportFraction: 1,
-                        enlargeCenterPage: false,
-                        enableInfiniteScroll: false,
-                        scrollPhysics: NeverScrollableScrollPhysics()),
-                    itemCount: 2,
-                    itemBuilder: (context, idx, realIndex) {
-                      return tabSlider(idx, context);
-                    },
-                  ),
-                ],
+                                  child: SizedBox(
+                                    width: 70,
+                                    child: Image.asset(
+                                      'assets/icons/track/${icons[i]}.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ))),
+                          options: CarouselOptions(
+                            scrollDirection: Axis.horizontal,
+                            viewportFraction: 0.26,
+                            // 아이콘의 크기에 맞게 조정
+                            height: 80,
+                            // 아이콘의 높이에 맞게 조정
+                            enlargeCenterPage: true,
+                            // 중앙 아이콘을 강조
+                            autoPlay: false,
+                            // 자동 재생 여부
+                            onPageChanged: (idx, reason) {
+                              // print("$idx : ${getIconNm(idx)}");
+                              setState(() {
+                                createTrackInitInfo['track icon'] = icons[idx];
+                              });
+                              final pv = Provider.of<OneTrackDetailInfoProvider>(
+                                  context,
+                                  listen: false);
+                              pv.setIcon(icons[idx]);
+                            },
+                          ),
+                          carouselController: _controller,
+                        )),
+                    CarouselSlider.builder(
+                      carouselController: _tabcontroller,
+                      options: CarouselOptions(
+                          height: 400,
+                          initialPage: 0,
+                          viewportFraction: 1,
+                          enlargeCenterPage: false,
+                          enableInfiniteScroll: false,
+                          scrollPhysics: NeverScrollableScrollPhysics()),
+                      itemCount: 2,
+                      itemBuilder: (context, idx, realIndex) {
+                        return tabSlider(idx, context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             )));
   }
 }
 
 Widget onlyCanStartMonday(BuildContext context) => Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 10),
-          SizedBox(
-            width: 170,
-            child: Image.asset(
-              'assets/icons/dialog/save_fail_1.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 30),
-          Text(
-            "트랙은 월요일부터 시작할 수 있어요.",
-            style: Text25BoldBlack,
-          ),
-          SizedBox(height: 40),
-          SizedBox(height: 15),
-          Center(
-            child: SizedBox(
-              width: 340,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  bottomShow(context);
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(40, 40),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    ColorMainBack,
-                  ),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shadowColor: MaterialStateProperty.all<Color>(
-                    Colors.black,
-                  ),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
-                  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 10),
+      SizedBox(
+        width: 170,
+        child: Image.asset(
+          'assets/icons/dialog/save_fail_1.png',
+          fit: BoxFit.cover,
+        ),
+      ),
+      SizedBox(height: 30),
+      Text(
+        "트랙은 월요일부터 시작할 수 있어요.",
+        style: Text25BoldBlack,
+      ),
+      SizedBox(height: 40),
+      SizedBox(height: 15),
+      Center(
+        child: SizedBox(
+          width: 340,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              bottomShow(context);
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.fromLTRB(10, 5, 10, 5),
+              ),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(40, 40),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                ColorMainBack,
+              ),
+              elevation: MaterialStateProperty.all<double>(0),
+              shadowColor: MaterialStateProperty.all<Color>(
+                Colors.black,
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: ColorBackGround,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color(0xFFE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "닫기",
-                        style: Text22BoldBlack,
-                      ),
-                    )),
+              ),
+              overlayColor: MaterialStateProperty.all<Color>(
+                Colors.transparent,
               ),
             ),
-          )
-        ],
-      ),
-    );
+            child: Container(
+                width: double.maxFinite,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: ColorBackGround,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Color(0xFFE6E6E6),
+                    width: 1,
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "닫기",
+                    style: Text22BoldBlack,
+                  ),
+                )),
+          ),
+        ),
+      )
+    ],
+  ),
+);
 
 Widget createTrackSuc(BuildContext context) => Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 30),
-          SizedBox(
-            width: 170,
-            child: Image.asset(
-              'assets/icons/dialog/save_suc_1.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 30),
-          Text(
-            "성공적으로 저장하였습니다.",
-            style: Text25BoldBlack,
-          ),
-          SizedBox(height: 40),
-          Center(
-            child: SizedBox(
-              width: 340,
-              child: ElevatedButton(
-                onPressed: () {
-                  bottomShow(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(40, 40),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    ColorMainBack,
-                  ),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shadowColor: MaterialStateProperty.all<Color>(
-                    Colors.black,
-                  ),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
-                  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 30),
+      SizedBox(
+        width: 170,
+        child: Image.asset(
+          'assets/icons/dialog/save_suc_1.png',
+          fit: BoxFit.cover,
+        ),
+      ),
+      SizedBox(height: 30),
+      Text(
+        "성공적으로 저장하였습니다.",
+        style: Text25BoldBlack,
+      ),
+      SizedBox(height: 40),
+      Center(
+        child: SizedBox(
+          width: 340,
+          child: ElevatedButton(
+            onPressed: () {
+              bottomShow(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.fromLTRB(10, 5, 10, 5),
+              ),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(40, 40),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                ColorMainBack,
+              ),
+              elevation: MaterialStateProperty.all<double>(0),
+              shadowColor: MaterialStateProperty.all<Color>(
+                Colors.black,
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xffCBFF89),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color(0xFFE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "닫기",
-                        style: Text22BoldBlack,
-                      ),
-                    )),
+              ),
+              overlayColor: MaterialStateProperty.all<Color>(
+                Colors.transparent,
               ),
             ),
-          )
-        ],
-      ),
-    );
+            child: Container(
+                width: double.maxFinite,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xffCBFF89),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Color(0xFFE6E6E6),
+                    width: 1,
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "닫기",
+                    style: Text22BoldBlack,
+                  ),
+                )),
+          ),
+        ),
+      )
+    ],
+  ),
+);
 
 Widget createTrackFail(BuildContext context) => Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: 30),
-          SizedBox(
-            width: 170,
-            child: Image.asset(
-              'assets/icons/dialog/save_fail_1.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 30),
-          Text(
-            "오류가 발생하였습니다.",
-            style: Text25BoldBlack,
-          ),
-          SizedBox(height: 40),
-          Center(
-            child: SizedBox(
-              width: 340,
-              child: ElevatedButton(
-                onPressed: () {
-                  bottomShow(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(40, 40),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    ColorMainBack,
-                  ),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shadowColor: MaterialStateProperty.all<Color>(
-                    Colors.black,
-                  ),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
-                  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      SizedBox(height: 30),
+      SizedBox(
+        width: 170,
+        child: Image.asset(
+          'assets/icons/dialog/save_fail_1.png',
+          fit: BoxFit.cover,
+        ),
+      ),
+      SizedBox(height: 30),
+      Text(
+        "오류가 발생하였습니다.",
+        style: Text25BoldBlack,
+      ),
+      SizedBox(height: 40),
+      Center(
+        child: SizedBox(
+          width: 340,
+          child: ElevatedButton(
+            onPressed: () {
+              bottomShow(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.fromLTRB(10, 5, 10, 5),
+              ),
+              minimumSize: MaterialStateProperty.all<Size>(
+                Size(40, 40),
+              ),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                ColorMainBack,
+              ),
+              elevation: MaterialStateProperty.all<double>(0),
+              shadowColor: MaterialStateProperty.all<Color>(
+                Colors.black,
+              ),
+              shape: MaterialStateProperty.all<OutlinedBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xffCBFF89),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color(0xFFE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "닫기",
-                        style: Text22BoldBlack,
-                      ),
-                    )),
+              ),
+              overlayColor: MaterialStateProperty.all<Color>(
+                Colors.transparent,
               ),
             ),
-          )
-        ],
-      ),
-    );
+            child: Container(
+                width: double.maxFinite,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xffCBFF89),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Color(0xFFE6E6E6),
+                    width: 1,
+                  ),
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "닫기",
+                    style: Text22BoldBlack,
+                  ),
+                )),
+          ),
+        ),
+      )
+    ],
+  ),
+);
 
 class TrackDetail_Sf extends StatefulWidget {
   const TrackDetail_Sf(
@@ -1517,7 +1583,100 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
   bool _isloading = true;
 
   TextEditingController _goalCalController = TextEditingController();
+  TextEditingController _trackNmController = TextEditingController();
 
+  Widget chgTrackNm(BuildContext context, String hintText) => Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "트랙 이름 변경",
+          style: Text15Bold,
+        ),
+        SizedBox(
+            width: 200,
+            child: Center(
+              child: TextField(
+                controller: _trackNmController,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  hintStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: mainBlack),
+                  border: InputBorder.none, // 모든 테두리 제거
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            )),
+        SizedBox(height: 40),
+        Center(
+          child: SizedBox(
+            width: 200,
+            child: ElevatedButton(
+              onPressed: () {
+                bottomShow(context);
+                Navigator.pop(context);
+                final pv = Provider.of<OneTrackDetailInfoProvider>(context,
+                    listen: false);
+                pv.setName(_trackNmController.text);
+              },
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsets>(
+                  EdgeInsets.fromLTRB(10, 5, 10, 5),
+                ),
+                minimumSize: MaterialStateProperty.all<Size>(
+                  Size(40, 40),
+                ),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  ColorMainBack,
+                ),
+                elevation: MaterialStateProperty.all<double>(0),
+                shadowColor: MaterialStateProperty.all<Color>(
+                  Colors.black,
+                ),
+                shape: MaterialStateProperty.all<OutlinedBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                overlayColor: MaterialStateProperty.all<Color>(
+                  Colors.transparent,
+                ),
+              ),
+              child: Container(
+                  width: double.maxFinite,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Color(0xffCBFF89),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Color(0xFFE6E6E6),
+                      width: 1,
+                    ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "저장",
+                      style: Text22BoldBlack,
+                    ),
+                  )),
+            ),
+          ),
+        )
+      ],
+    ),
+  );
+
+  @override
+  void dispose() {
+    _trackNmController.dispose();
+    _goalCalController.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -1583,8 +1742,8 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
         debugShowCheckedModeBanner: false,
         title: 'loading',
         theme: ThemeData(
-            // 테마 설정
-            ),
+          // 테마 설정
+        ),
         home: Scaffold(
           appBar: AppBar(
             scrolledUnderElevation: 0,
@@ -1595,14 +1754,14 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
               style: Text14BlackBold,
             ),
             leading: IconButton(
-              onPressed: () {
-                popWithSlideAnimation(context, 2);
-              },
-              icon: Icon(Icons.chevron_left, size: 30),
-              style: ButtonStyle(
-                overlayColor:
-                MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
-              )
+                onPressed: () {
+                  popWithSlideAnimation(context, 2);
+                },
+                icon: Icon(Icons.chevron_left, size: 30),
+                style: ButtonStyle(
+                  overlayColor:
+                  MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
+                )
             ),
           ),
           body: SizedBox(),
@@ -1619,7 +1778,7 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
           centerTitle: true,
           title: Text(
             "트랙 ${widget.pagetype}",
-            style: Text14BlackBold,
+            style: TextAppbar,
           ),
           leading: IconButton(
             onPressed: () {
@@ -1627,7 +1786,7 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
                 title: '',
                 content: Column(
                   children: [
-                    Text(
+                    const Text(
                       "잠깐!\n지금 페이지에서 나가면\n내용이 저장되지 않아요.",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
@@ -1689,14 +1848,14 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
             },
             style: ButtonStyle(
               overlayColor:
-                  MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
+              MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
             ),
             icon: Icon(Icons.chevron_left, size: 30),
           ),
           actions: [ //상세보기일 경우 삭제 버튼 배치
             widget.pagetype == "생성"
-            ?const SizedBox()
-            :TextButton(
+                ?const SizedBox()
+                :TextButton(
                 style: ButtonStyle(
                   overlayColor:
                   MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
@@ -1767,278 +1926,276 @@ class _TrackDetail_SfState extends State<TrackDetail_Sf>
           onTap: () {},
           child: SingleChildScrollView(
               child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          bottomHide(context);
-                          bottomSheetType300(context, chgTrackIcon(context));
-                        },
-                        child: SizedBox(
-                          width: 33,
-                          child: Image.asset(
-                            'assets/icons/track/${pv.oneTrackInfo['icon']}.png',
-                            fit: BoxFit.cover,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              bottomHide(context);
+                              bottomSheetType300(context, chgTrackIcon(context));
+                            },
+                            child: SizedBox(
+                              width: 33,
+                              child: Image.asset(
+                                'assets/icons/track/${pv.oneTrackInfo['icon']}.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.all(0),
+                              ),
+                              minimumSize: MaterialStateProperty.all<Size>(
+                                Size(33, 33),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                              // shape:
+                              // MaterialStateProperty.all<OutlinedBorder>(
+                              //   RoundedRectangleBorder(
+                              //     borderRadius: BorderRadius.circular(10),
+                              //   ),
+                              // ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                            )),
+                        TextButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.only(top: 3),
+                              ),
+                              overlayColor:
+                              MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
+                            ),
+                            onPressed: () {
+                              bottomHide(context);
+                              bottomSheetType300(context,
+                                  chgTrackNm(context, pv.oneTrackInfo['name']));
+                            },
+                            child: Text(
+                              "${pv.oneTrackInfo['name']}",
+                              style: Text25BoldBlack,
+                            )),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Text(
+                            "하루 목표 칼로리",
+                            style: Text17BoldBlack,
                           ),
-                        ),
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.all(0),
-                          ),
-                          minimumSize: MaterialStateProperty.all<Size>(
-                            Size(33, 33),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent,
-                          ),
-                          elevation: MaterialStateProperty.all<double>(0),
-                          shadowColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent,
-                          ),
-                          // shape:
-                          // MaterialStateProperty.all<OutlinedBorder>(
-                          //   RoundedRectangleBorder(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //   ),
-                          // ),
-                          overlayColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent,
-                          ),
-                        )),
-                    // SizedBox(width: 3),
-                    TextButton(
-                        style: ButtonStyle(
-                          overlayColor:
-                          MaterialStateProperty.all(Colors.transparent), // Hover 효과 없애기
-                        ),
-                        onPressed: () {
-                          bottomHide(context);
-                          bottomSheetType300(context,
-                              chgTrackNm(context, pv.oneTrackInfo['name']));
-                        },
-                        child: Text(
-                          "${pv.oneTrackInfo['name']}",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: mainBlack),
-                        )),
-                  ],
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                child: Container(
-                  width: double.maxFinite,
-                  height: 50,
-                  child: Row(
-                    children: [
-                      Text(
-                        "하루 목표 칼로리",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: mainBlack),
-                      ),
-                      Spacer(),
-                      Container(
-                        width: 150,
-                        height: 40,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        decoration: BoxDecoration(
-                          color: ColorMainBack,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Color(0xFFE6E6E6),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _goalCalController,
-                                decoration: InputDecoration(
-                                  contentPadding:
-                                      EdgeInsets.fromLTRB(15, 0, 0, 5),
-                                  hintText:
+                          Spacer(),
+                          Container(
+                            width: 150,
+                            height: 40,
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            decoration: BoxDecoration(
+                              color: ColorMainBack,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Color(0xFFE6E6E6),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    textAlign: TextAlign.right,
+                                    controller: _goalCalController,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                      EdgeInsets.fromLTRB(15, 0, 15, 9),
+                                      hintText:
                                       '${pv.oneTrackInfo['calorie'] ?? "00"}',
-                                  hintStyle: const TextStyle(
-                                    color: mainBlack,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                  border: InputBorder.none,
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged : (value) {
-                                  final pv =
+                                      hintStyle: const TextStyle(
+                                        color: mainBlack,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    onChanged : (value) {
+                                      final pv =
                                       Provider.of<OneTrackDetailInfoProvider>(
                                           context,
                                           listen: false);
-                                  pv.setCalorie(int.parse(value));
-                                  print(pv.oneTrackInfo);
-                                },
-                              ),
-                            ),
-                            Text(
-                              "Kcal",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff818181)),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Builder(
-                builder: (context) {
-                  return DefaultTabController(
-                    length: 3, // 탭의 개수를 지정
-                    initialIndex: // null이나 14는 0, 30은 1, 60은 2
-                    pv.oneTrackInfo['duration'] == null || pv.oneTrackInfo['duration'] == 14
-                        ? 0 : pv.oneTrackInfo['duration'] == 30 ? 1: 2,
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                                padding: EdgeInsets.all(10),
-                                height: 45,
-                                width: MediaQuery.sizeOf(context).width * 0.8,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff787880).withOpacity(0.09),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: SizedBox(
-                                  child: TabBar(
-                                    dividerColor: Colors.transparent,
-                                    indicatorColor: Colors.transparent,
-                                    overlayColor: MaterialStateProperty.all(
-                                        Colors.transparent),
-                                    labelStyle: TextStyle(
-                                      fontSize: 14,
-                                      // 클릭된 탭의 텍스트 크기
-                                      fontWeight: FontWeight.bold,
-                                      // 클릭된 탭의 텍스트 두께
-                                      color: mainBlack, // 클릭된 탭의 텍스트 색상
-                                    ),
-                                    unselectedLabelStyle: TextStyle(
-                                      fontSize: 14,
-                                      // 선택되지 않은 탭의 텍스트 크기
-                                      fontWeight: FontWeight.normal,
-                                      // 선택되지 않은 탭의 텍스트 두께
-                                      color: mainBlack.withOpacity(
-                                          0.8), // 선택되지 않은 탭의 텍스트 색상
-                                    ),
-                                    tabs: [
-                                      Tab(text: "14일"),
-                                      Tab(text: "30일"),
-                                      Tab(text: "60일"),
-                                    ],
-                                    onTap: (idx) {
-                                      final pv = Provider.of< OneTrackDetailInfoProvider>(
-                                          context,
-                                          listen: false);
-                                      switch (idx) {
-                                        case 0:
-                                          pv.setduration(14);
-                                        case 1:
-                                          pv.setduration(30);
-                                        case 2:
-                                          pv.setduration(60);
-                                        default:
-                                          pv.setduration(14);
-                                      };
-                                      final tpv = Provider.of<trackDetailTabProvider>(context,listen: false);
-                                      tpv.setweek(1);
+                                      pv.setCalorie(int.parse(value));
+                                      print(pv.oneTrackInfo);
                                     },
                                   ),
-                                )),
+                                ),
+                                Text(
+                                  "Kcal",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff818181)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Builder(
+                    builder: (context) {
+                      return DefaultTabController(
+                        length: 3, // 탭의 개수를 지정
+                        initialIndex: // null이나 14는 0, 30은 1, 60은 2
+                        pv.oneTrackInfo['duration'] == null || pv.oneTrackInfo['duration'] == 14
+                            ? 0 : pv.oneTrackInfo['duration'] == 30 ? 1: 2,
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.all(10),
+                                    height: 45,
+                                    width: MediaQuery.sizeOf(context).width * 0.8,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff787880).withOpacity(0.09),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: SizedBox(
+                                      child: TabBar(
+                                        dividerColor: Colors.transparent,
+                                        indicatorColor: Colors.transparent,
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        labelStyle: TextStyle(
+                                          fontSize: 14,
+                                          // 클릭된 탭의 텍스트 크기
+                                          fontWeight: FontWeight.bold,
+                                          // 클릭된 탭의 텍스트 두께
+                                          color: mainBlack, // 클릭된 탭의 텍스트 색상
+                                        ),
+                                        unselectedLabelStyle: TextStyle(
+                                          fontSize: 14,
+                                          // 선택되지 않은 탭의 텍스트 크기
+                                          fontWeight: FontWeight.normal,
+                                          // 선택되지 않은 탭의 텍스트 두께
+                                          color: mainBlack.withOpacity(
+                                              0.8), // 선택되지 않은 탭의 텍스트 색상
+                                        ),
+                                        tabs: [
+                                          Tab(text: "14일"),
+                                          Tab(text: "30일"),
+                                          Tab(text: "60일"),
+                                        ],
+                                        onTap: (idx) {
+                                          final pv = Provider.of< OneTrackDetailInfoProvider>(
+                                              context,
+                                              listen: false);
+                                          switch (idx) {
+                                            case 0:
+                                              pv.setduration(14);
+                                            case 1:
+                                              pv.setduration(30);
+                                            case 2:
+                                              pv.setduration(60);
+                                            default:
+                                              pv.setduration(14);
+                                          };
+                                          final tpv = Provider.of<trackDetailTabProvider>(context,listen: false);
+                                          tpv.setweek(1);
+                                        },
+                                      ),
+                                    )),
+                              ],
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 800,
+
+                              // constraints: BoxConstraints(
+                              //   minHeight: MediaQuery.of(context).size.width * 1, // 최소 높이
+                              // ),
+                              child: TabBarView(
+                                physics: NeverScrollableScrollPhysics(),
+                                children: [
+                                  FutureBuilder<List<String>>(
+                                    future: fetchDataForTab("14일"),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child:
+                                            Text('Error: ${snapshot.error}'));
+                                      } else {
+                                        return Container(
+                                          child: routinTab_SF(tablength: 2),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  FutureBuilder<List<String>>(
+                                    future: fetchDataForTab("30일"),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child:
+                                            Text('Error: ${snapshot.error}'));
+                                      } else {
+                                        return Container(
+                                          child: routinTab_SF(tablength: 4),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  FutureBuilder<List<String>>(
+                                    future: fetchDataForTab("60일"),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child:
+                                            Text('Error: ${snapshot.error}'));
+                                      } else {
+                                        return Container(
+                                          child: routinTab_SF(tablength: 8),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 800,
-
-                          // constraints: BoxConstraints(
-                          //   minHeight: MediaQuery.of(context).size.width * 1, // 최소 높이
-                          // ),
-                          child: TabBarView(
-                            children: [
-                              FutureBuilder<List<String>>(
-                                future: fetchDataForTab("14일"),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child:
-                                            Text('Error: ${snapshot.error}'));
-                                  } else {
-                                    return Container(
-                                      child: routinTab_SF(tablength: 2),
-                                    );
-                                  }
-                                },
-                              ),
-                              FutureBuilder<List<String>>(
-                                future: fetchDataForTab("30일"),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child:
-                                            Text('Error: ${snapshot.error}'));
-                                  } else {
-                                    return Container(
-                                      child: routinTab_SF(tablength: 4),
-                                    );
-                                  }
-                                },
-                              ),
-                              FutureBuilder<List<String>>(
-                                future: fetchDataForTab("60일"),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                        child:
-                                            Text('Error: ${snapshot.error}'));
-                                  } else {
-                                    return Container(
-                                      child: routinTab_SF(tablength: 8),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          )),
+                      );
+                    },
+                  ),
+                ],
+              )),
         ),
       );
     });
@@ -2081,7 +2238,7 @@ class _routinTab_SFState extends State<routinTab_SF> {
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(40), // TabBar의 높이 조정
               child: TabBar(
-                  // dividerColor: Colors.transparent,
+                // dividerColor: Colors.transparent,
                   indicatorColor: Color1BAF79,
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   labelStyle: const TextStyle(
@@ -2097,7 +2254,7 @@ class _routinTab_SFState extends State<routinTab_SF> {
                   tabs: List.generate(widget.tablength, (index) {
                     return Tab(
                         text:
-                            "${index + 1}주"); // 각 탭의 텍스트를 "1주", "2주", ... 형태로 설정
+                        "${index + 1}주"); // 각 탭의 텍스트를 "1주", "2주", ... 형태로 설정
                   }),
                   onTap: (index) {
                     setState(() {
@@ -2111,28 +2268,29 @@ class _routinTab_SFState extends State<routinTab_SF> {
           ),
           body: Expanded(
               child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   children: List.generate(
                       widget.tablength,
-                      (idx) => FutureBuilder<List<int>>(
-                            future:
-                                fetchDataForTab(widget.tablength), //몇 일차인지 계산
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              } else if (snapshot.hasError) {
-                                return Center(
-                                    child: Text('Error: ${snapshot.error}'));
-                              } else {
-                                return Container(
-                                  child: routinTab_byweek_SF(
-                                      selectedWeek: selectedWeek,
-                                      selectedDay: selectedDay),
-                                );
-                              }
-                            },
-                          ))))),
+                          (idx) => FutureBuilder<List<int>>(
+                        future:
+                        fetchDataForTab(widget.tablength), //몇 일차인지 계산
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else {
+                            return Container(
+                              child: routinTab_byweek_SF(
+                                  selectedWeek: selectedWeek,
+                                  selectedDay: selectedDay),
+                            );
+                          }
+                        },
+                      ))))),
     );
   }
 
@@ -2160,7 +2318,7 @@ class _routinTab_byweek_SFState extends State<routinTab_byweek_SF> {
     super.initState();
     print(widget.selectedWeek);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-       routineListup_GET(context);
+      routineListup_GET(context);
     });
   }
 
@@ -2168,69 +2326,55 @@ class _routinTab_byweek_SFState extends State<routinTab_byweek_SF> {
   List<int> isClickedWeek = [1, 0, 0, 0, 0, 0, 0];
 
   Widget DayWidget(int idx, BuildContext context) => Container(
-        padding: EdgeInsets.zero, // 기본 패딩 제거
-        width: MediaQuery.sizeOf(context).width / 7,
+    padding: EdgeInsets.zero, // 기본 패딩 제거
+    width: MediaQuery.sizeOf(context).width / 7,
+    height: 70.0,
+    child: Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(3.0, 8.0, 3.0, 0.0),
+      child: Container(
+        width: 45.0,
         height: 70.0,
-        child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(3.0, 10.0, 3.0, 0.0),
-          child: Container(
-            width: 45.0,
-            height: 70.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Stack(
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: 30.0,
-                      height: 30.0,
-                      decoration: BoxDecoration(
-                        color: ColorMainBack,
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
-                          color: isClickedWeek[idx] == 1
-                              ? Color1BAF79
-                              : ColorMainBack,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                        width: 30.0,
-                        height: 30.0,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Consumer<trackDetailTabProvider>(
-                              builder: (context, pv, child) {
+                SizedBox(
+                    width: 30.0,
+                    height: 30.0,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Consumer<trackDetailTabProvider>(
+                          builder: (context, pv, child) {
                             int week = pv.selectedWeek;
                             return Text(
                               "${(week - 1) * 7 + (idx + 1)}",
                               style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 13,
                                   color:
-                                      const Color(0xff1E1E1E).withOpacity(0.3),
+                                  const Color(0xff1E1E1E).withOpacity(0.3),
                                   fontWeight: FontWeight.bold),
                             );
                           }),
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Text('${fomatDay(idx)}요일',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: 'Noto Sans KR',
-                      letterSpacing: 0.0,
-                      fontWeight: FontWeight.w600,
                     )),
               ],
             ),
-          ),
+            const SizedBox(
+              height: 3,
+            ),
+            Text('',  //${fomatDay(idx)}요일
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontFamily: 'Noto Sans KR',
+                  letterSpacing: 0.0,
+                  fontWeight: FontWeight.w600,
+                )),
+          ],
         ),
-      );
+      ),
+    ),
+  );
   Future<void> updateTrack_PATCH(BuildContext context) async {
     String? tk = await getTk();
     final pv = Provider.of<OneTrackDetailInfoProvider>(context, listen: false);
@@ -2288,137 +2432,175 @@ class _routinTab_byweek_SFState extends State<routinTab_byweek_SF> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7, // 탭의 개수를 지정
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color(0xffEBFFEE),
-          scrolledUnderElevation: 0,
-          automaticallyImplyLeading: false,
-          toolbarHeight: 5,
-          // AppBar의 높이 설정
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(70), // TabBar의 높이 조정
-            child: TabBar(
-              isScrollable: false,
-              // TabBar가 스크롤 가능하게 설정
-              dividerColor: Colors.transparent,
-              indicatorColor: Colors.transparent,
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              labelStyle: const TextStyle(
-                fontSize: 14, // 클릭된 탭의 텍스트 크기
-                fontWeight: FontWeight.bold, // 클릭된 탭의 텍스트 두께
-                color: mainBlack, // 클릭된 탭의 텍스트 색상
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontSize: 14, // 선택되지 않은 탭의 텍스트 크기
-                fontWeight: FontWeight.normal, // 선택되지 않은 탭의 텍스트 두께
-                color: mainBlack.withOpacity(0.8), // 선택되지 않은 탭의 텍스트 색상
-              ),
-              tabs: List.generate(7, (index) {
-                return Container(
-                  width: MediaQuery.of(context).size.width / 7,
-                  // 각 탭의 너비 설정
-                  height: 70,
-                  // 원하는 높이
-                  padding: EdgeInsets.zero,
-                  // 패딩 제거
-                  margin: EdgeInsets.zero,
-                  // 마진 제거
-                  alignment: Alignment.center,
-                  // 텍스트 중앙 정렬
-                  child: DayWidget(index, context), // 각 탭의 내용
-                );
-              }),
-              onTap: (idx) {
-                setState(() async{
-                  // selectedDay = idx+1;
-                  for (int i = 0; i < isClickedWeek.length; i++) {
-                    if (idx != i) isClickedWeek[i] = 0;
-                  }
-                  isClickedWeek[idx] = 1;
-                  final tabpv = Provider.of<trackDetailTabProvider>(context, listen: false);
-                  tabpv.setDay(idx);
-                  await routineListup_GET(context);
-                });
-              },
-            ),
-          ),
-          elevation: 0, // AppBar의 그림자 제거
-        ),
-        body: TabBarView(
-          children: List.generate(
-              7,(idx) => Padding(
-            padding: EdgeInsets.all(15),
-            child : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        length: 7, // 탭의 개수를 지정
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color(0xffEBFFEE),
+            scrolledUnderElevation: 0,
+            automaticallyImplyLeading: false,
+            toolbarHeight: 5,
+            // AppBar의 높이 설정
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(70), // TabBar의 높이 조정
+              child: Stack(
                 children: [
-                  Text('루틴리스트', style: Text14BlackBold),
-                  const SizedBox(height: 10),
-                  Consumer<RoutinListProvider>(
-                      builder: (context,pv,child){
-                        return Column(
-                          children: List.generate(
-                              pv.routineList.length,
-                                  (idx) => idx == 0
-                                  ? Column(children: [
-                                routineCreateButton(context),
-                                const SizedBox(height: 5),
-                              ])
-                                  : Column(children: [
-                                routineButton(context,idx),
-                                //id 넘겨야 함(페이지 이동 시 사용)
-                                const SizedBox(height: 5),
-                              ])),
-                        );
-                      }),
-                  const SizedBox(height: 40),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child:
-                    ElevatedButton(
-                      onPressed: () => updateTrack_PATCH(context),  //트랙 업데이트
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(0),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 70,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 7,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: List.generate(7, (idx)=> Container(
+                            width: 33.0,
+                            height: 33.0,
+                            decoration: BoxDecoration(
+                              color: ColorMainBack,
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                color: isClickedWeek[idx] == 1
+                              ? Color1BAF79
+                                  : ColorMainBack,
+                                width: 1,
+                              ),
+                            ),
+                          )),
                         ),
-                        minimumSize: MaterialStateProperty.all<Size>(
-                          Size(280, 44),
+                        SizedBox(height: 7,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: List.generate(7, (idx)=> Text("${formatDay(idx)}요일",style: Text11Black,)),
                         ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                          Color(0xff20C387),
-                        ),
-                        elevation: MaterialStateProperty.all<double>(0),
-                        shadowColor: MaterialStateProperty.all<Color>(
-                          Colors.black,
-                        ),
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(48),
-                          ),
-                        ),
-                        overlayColor: MaterialStateProperty.all<Color>(
-                          Colors.transparent,
-                        ),
-                      ),
-                      child: Container(
-                        width: 280,
-                        height: 44,
-                        child: Center(
-                          child: Text(
-                            "저장",
-                            style: Text23w600white,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
+                  ),
+                  TabBar(
+                    isScrollable: false,
+                    // TabBar가 스크롤 가능하게 설정
+                    dividerColor: Colors.transparent,
+                    indicatorColor: Colors.transparent,
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    labelStyle: const TextStyle(
+                      fontSize: 10, // 클릭된 탭의 텍스트 크기
+                      fontWeight: FontWeight.bold, // 클릭된 탭의 텍스트 두께
+                      color: mainBlack, // 클릭된 탭의 텍스트 색상
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: 10, // 선택되지 않은 탭의 텍스트 크기
+                      fontWeight: FontWeight.normal, // 선택되지 않은 탭의 텍스트 두께
+                      color: mainBlack.withOpacity(0.8), // 선택되지 않은 탭의 텍스트 색상
+                    ),
+                    tabs: List.generate(7, (index) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width / 7,
+                        // 각 탭의 너비 설정
+                        height: 70,
+                        // 원하는 높이
+                        padding: EdgeInsets.zero,
+                        // 패딩 제거
+                        margin: EdgeInsets.zero,
+                        // 마진 제거
+                        alignment: Alignment.center,
+                        // 텍스트 중앙 정렬
+                        child: DayWidget(index, context), // 각 탭의 내용
+                      );
+                    }),
+                    onTap: (idx) {
+                      // 상태 변경을 먼저 반영
+                      setState(() {
+                        for (int i = 0; i < isClickedWeek.length; i++) {
+                          isClickedWeek[i] = (idx == i) ? 1 : 0;
+                        }
+                      });
+
+                      // 비동기 작업은 상태 변경 후 처리
+                      final tabpv = Provider.of<trackDetailTabProvider>(context, listen: false);
+                      tabpv.setDay(idx);
+                      routineListup_GET(context);
+                      print(isClickedWeek);
+                    },
                   )
                 ],
               ),
             ),
-          )),
-        ),
-      ));
+            elevation: 0, // AppBar의 그림자 제거
+          ),
+          body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: List.generate(
+                7,(idx) => Padding(
+              padding: EdgeInsets.all(15),
+              child : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('루틴리스트', style: Text14BlackBold),
+                    const SizedBox(height: 10),
+                    Consumer<RoutinListProvider>(
+                        builder: (context,pv,child){
+                          return Column(
+                            children: List.generate(
+                                pv.routineList.length,
+                                    (idx) => idx == 0
+                                    ? Column(children: [
+                                  routineCreateButton(context),
+                                  const SizedBox(height: 5),
+                                ])
+                                    : Column(children: [
+                                  routineButton(context,idx),
+                                  //id 넘겨야 함(페이지 이동 시 사용)
+                                  const SizedBox(height: 5),
+                                ])),
+                          );
+                        }),
+                    const SizedBox(height: 40),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child:
+                      ElevatedButton(
+                        onPressed: () => updateTrack_PATCH(context),  //트랙 업데이트
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.all(0),
+                          ),
+                          minimumSize: MaterialStateProperty.all<Size>(
+                            Size(280, 44),
+                          ),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Color(0xff20C387),
+                          ),
+                          elevation: MaterialStateProperty.all<double>(0),
+                          shadowColor: MaterialStateProperty.all<Color>(
+                            Colors.black,
+                          ),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(48),
+                            ),
+                          ),
+                          overlayColor: MaterialStateProperty.all<Color>(
+                            Colors.transparent,
+                          ),
+                        ),
+                        child: Container(
+                          width: 280,
+                          height: 44,
+                          child: Center(
+                            child: Text(
+                              "저장",
+                              style: Text23w600white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )),
+          ),
+        ));
   }
 }
 
@@ -2548,141 +2730,55 @@ Widget chgTrackIcon(BuildContext context){
   );
 }
 
-TextEditingController _trackNmController = TextEditingController();
-
-Widget chgTrackNm(BuildContext context, String hintText) => Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "트랙 이름 변경",
-            style: Text15Bold,
-          ),
-          SizedBox(
-              width: 200,
-              child: Center(
-                child: TextField(
-                  controller: _trackNmController,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    hintText: hintText,
-                    hintStyle: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: mainBlack),
-                    border: InputBorder.none, // 모든 테두리 제거
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
-              )),
-          SizedBox(height: 40),
-          Center(
-            child: SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {
-                  bottomShow(context);
-                  Navigator.pop(context);
-                  final pv = Provider.of<OneTrackDetailInfoProvider>(context,
-                      listen: false);
-                  pv.setName(_trackNmController.text);
-                },
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  ),
-                  minimumSize: MaterialStateProperty.all<Size>(
-                    Size(40, 40),
-                  ),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                    ColorMainBack,
-                  ),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  shadowColor: MaterialStateProperty.all<Color>(
-                    Colors.black,
-                  ),
-                  shape: MaterialStateProperty.all<OutlinedBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
-                  ),
-                ),
-                child: Container(
-                    width: double.maxFinite,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color(0xffCBFF89),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Color(0xFFE6E6E6),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "저장",
-                        style: Text22BoldBlack,
-                      ),
-                    )),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
 
 //button(루틴 리스트에서 각 버튼 widget)
 Widget routineCreateButton(BuildContext context) => ElevatedButton(
-      onPressed: () {
-        NvgToNxtPage(context, RoutineDetail(type: "생성"));
-      },
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(
-          EdgeInsets.all(0),
-        ),
-        minimumSize: MaterialStateProperty.all<Size>(
-          Size(40, 30),
-        ),
-        backgroundColor: MaterialStateProperty.all<Color>(
-          ColorMainBack,
-        ),
-        elevation: MaterialStateProperty.all<double>(0),
-        shadowColor: MaterialStateProperty.all<Color>(
-          Colors.black,
-        ),
-        shape: MaterialStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        overlayColor: MaterialStateProperty.all<Color>(
-          Colors.transparent,
-        ),
+  onPressed: () {
+    NvgToNxtPage(context, RoutineDetail(type: "생성"));
+  },
+  style: ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(
+      EdgeInsets.all(0),
+    ),
+    minimumSize: MaterialStateProperty.all<Size>(
+      Size(40, 30),
+    ),
+    backgroundColor: MaterialStateProperty.all<Color>(
+      ColorMainBack,
+    ),
+    elevation: MaterialStateProperty.all<double>(0),
+    shadowColor: MaterialStateProperty.all<Color>(
+      Colors.black,
+    ),
+    shape: MaterialStateProperty.all<OutlinedBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Container(
-        width: double.maxFinite,
-        height: 65,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Color(0xFFE6E6E6),
-            width: 1,
-          ),
-        ),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-          child: Center(child: Icon(Icons.add, size: 25, color: mainBlack)),
-        ),
+    ),
+    overlayColor: MaterialStateProperty.all<Color>(
+      Colors.transparent,
+    ),
+  ),
+  child: Container(
+    width: double.maxFinite,
+    height: 65,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(
+        color: Color(0xFFE6E6E6),
+        width: 1,
       ),
-    ); //루틴리스트의 최상단 루틴 생성 버튼
+    ),
+    child: Container(
+      padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+      child: Center(child: Icon(Icons.add, size: 25, color: mainBlack)),
+    ),
+  ),
+); //루틴리스트의 최상단 루틴 생성 버튼
 Widget routineButton(BuildContext context, int idx) =>
     ElevatedButton(
       onPressed: () {
+        bottomHide(context);
         NvgToNxtPage(context, RoutineDetail(type: "상세보기"));
       },
       style: ButtonStyle(
@@ -2709,147 +2805,150 @@ Widget routineButton(BuildContext context, int idx) =>
         ),
       ),
       child: Consumer<RoutinListProvider>(
-        builder : (context,pv,child){
-          return Container(
-            width: double.maxFinite,
-            height: 65,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Color(0xFFE6E6E6),
-                width: 1,
+          builder : (context,pv,child){
+            return Container(
+              width: double.maxFinite,
+              height: 65,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Color(0xFFE6E6E6),
+                  width: 1,
+                ),
               ),
-            ),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                      child: Text(
-                        "${formatDay(pv.routineList[idx]['time'])} - ${extractHour(pv.routineList[idx]['clock'])}시",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 11,
-                          color: Color(0xFF737373),
+              child: Container(
+                padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                        child: Text(
+                          "${formatDay(pv.routineList[idx]['time']-1)} - ${extractHour(pv.routineList[idx]['clock'])}시",  //루틴 한 요소
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            color: Color(0xFF737373),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        Text(
-                          "${pv.routineList[idx]['title']}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 20,
-                              color: Color(0xff464646)),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${pv.routineList[idx]['calorie']}kcal',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Color(0xff464646)),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+
+
+
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Row(
+                        children: [
+                          Text(
+                            "${pv.routineList[idx]['title']}",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 20,
+                                color: Color(0xff464646)),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${pv.routineList[idx]['calorie']}kcal',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: Color(0xff464646)),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          );
-        }
+            );
+          }
       ),
     );
 
 //dialog
 Widget saveTrackSuc(BuildContext context) => Container(
-      child:Consumer<OneTrackDetailInfoProvider>(
-        builder : (context,pv, child){
-          return  Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 30),
-              SizedBox(
-                width: 170,
-                child: Image.asset(
-                  'assets/icons/dialog/save_suc_1.png',
-                  fit: BoxFit.cover,
-                ),
+  child:Consumer<OneTrackDetailInfoProvider>(
+      builder : (context,pv, child){
+        return  Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 30),
+            SizedBox(
+              width: 170,
+              child: Image.asset(
+                'assets/icons/dialog/save_suc_1.png',
+                fit: BoxFit.cover,
               ),
-              SizedBox(height: 30),
-              Text(
-                "성공적으로 저장하였습니다.",
-                style: Text25BoldBlack,
-              ),
-              SizedBox(height: 40),
-              Center(
-                child: SizedBox(
-                  width: 340,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      bottomShow(context);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      if(pv.pageType == "생성") Navigator.pop(context);
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      ),
-                      minimumSize: MaterialStateProperty.all<Size>(
-                        Size(40, 40),
-                      ),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        ColorMainBack,
-                      ),
-                      elevation: MaterialStateProperty.all<double>(0),
-                      shadowColor: MaterialStateProperty.all<Color>(
-                        Colors.black,
-                      ),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      overlayColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent,
+            ),
+            SizedBox(height: 30),
+            Text(
+              "성공적으로 저장하였습니다.",
+              style: Text25BoldBlack,
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: SizedBox(
+                width: 340,
+                child: ElevatedButton(
+                  onPressed: () {
+                    bottomShow(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    if(pv.pageType == "생성") Navigator.pop(context);
+                  },
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    ),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      Size(40, 40),
+                    ),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      ColorMainBack,
+                    ),
+                    elevation: MaterialStateProperty.all<double>(0),
+                    shadowColor: MaterialStateProperty.all<Color>(
+                      Colors.black,
+                    ),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Container(
-                        width: double.maxFinite,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xffCBFF89),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Color(0xFFE6E6E6),
-                            width: 1,
-                          ),
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "닫기",
-                            style: Text22BoldBlack,
-                          ),
-                        )),
+                    overlayColor: MaterialStateProperty.all<Color>(
+                      Colors.transparent,
+                    ),
                   ),
+                  child: Container(
+                      width: double.maxFinite,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color(0xffCBFF89),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Color(0xFFE6E6E6),
+                          width: 1,
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "닫기",
+                          style: Text22BoldBlack,
+                        ),
+                      )),
                 ),
-              )
-            ],
-          );
-        }
-      ),
-    ); //트랙 수정 성공
- //트랙 수정 실패
+              ),
+            )
+          ],
+        );
+      }
+  ),
+); //트랙 수정 성공
+//트랙 수정 실패
 //트랙수정 - 아이템 변경
 //트랙수정 - 트랙명 변경
 

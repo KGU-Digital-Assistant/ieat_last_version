@@ -33,13 +33,12 @@ import '../home/homeaction.dart';
  *
  */
 
-Future<void> createRoutine_1_POST(BuildContext context, int tid) async {
-
+Future<void> createRoutine_1_POST(BuildContext context) async {
+  final tpv = Provider.of<OneTrackDetailInfoProvider>(context, listen: false);
   String? tk = await getTk();
   final tabpv = Provider.of<trackDetailTabProvider>(context, listen: false);
 
   String funcname = 'createRoutine_1_POST';
-  String uri = '$url/track/routine/create/$tid';
   setupDio();
 
   String selectedDay = formatDay(tabpv.selectedDay);
@@ -47,24 +46,15 @@ Future<void> createRoutine_1_POST(BuildContext context, int tid) async {
   print("tabpv.selectedDay : ${selectedDay}");
 
   try {
-    final response = await dio.request(
-        uri,
-        options: Options(
-          method: 'POST',
-          headers: {'accept': '*/*', 'Authorization': 'Bearer $tk'},
-          validateStatus: (status) {
-            print('$funcname : $status');
-            return status! < 500;
-          },
-        ),
-        queryParameters: {
-          "week" : tabpv.selectedWeek,
-          "weekday" : selectedDay
-        }
+    final response = await http.post(
+      Uri.parse('$url/track/routine/create/${tpv.oneTrackInfo['tid']}?week=${tabpv.selectedWeek}&weekday=$selectedDay'),
+      headers: {'accept': '*/*', 'Authorization': 'Bearer $tk'},
     );
-    print(response.data);
+
     if (response.statusCode == 200 || response.statusCode == 204) {
-      Map<String, dynamic> data = Map<String, dynamic>.from(response.data);
+      var utf8Res = utf8.decode(response.bodyBytes);
+      var data = jsonDecode(utf8Res);
+      print(data);
       createRoutine_2_POST(context, data['routine_id'], data['routine_date_id']);
     } else if (response.statusCode == 401) {
       await simpleAlert("오류가 발생하였습니다.");

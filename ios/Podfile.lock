@@ -35,9 +35,6 @@ PODS:
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
-  - Firebase/Core (11.2.0):
-    - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 11.2.0)
   - Firebase/CoreOnly (11.2.0):
     - FirebaseCore (= 11.2.0)
   - Firebase/Messaging (11.2.0):
@@ -50,24 +47,6 @@ PODS:
     - Firebase/Messaging (= 11.2.0)
     - firebase_core
     - Flutter
-  - FirebaseAnalytics (11.2.0):
-    - FirebaseAnalytics/AdIdSupport (= 11.2.0)
-    - FirebaseCore (~> 11.0)
-    - FirebaseInstallations (~> 11.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/MethodSwizzler (~> 8.0)
-    - GoogleUtilities/Network (~> 8.0)
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-    - nanopb (~> 3.30910.0)
-  - FirebaseAnalytics/AdIdSupport (11.2.0):
-    - FirebaseCore (~> 11.0)
-    - FirebaseInstallations (~> 11.0)
-    - GoogleAppMeasurement (= 11.2.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/MethodSwizzler (~> 8.0)
-    - GoogleUtilities/Network (~> 8.0)
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-    - nanopb (~> 3.30910.0)
   - FirebaseCore (11.2.0):
     - FirebaseCoreInternal (~> 11.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -96,26 +75,6 @@ PODS:
   - FMDB/Core (2.7.12)
   - FMDB/standard (2.7.12):
     - FMDB/Core
-  - GoogleAppMeasurement (11.2.0):
-    - GoogleAppMeasurement/AdIdSupport (= 11.2.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/MethodSwizzler (~> 8.0)
-    - GoogleUtilities/Network (~> 8.0)
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-    - nanopb (~> 3.30910.0)
-  - GoogleAppMeasurement/AdIdSupport (11.2.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 11.2.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/MethodSwizzler (~> 8.0)
-    - GoogleUtilities/Network (~> 8.0)
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-    - nanopb (~> 3.30910.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (11.2.0):
-    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
-    - GoogleUtilities/MethodSwizzler (~> 8.0)
-    - GoogleUtilities/Network (~> 8.0)
-    - "GoogleUtilities/NSData+zlib (~> 8.0)"
-    - nanopb (~> 3.30910.0)
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
@@ -128,9 +87,6 @@ PODS:
     - GoogleUtilities/Privacy
   - GoogleUtilities/Logger (8.0.2):
     - GoogleUtilities/Environment
-    - GoogleUtilities/Privacy
-  - GoogleUtilities/MethodSwizzler (8.0.2):
-    - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GoogleUtilities/Network (8.0.2):
     - GoogleUtilities/Logger
@@ -173,8 +129,6 @@ PODS:
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
-  - Firebase/Core
-  - Firebase/Messaging
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
@@ -190,13 +144,11 @@ SPEC REPOS:
     - DKImagePickerController
     - DKPhotoGallery
     - Firebase
-    - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreInternal
     - FirebaseInstallations
     - FirebaseMessaging
     - FMDB
-    - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
     - nanopb
@@ -236,7 +188,6 @@ SPEC CHECKSUMS:
   Firebase: 98e6bf5278170668a7983e12971a66b2cd57fc8c
   firebase_core: 2bedc3136ec7c7b8561c6123ed0239387b53f2af
   firebase_messaging: 15d114e1a41fc31e4fbabcd48d765a19eec94a38
-  FirebaseAnalytics: c36efd5710c60c17558650fa58c2066eca7e9265
   FirebaseCore: a282032ae9295c795714ded2ec9c522fc237f8da
   FirebaseCoreInternal: ac26d09a70c730e497936430af4e60fb0c68ec4e
   FirebaseInstallations: 58cf94dabf1e2bb2fa87725a9be5c2249171cda0
@@ -244,7 +195,6 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
-  GoogleAppMeasurement: 76d4f8b36b03bd8381fa9a7fe2cc7f99c0a2e93a
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
@@ -257,6 +207,6 @@ SPEC CHECKSUMS:
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
 
-PODFILE CHECKSUM: 3bb10713a111b526eef002b92523f05fbbaaa4ef
+PODFILE CHECKSUM: c3605ac2f092eba8c50c21df1e7fa8c2893bf30a
 
 COCOAPODS: 1.15.2

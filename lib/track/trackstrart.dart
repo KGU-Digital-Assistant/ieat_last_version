@@ -47,13 +47,18 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
         appBar: AppBar(
           scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
-          leading : IconButton(
-          onPressed: () {
-            popWithSlideAnimation(context, 2);
-            bottomShow(context);
-          },
-          icon: Icon(Icons.chevron_left, size: 30),
-        ),),
+            leading: IconButton(
+              onPressed: () {
+                popWithSlideAnimation(context, 2);
+                bottomShow(context);
+              },
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all<Color>(
+                    Colors.transparent,
+                  )
+              ),
+              icon: Icon(Icons.chevron_left, size: 30),
+            )),
         body: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,13 +74,11 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
                 style: Text20BoldBlack,
               ),
               SizedBox(height: 20,),
-              SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: Image.asset(
-                    'pixcap/startrackPickDay.png',
-                    fit: BoxFit.cover,
-                  )
+              Image.asset(
+                'assets/pixcap/startrackPickDay.png', // 여기에 이미지 경로를 입력하세요.
+                fit: BoxFit.cover, // 이미지가 화면을 꽉 채우도록 설정
+                width: 150,
+                height: 150,
               ),
               Text(
                 '${_selectedMondayStr} 월요일',
@@ -151,7 +154,7 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
                     ),
                     child: Container(
                         width: double.maxFinite,
-                        height: 50,
+                        height: 65,
                         decoration: BoxDecoration(
                           color: Color(0xffCBFF89),
                           borderRadius: BorderRadius.circular(10),

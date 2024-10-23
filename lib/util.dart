@@ -511,7 +511,7 @@ void popWithSlideAnimation(BuildContext context, int cnt) {
         child: child,
       );
     },
-    transitionDuration: Duration(milliseconds: 300), // 애니메이션 속도 조절
+    transitionDuration: Duration(milliseconds: 50), // 애니메이션 속도 조절
   ));
 
   // 실제로 pop을 호출하여 페이지를 뒤로 이동

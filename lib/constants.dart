@@ -3,9 +3,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const port = 8000;
 const url = "https://www.ieat.store";
-//const url = 'http://223.130.143.86';
+//const url_mi1-93 = 'http://223.130.143.86';
+//const url = 'http://223.130.151.151';
 
-var mapp = false;
+
 int userid = 5;  //메인에서 세팅
 bool isLogined = true;
 

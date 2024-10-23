@@ -3,15 +3,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ieat/meal/mealdetail.dart';
 import 'package:ieat/provider.dart';
 import 'package:ieat/setting.dart';
 import 'package:ieat/styleutil.dart';
 import 'package:ieat/util.dart';
 import 'package:provider/provider.dart';
+
+import '../calender/presentation/calendar_screen.dart';
 import '../meal/mealsave.dart';
 import '../track/trackaction.dart';
+import 'home.dart';
 import 'homeaction.dart';
 import 'homecalender.dart';
+import 'homecalenderapi.dart';
+import 'homemeal.dart';
 import 'package:ieat/moose.dart';
 
 class Home_Sf extends StatefulWidget {
@@ -37,10 +43,13 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
   };
   List<bool> isNuFin = [false,false,true];
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeMainTopPart(context);
+    });
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -267,439 +276,407 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){},
-      child: Scaffold(
-        appBar: AppBar(
-            scrolledUnderElevation: 0,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.calendar_month,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
+        onTap: (){},
+        child: Scaffold(
+          appBar: AppBar(
+              scrolledUnderElevation: 0,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: Colors.black,
+                    size: 30,
                   ),
-                ),
-                onPressed: () {
-                  bottomHide(context);
-                  NvgToNxtPageSlide(context, const HomeboardCalender_Sf());
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.black,
-                  size: 30,
-                ),
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all<Color>(
-                    Colors.transparent,
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(
+                      Colors.transparent,
+                    ),
                   ),
+                  onPressed: () {
+                    bottomHide(context);
+                    NvgToNxtPageSlide(context, HomeboardCalender_Sf());
+                  },
                 ),
-                onPressed: () {
-                  bottomHide(context);
-                  NvgToNxtPageSlide(context, const Setting_Sf());
-                },
-              ),
-              SizedBox(
-                width: 5,
-              )
-            ],
-            title: Consumer<HomeSave>(builder: (context, pv, child) {
-              Map<String, dynamic> trackNmDDay = pv.trackNmDDay;
-              return pv.isTracking
-                  ? Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 7, 0),
-                    child: Text('${trackNmDDay['name']}',
+                IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                    color: Colors.black,
+                    size: 30,
+                  ),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all<Color>(
+                      Colors.transparent,
+                    ),
+                  ),
+                  onPressed: () {
+                    bottomHide(context);
+                    NvgToNxtPageSlide(context, const Setting_Sf());
+                  },
+                ),
+                SizedBox(
+                  width: 5,
+                )
+              ],
+              title: Consumer<HomeSave>(builder: (context, pv, child) {
+                Map<String, dynamic> trackNmDDay = pv.trackNmDDay;
+                return pv.isTracking
+                    ? Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 7, 0),
+                      child: Text('${trackNmDDay['name']}',
+                          style: TextStyle(
+                              color: Color(0xFF009E54),
+                              fontSize: 22,
+                              letterSpacing: 0.0,
+                              fontWeight: FontWeight.w900)),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      child: Text(
+                        '+${trackNmDDay['dday']}',
                         style: TextStyle(
-                            color: Color(0xFF009E54),
-                            fontSize: 22,
-                            letterSpacing: 0.0,
-                            fontWeight: FontWeight.w900)),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
-                    child: Text(
-                      '+${trackNmDDay['dday']}',
-                      style: TextStyle(
-                        fontSize: 15,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          letterSpacing: 0.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-                  : Container(
-                  padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-                  child: SizedBox(
-                    width: 100,
-                    child: Image.asset(
-                      'assets/i-eat_Text_Logo.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ));
-            })),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(15),
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height * 1, // 최소 높이
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("$today(오늘)", style: Text16BoldBlack),
-                SizedBox(height: 15),
-                Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3), // 그림자 색상 및 투명도 설정
-                          spreadRadius: 2, // 그림자 퍼짐 정도
-                          blurRadius: 5,   // 그림자의 흐림 정도
-                          offset: Offset(1, 3), // 그림자의 위치 (x, y)
-                        ),
-                      ],
-                      color: ColorMainBack,
-                      border: Border.all(
-                          color: mainGrey.withOpacity(0.5),
-                          width: 1.5
+                  ],
+                )
+                    : Container(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: SizedBox(
+                      width: 100,
+                      child: Image.asset(
+                        'assets/i-eat_Text_Logo.png',
+                        fit: BoxFit.cover,
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    height: 400,
-                    width: double.maxFinite,
-                    padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 15),
-                        Stack(
-                          children: [
-                            SizedBox(
-                              height: 100,
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    // "${formatNumberWithComma(todaymealInfo['todaycalorie'])}",
-                                    "2,980",
-                                    style: GoogleFonts.racingSansOne(
-                                      // decoration: TextDecoration.underline,
-                                      fontSize: 89, // 폰트 크기 조절
-                                      color: Colors.black, // 폰트 색상
-                                      fontWeight: FontWeight.bold, // 굵기 조절
-                                    ),
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 100,
-                              child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "목표 칼로리 : 00kcal",
-                                    style: const TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff7F7F7F)),
-                                  )),
-                            ),
-                          ],
+                    ));
+              })),
+          body: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height * 1, // 최소 높이
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("$today(오늘)", style: Text16BoldBlack),
+                  SizedBox(height: 15),
+                  Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3), // 그림자 색상 및 투명도 설정
+                            spreadRadius: 2, // 그림자 퍼짐 정도
+                            blurRadius: 5,   // 그림자의 흐림 정도
+                            offset: Offset(1, 3), // 그림자의 위치 (x, y)
+                          ),
+                        ],
+                        color: ColorMainBack,
+                        border: Border.all(
+                            color: mainGrey.withOpacity(0.5),
+                            width: 1.5
                         ),
-                        SizedBox(height: 8,),
-                        SizedBox(
-                          // color: Colors.brown,
-                          width: double.maxFinite,
-                          height: 100,
-                          child: Container(
-                            width: 200,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    isNuFin[0]
-                                        ?Container(
-                                        width: 100,
-                                        height: 100,
-                                        padding: EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child:
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color : Color(0xff21C87D).withOpacity(0.18)
-                                          )
-                                          ,))
-                                        :SizedBox(),
-                                    AnimatedBuilder(
-                                      animation: animationController,
-                                      builder: (context, child) {
-                                        if (animationController.value < 0.1) {
-                                          return const SizedBox();
-                                        }
-                                        return SizedBox(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      height: 400,
+                      width: double.maxFinite,
+                      padding: EdgeInsets.fromLTRB(15, 0, 10, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 15),
+                          Stack(
+                            children: [
+                              SizedBox(
+                                height: 100,
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      // "${formatNumberWithComma(todaymealInfo['todaycalorie'])}",
+                                      "2,980",
+                                      style: GoogleFonts.racingSansOne(
+                                        // decoration: TextDecoration.underline,
+                                        fontSize: 89, // 폰트 크기 조절
+                                        color: Colors.black, // 폰트 색상
+                                        fontWeight: FontWeight.bold, // 굵기 조절
+                                      ),
+                                    )),
+                              ),
+                              SizedBox(
+                                height: 100,
+                                child: Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "목표 칼로리 : 00kcal",
+                                      style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff7F7F7F)),
+                                    )),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8,),
+                          SizedBox(
+                            // color: Colors.brown,
+                            width: double.maxFinite,
+                            height: 100,
+                            child: Container(
+                              width: 200,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      isNuFin[0]
+                                          ?Container(
                                           width: 100,
                                           height: 100,
-                                          child: Center(
-                                              child: CustomPaint(
-                                                size: const Size(95, 95),
-                                                painter: _RadialChart(
-                                                    carBoChartData, animationController.value),
-                                              )),
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child:  Padding(
-                                            padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
-                                            child: Align(
-                                              alignment: Alignment.topCenter,
-                                              child: Text(
-                                                // "${formatNumberWithComma(todaymealInfo['todaycalorie'])}",
-                                                "탄",
-                                                style: TextHomeNuTitle,
-                                              ),
-                                            ))),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
-                                          child: Align(
-                                            alignment: Alignment.topCenter,
-                                            child: Text(
-                                                "69",
-                                                // "${formatNumberWithComma(goalNowNutrientInfo['carb']!)}",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold)),
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                                Stack(
-                                  children: [
-                                    isNuFin[1]
-                                        ?Container(
-                                        width: 100,
-                                        height: 100,
-                                        padding: EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child:
-                                        Container(
+                                          padding: EdgeInsets.all(15),
                                           decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color : Color(0xff21C87D).withOpacity(0.18)
-                                          )
-                                          ,))
-                                        :SizedBox(),
-                                    AnimatedBuilder(
-                                      animation: animationController,
-                                      builder: (context, child) {
-                                        if (animationController.value < 0.1) {
-                                          return const SizedBox();
-                                        }
-                                        return SizedBox(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child:
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color : Color(0xff21C87D).withOpacity(0.18)
+                                            )
+                                            ,))
+                                          :SizedBox(),
+                                      AnimatedBuilder(
+                                        animation: animationController,
+                                        builder: (context, child) {
+                                          if (animationController.value < 0.1) {
+                                            return const SizedBox();
+                                          }
+                                          return SizedBox(
+                                            width: 100,
+                                            height: 100,
+                                            child: Center(
+                                                child: CustomPaint(
+                                                  size: const Size(95, 95),
+                                                  painter: _RadialChart(
+                                                      carBoChartData, animationController.value),
+                                                )),
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(
                                           width: 100,
-                                          height: double.maxFinite,
-                                          child: Center(
-                                              child: CustomPaint(
-                                                size: const Size(95, 95),
-                                                painter: _RadialChart(
-                                                    proChartData, animationController.value),
-                                              )),
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child:  Padding(
-                                            padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                                          height: 100,
+                                          child:  Padding(
+                                              padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Text(
+                                                  // "${formatNumberWithComma(todaymealInfo['todaycalorie'])}",
+                                                  "탄",
+                                                  style: TextHomeNuTitle,
+                                                ),
+                                              ))),
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
                                             child: Align(
                                               alignment: Alignment.topCenter,
                                               child: Text(
-                                                "단",
-                                                style: TextHomeNuTitle,
-                                              ),
-                                            ))),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
-                                          child: Align(
-                                            alignment: Alignment.topCenter,
-                                            child: Text(
-                                                "81",
-                                                // "${formatNumberWithComma(goalNowNutrientInfo['protein']!)}",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold)),
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                                Stack(
-                                  children: [
-                                    isNuFin[2]
-                                        ?Container(
-                                      width: 100,
-                                      height: 100,
-                                      padding: EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                      ),
-                                    child:
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color : Color(0xff21C87D).withOpacity(0.18)
-                                      )  
-                                      ,))
-                                        :SizedBox(),
-                                    AnimatedBuilder(
-                                      animation: animationController,
-                                      builder: (context, child) {
-                                        if (animationController.value < 0.1) {
-                                          return const SizedBox();
-                                        }
-                                        return Container(
+                                                  "69",
+                                                  // "${formatNumberWithComma(goalNowNutrientInfo['carb']!)}",
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.bold)),
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                  Stack(
+                                    children: [
+                                      isNuFin[1]
+                                          ?Container(
                                           width: 100,
-                                          height: double.maxFinite,
-                                          child: Center(
-                                              child: CustomPaint(
-                                                size: const Size(95, 95),
-                                                painter: _RadialChart(
-                                                    fatChartData, animationController.value),
-                                              )),
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child:  Padding(
-                                            padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                                          height: 100,
+                                          padding: EdgeInsets.all(15),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child:
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color : Color(0xff21C87D).withOpacity(0.18)
+                                            )
+                                            ,))
+                                          :SizedBox(),
+                                      AnimatedBuilder(
+                                        animation: animationController,
+                                        builder: (context, child) {
+                                          if (animationController.value < 0.1) {
+                                            return const SizedBox();
+                                          }
+                                          return SizedBox(
+                                            width: 100,
+                                            height: double.maxFinite,
+                                            child: Center(
+                                                child: CustomPaint(
+                                                  size: const Size(95, 95),
+                                                  painter: _RadialChart(
+                                                      proChartData, animationController.value),
+                                                )),
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child:  Padding(
+                                              padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Text(
+                                                  "단",
+                                                  style: TextHomeNuTitle,
+                                                ),
+                                              ))),
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
                                             child: Align(
                                               alignment: Alignment.topCenter,
-                                              child: Text("지",
-                                                  style: TextHomeNuTitle),
-                                            ))),
-                                    SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
-                                          child: Align(
-                                            alignment: Alignment.topCenter,
-                                            child: Text(
-                                                "100",
-                                                // "${formatNumberWithComma(goalNowNutrientInfo['fat']!)}",
-                                                style: TextStyle(
-                                                    fontSize: 13,
-                                                    color: Colors.grey,
-                                                    fontWeight: FontWeight.bold)),
+                                              child: Text(
+                                                  "81",
+                                                  // "${formatNumberWithComma(goalNowNutrientInfo['protein']!)}",
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.bold)),
+                                            ),
+                                          ))
+                                    ],
+                                  ),
+                                  Stack(
+                                    children: [
+                                      isNuFin[2]
+                                          ?Container(
+                                          width: 100,
+                                          height: 100,
+                                          padding: EdgeInsets.all(15),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
                                           ),
-                                        ))
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Divider(),
-                        SizedBox(height: 8,),
-                        ElevatedButton(
-                          onPressed: () {
-                          },
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                              Size(double.maxFinite, 40),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorMainBack,
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            shadowColor: MaterialStateProperty.all<Color>(
-                              Colors.black,
-                            ),
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1, // 테두리 두께
-                                ),
+                                          child:
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color : Color(0xff21C87D).withOpacity(0.18)
+                                            )
+                                            ,))
+                                          :SizedBox(),
+                                      AnimatedBuilder(
+                                        animation: animationController,
+                                        builder: (context, child) {
+                                          if (animationController.value < 0.1) {
+                                            return const SizedBox();
+                                          }
+                                          return Container(
+                                            width: 100,
+                                            height: double.maxFinite,
+                                            child: Center(
+                                                child: CustomPaint(
+                                                  size: const Size(95, 95),
+                                                  painter: _RadialChart(
+                                                      fatChartData, animationController.value),
+                                                )),
+                                          );
+                                        },
+                                      ),
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child:  Padding(
+                                              padding: EdgeInsets.fromLTRB(0, 18, 0, 0),
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Text("지",
+                                                    style: TextHomeNuTitle),
+                                              ))),
+                                      SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: Padding(
+                                            padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
+                                            child: Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Text(
+                                                  "100",
+                                                  // "${formatNumberWithComma(goalNowNutrientInfo['fat']!)}",
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.grey,
+                                                      fontWeight: FontWeight.bold)),
+                                            ),
+                                          ))
+                                    ],
+                                  )
+                                ],
                               ),
                             ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                              Colors.transparent,
-                            ),
                           ),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            height: 40,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  child: Text('총 섭취 칼로리',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        color: mainBlack,
-                                        fontSize: 16,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                          Divider(),
+                          SizedBox(height: 8,),
+                          ElevatedButton(
+                            onPressed: () {
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              ),
+                              minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.maxFinite, 40),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                ColorMainBack,
+                              ),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                Colors.black,
+                              ),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1, // 테두리 두께
+                                  ),
                                 ),
-                                Spacer(),
-                                Align(
-                                  alignment: AlignmentDirectional(1, 0),
-                                  child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                      child: Consumer<HomeSave>(
-                                        builder: (context, pv, child) {
-                                          return Text(
-                                              '${formatNumberWithComma(pv.todayWeightCalories['takeCalorie']!)}',
-                                              style: TextStyle(
-                                                color: mainBlack,
-                                                fontFamily: 'Readex Pro',
-                                                fontSize: 21,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                              ));
-                                        },
-                                      )),
-                                ),
-                                Container(
-                                  width: 38,
-                                  child: Align(
-                                    alignment: AlignmentDirectional(1, 0),
-                                    child: Text('kg',
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              height: 40,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Text('총 섭취 칼로리',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           color: mainBlack,
@@ -708,85 +685,85 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                           fontWeight: FontWeight.bold,
                                         )),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            bottomHide(context);
-                            bottomSheetType500(context, todayBurnCalorie());
-                          },
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                              Size(double.maxFinite, 40),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorMainBack,
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            shadowColor: MaterialStateProperty.all<Color>(
-                              Colors.black,
-                            ),
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1, // 테두리 두께
-                                ),
+                                  Spacer(),
+                                  Align(
+                                    alignment: AlignmentDirectional(1, 0),
+                                    child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                                        child: Consumer<HomeSave>(
+                                          builder: (context, pv, child) {
+                                            return Text(
+                                                '${formatNumberWithComma(pv.todayWeightCalories['takeCalorie']!)}',
+                                                style: TextStyle(
+                                                  color: mainBlack,
+                                                  fontFamily: 'Readex Pro',
+                                                  fontSize: 21,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ));
+                                          },
+                                        )),
+                                  ),
+                                  Container(
+                                    width: 38,
+                                    child: Align(
+                                      alignment: AlignmentDirectional(1, 0),
+                                      child: Text('kg',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            color: mainBlack,
+                                            fontSize: 16,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                              Colors.transparent,
-                            ),
                           ),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            height: 40,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const Align(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  child: Text('소모칼로리',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        color: mainBlack,
-                                        fontSize: 16,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                          ElevatedButton(
+                            onPressed: () {
+                              bottomHide(context);
+                              bottomSheetType500(context, todayBurnCalorie());
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              ),
+                              minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.maxFinite, 40),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                ColorMainBack,
+                              ),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                Colors.black,
+                              ),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1, // 테두리 두께
+                                  ),
                                 ),
-                                Spacer(),
-                                Align(
-                                  alignment: AlignmentDirectional(1, 0),
-                                  child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                      child: Consumer<HomeSave>(
-                                        builder: (context, pv, child) {
-                                          return Text(
-                                              '${formatNumberWithComma(pv.todayWeightCalories['burnCalorie']!)}',
-                                              style: TextStyle(
-                                                color: mainBlack,
-                                                fontFamily: 'Readex Pro',
-                                                fontSize: 21,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                              ));
-                                        },
-                                      )),
-                                ),
-                                Container(
-                                  width: 38,
-                                  child: Align(
-                                    alignment: AlignmentDirectional(1, 0),
-                                    child: Text('kg',
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              height: 40,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Text('소모칼로리',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           color: mainBlack,
@@ -795,85 +772,85 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                           fontWeight: FontWeight.bold,
                                         )),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            bottomHide(context);
-                            bottomSheetType500(context, todayWeight());
-                          },
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.fromLTRB(0, 0, 0, 0),
-                            ),
-                            minimumSize: MaterialStateProperty.all<Size>(
-                              Size(double.maxFinite, 40),
-                            ),
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              ColorMainBack,
-                            ),
-                            elevation: MaterialStateProperty.all<double>(0),
-                            shadowColor: MaterialStateProperty.all<Color>(
-                              Colors.black,
-                            ),
-                            shape: MaterialStateProperty.all<OutlinedBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1, // 테두리 두께
-                                ),
+                                  Spacer(),
+                                  Align(
+                                    alignment: AlignmentDirectional(1, 0),
+                                    child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                                        child: Consumer<HomeSave>(
+                                          builder: (context, pv, child) {
+                                            return Text(
+                                                '${formatNumberWithComma(pv.todayWeightCalories['burnCalorie']!)}',
+                                                style: TextStyle(
+                                                  color: mainBlack,
+                                                  fontFamily: 'Readex Pro',
+                                                  fontSize: 21,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ));
+                                          },
+                                        )),
+                                  ),
+                                  Container(
+                                    width: 38,
+                                    child: Align(
+                                      alignment: AlignmentDirectional(1, 0),
+                                      child: Text('kg',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            color: mainBlack,
+                                            fontSize: 16,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            overlayColor: MaterialStateProperty.all<Color>(
-                              Colors.transparent,
-                            ),
                           ),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width,
-                            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                            height: 40,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  child: Text('몸무게',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        color: mainBlack,
-                                        fontSize: 16,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                          ElevatedButton(
+                            onPressed: () {
+                              bottomHide(context);
+                              bottomSheetType500(context, todayWeight());
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              ),
+                              minimumSize: MaterialStateProperty.all<Size>(
+                                Size(double.maxFinite, 40),
+                              ),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                ColorMainBack,
+                              ),
+                              elevation: MaterialStateProperty.all<double>(0),
+                              shadowColor: MaterialStateProperty.all<Color>(
+                                Colors.black,
+                              ),
+                              shape: MaterialStateProperty.all<OutlinedBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1, // 테두리 두께
+                                  ),
                                 ),
-                                Spacer(),
-                                Align(
-                                  alignment: AlignmentDirectional(1, 0),
-                                  child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                      child: Consumer<HomeSave>(
-                                        builder: (context, pv, child) {
-                                          return Text(
-                                              '${formatNumberWithComma(pv.todayWeightCalories['weight']!)}',
-                                              style: TextStyle(
-                                                color: mainBlack,
-                                                fontFamily: 'Readex Pro',
-                                                fontSize: 21,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.bold,
-                                              ));
-                                        },
-                                      )),
-                                ),
-                                Container(
-                                  width: 38,
-                                  child: Align(
-                                    alignment: AlignmentDirectional(1, 0),
-                                    child: Text('kg',
+                              ),
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                Colors.transparent,
+                              ),
+                            ),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width,
+                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              height: 40,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(0, 0),
+                                    child: Text('몸무게',
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           color: mainBlack,
@@ -882,43 +859,75 @@ class _Home_SfState extends State<Home_Sf> with TickerProviderStateMixin {
                                           fontWeight: FontWeight.bold,
                                         )),
                                   ),
-                                )
-                              ],
+                                  Spacer(),
+                                  Align(
+                                    alignment: AlignmentDirectional(1, 0),
+                                    child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                                        child: Consumer<HomeSave>(
+                                          builder: (context, pv, child) {
+                                            return Text(
+                                                '${formatNumberWithComma(pv.todayWeightCalories['weight']!)}',
+                                                style: TextStyle(
+                                                  color: mainBlack,
+                                                  fontFamily: 'Readex Pro',
+                                                  fontSize: 21,
+                                                  letterSpacing: 0.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ));
+                                          },
+                                        )),
+                                  ),
+                                  Container(
+                                    width: 38,
+                                    child: Align(
+                                      alignment: AlignmentDirectional(1, 0),
+                                      child: Text('kg',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            color: mainBlack,
+                                            fontSize: 16,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
+                        ],
+                      )),
+                  SizedBox(height: 25),
+                  Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3), // 그림자 색상 및 투명도 설정
+                            spreadRadius: 2, // 그림자 퍼짐 정도
+                            blurRadius: 5,   // 그림자의 흐림 정도
+                            offset: Offset(1, 3), // 그림자의 위치 (x, y)
+                          ),
+                        ],
+                        color: ColorMainBack,
+                        border: Border.all(
+                            color: mainGrey.withOpacity(0.5),
+                            width: 1.5
                         ),
-                      ],
-                    )),
-                SizedBox(height: 25),
-                Container(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3), // 그림자 색상 및 투명도 설정
-                          spreadRadius: 2, // 그림자 퍼짐 정도
-                          blurRadius: 5,   // 그림자의 흐림 정도
-                          offset: Offset(1, 3), // 그림자의 위치 (x, y)
-                        ),
-                      ],
-                      color: ColorMainBack,
-                      border: Border.all(
-                          color: mainGrey.withOpacity(0.5),
-                        width: 1.5
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    height: 600,
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.width * 1, // 최소 높이
-                    ),
-                    width: double.maxFinite,
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  child: WeekSf()),
-              ],
+                      height: 600,
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.width * 1, // 최소 높이
+                      ),
+                      width: double.maxFinite,
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child: WeekSf()),
+                ],
+              ),
             ),
           ),
-        ),
-      )
+        )
     );
   }
 }
@@ -977,20 +986,9 @@ class _WeekSfState extends State<WeekSf> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Stack(
+          Column(
             children: [
-              Container(
-                width: 30.0,
-                height: 30.0,
-                decoration: BoxDecoration(
-                  color: ColorMainBack,
-                  borderRadius: BorderRadius.circular(50),
-                  border: Border.all(
-                    color: isClickedWeek[idx] == 1 ? Color1BAF79 : mainGrey.withOpacity(0.5),
-                    width: 1,
-                  ),
-                ),
-              ),
+              SizedBox(height: 5,),
               SizedBox(
                 width: 30.0,
                 height: 30.0,
@@ -1014,16 +1012,6 @@ class _WeekSfState extends State<WeekSf> {
             ],
           ),
           const SizedBox(height: 3),
-          Text(
-            '${formatDay(idx)}요일',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 10,
-              fontFamily: 'Noto Sans KR',
-              letterSpacing: 0.0,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ],
       ),
     );
@@ -1048,128 +1036,179 @@ class _WeekSfState extends State<WeekSf> {
     return DefaultTabController(
       length: 7, // 탭의 개수를 지정
       child: Scaffold(
-        appBar: AppBar(
-          // backgroundColor: const Color(0xffEBFFEE),
-          scrolledUnderElevation: 0,
-          automaticallyImplyLeading: false,
-          toolbarHeight: 5,
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(70), // TabBar의 높이 조정
-            child: TabBar(
-              isScrollable: false,
-              // dividerColor: Colors.transparent,
-              indicatorColor: Colors.transparent,
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              labelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: mainBlack,
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: mainBlack.withOpacity(0.8),
-              ),
-              tabs: List.generate(7, (index) {
-                return DayWidget(index, context); // 각 탭의 내용
-              }),
-              onTap: (idx) {
-                setState(() {
-                  isClickedWeek = List.filled(7, 0); // 모든 상태 초기화
-                  isClickedWeek[idx] = 1; // 클릭된 탭 상태 설정
-                });
-              },
-            ),
-          ),
-          elevation: 0, // AppBar의 그림자 제거
-        ),
-        body:
-        TabBarView(
-          children: List.generate(
-            7,
-                (idx) =>Container(
-                  padding: EdgeInsets.only(top: 10),
-                  // color: CupertinoColors.activeGreen,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 110,
-                        child: Padding(
-                          padding: EdgeInsets.all(7),
-                          child: Container(
-                              width: 100,
-                              height: 110,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: List.generate(
-                                      imgs.length+1,
-                                          (idx)=>
-                                      idx == 0
-                                          ?ElevatedButton(onPressed: (){
-                                            bottomHide(context);
-                                            NvgToNxtPageSlide(context, MealSave(type : 'save'));
-                                      }, style: ButtonStyle(
-                                          minimumSize: MaterialStateProperty.all(Size(70, 70)), // 최소 크기 설정
-                                          backgroundColor: MaterialStateProperty.all(Colors.transparent), // 배경색 투명
-                                          shadowColor: MaterialStateProperty.all(Colors.transparent), // 그림자 제거
-                                          elevation: MaterialStateProperty.all(0), // 높이 제거
-                                          padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 제거
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(0), // 모서리 둥글기 제거
+          appBar: AppBar(
+            // backgroundColor: const Color(0xffEBFFEE),
+            scrolledUnderElevation: 0,
+            automaticallyImplyLeading: false,
+            toolbarHeight: 5,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(70), // TabBar의 높이 조정
+              child: Stack(
+                children: [
+                  Container(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 5,),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children : List.generate(7,
+                                    (idx)=>
+                                        Container(
+                                          width: 30.0,
+                                          height: 30.0,
+                                          decoration: BoxDecoration(
+                                            color: ColorMainBack,
+                                            borderRadius: BorderRadius.circular(50),
+                                            border: Border.all(
+                                              color: isClickedWeek[idx] == 1 ? Color1BAF79 : mainGrey.withOpacity(0.5),
+                                              width: 1,
                                             ),
                                           ),
-                                          overlayColor: MaterialStateProperty.all<Color>(
-                                            Colors.transparent,
-                                          )
-                                      ),child: Container(
-                                        width: 75,
-                                        height: 110,
-                                        decoration: BoxDecoration(color: ColorMainBack),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              width: 70,
-                                              height: 70,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(25),
-                                                  // shape: BoxShape.circle,
-                                                  color: mainGrey.withOpacity(0.1)
-                                              ),
-                                              child: Icon(Icons.add, color: mainBlack,),
-                                            ),
-                                            Text('',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w900,
-                                                )),
-                                          ],
                                         ),
-                                      ))
-                                          :Container(
-                                        width: 75,
-                                        height: 105,
-                                        decoration: BoxDecoration(color: ColorMainBack),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            ElevatedButton(onPressed: (){
-                                              final mpv = Provider.of<OneFoodDetail>(context, listen: false);
-                                              // mpv.setimg(imgs[idx-1]);
-                                              // mpv.settime("06:04");
-                                              // mpv.setmealname("식단", idx);
-                                              NvgToNxtPage(context, MooseDetail(type: "음식 상세보기"));
-                                            },
-                                                style: ButtonStyle(
+
+                            )
+                        ),
+                        SizedBox(height: 5,),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children : List.generate(7,
+                                    (idx)=>
+                                    Text(
+                                      '${formatDay(idx)}요일',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontFamily: 'Noto Sans KR',
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+
+                            )
+                        )
+                      ],
+                    ),
+                  ),
+                  TabBar(
+                    isScrollable: false,
+                    // dividerColor: Colors.transparent,
+                    indicatorColor: Colors.transparent,
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    labelStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: mainBlack,
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: mainBlack.withOpacity(0.8),
+                    ),
+                    tabs: List.generate(7, (index) {
+                      return DayWidget(index, context); // 각 탭의 내용
+                    }),
+                    onTap: (idx) {
+                      setState(() {
+                        isClickedWeek = List.filled(7, 0); // 모든 상태 초기화
+                        isClickedWeek[idx] = 1; // 클릭된 탭 상태 설정
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            elevation: 0, // AppBar의 그림자 제거
+          ),
+          body:
+          TabBarView(
+            children: List.generate(
+              7,
+                  (idx) =>Container(
+                padding: EdgeInsets.only(top: 10),
+                // color: CupertinoColors.activeGreen,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 110,
+                      child: Padding(
+                        padding: EdgeInsets.all(7),
+                        child: Container(
+                            width: 100,
+                            height: 110,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(
+                                    imgs.length+1,
+                                        (idx)=>
+                                    idx == 0
+                                        ?ElevatedButton(onPressed: (){
+                                      final mpv = Provider.of<MealSaveProvider>(context,listen: false);
+                                      final opv = Provider.of<OneFoodDetail>(context,listen: false);
+                                      mpv.clear();
+                                      opv.clear();
+                                      NvgToNxtPageSlide(context, MealSave(type : 'save'));
+                                    }, style: ButtonStyle(
+                                        minimumSize: MaterialStateProperty.all(Size(70, 70)), // 최소 크기 설정
+                                        backgroundColor: MaterialStateProperty.all(Colors.transparent), // 배경색 투명
+                                        shadowColor: MaterialStateProperty.all(Colors.transparent), // 그림자 제거
+                                        elevation: MaterialStateProperty.all(0), // 높이 제거
+                                        padding: MaterialStateProperty.all(EdgeInsets.zero), // 패딩 제거
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(0), // 모서리 둥글기 제거
+                                          ),
+                                        ),
+                                        overlayColor: MaterialStateProperty.all<Color>(
+                                          Colors.transparent,
+                                        )
+                                    ),child: Container(
+                                      width: 75,
+                                      height: 110,
+                                      decoration: BoxDecoration(color: ColorMainBack),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 70,
+                                            height: 70,
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(25),
+                                                // shape: BoxShape.circle,
+                                                color: mainGrey.withOpacity(0.1)
+                                            ),
+                                            child: Icon(Icons.add, color: mainBlack,),
+                                          ),
+                                          Text('',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w900,
+                                              )),
+                                        ],
+                                      ),
+                                    ))
+                                        :Container(
+                                      width: 75,
+                                      height: 105,
+                                      decoration: BoxDecoration(color: ColorMainBack),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          ElevatedButton(onPressed: (){
+                                            final mpv = Provider.of<OneFoodDetail>(context, listen: false);
+                                            final opv = Provider.of<OneFoodDetail>(context,listen: false);
+                                            mpv.clear();
+                                            opv.clear();
+                                            NvgToNxtPageSlide(context, MooseDetail(type: "음식 상세보기",save: true,));
+                                          },
+                                              style: ButtonStyle(
                                                   minimumSize: MaterialStateProperty.all(Size(70, 70)), // 최소 크기 설정
                                                   backgroundColor: MaterialStateProperty.all(Colors.transparent), // 배경색 투명
                                                   shadowColor: MaterialStateProperty.all(Colors.transparent), // 그림자 제거
@@ -1180,48 +1219,52 @@ class _WeekSfState extends State<WeekSf> {
                                                       borderRadius: BorderRadius.circular(0), // 모서리 둥글기 제거
                                                     ),
                                                   ),
-                                                    overlayColor: MaterialStateProperty.all<Color>(
-                                                      Colors.transparent,
-                                                    )
+                                                  overlayColor: MaterialStateProperty.all<Color>(
+                                                    Colors.transparent,
+                                                  )
+                                              ),
+                                              child: Container(
+                                                width: 70,
+                                                height: 70,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: AssetImage('assets/test/${imgs[idx-1]}.jpg'),
+                                                    fit: BoxFit.fill
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(25),
+                                                  // shape: BoxShape.circle,
                                                 ),
-                                                child: Container(
-                                              width: 70,
-                                              height: 70,
-                                              clipBehavior: Clip.antiAlias,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(25),
-                                                // shape: BoxShape.circle,
-                                              ),
-                                              child: Image.network(
-                                                'assets/test/${imgs[idx-1]}.jpg',
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )),
-                                            SizedBox(height: 3),
-                                            Text('06:04',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w900,
-                                                )),
-                                          ],
-                                        ),
-                                      )
-                                  ),
+                                                child: Image.network(
+                                                  '',
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )),
+                                          SizedBox(height: 3),
+                                          Text('06:04',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w900,
+                                              )),
+                                        ],
+                                      ),
+                                    )
                                 ),
-                              )),
-                        ),
+                              ),
+                            )),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 40),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 40),
                       child: Center(
                         child: Text("트랙을 시작하고 루틴을 확인해보세요!", style: Text16BoldBlack,),
                       ),)
-                    ],
-                  ),
+                  ],
                 ),
-          ),
-        )
+              ),
+            ),
+          )
       ),
     );
   }

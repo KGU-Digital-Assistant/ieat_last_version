@@ -1,4 +1,3 @@
-
 //화면 길이로 가로 길이 비율 가져오기
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +10,10 @@ import 'package:intl/intl.dart';
 
 String today = getCurrentDateAsString();
 String todayStrkr = getCurrentDateAsStringkr();
-List<String> timeList = ['아침','아점','점심','점저','저녁','야식','간식'];
+List<String> timeList = ['아침', '아점', '점심', '점저', '저녁', '야식', '간식'];
 // List<String> mealSaveHintText = ['오랜만에 먹는 카레라이스','',''];
 
 var dio = Dio();
-
 
 List<String> icons = [
   "Melting face",
@@ -54,8 +52,6 @@ String fomatDay(int idx) {
   return day;
 }
 
-
-
 void setupDio() {
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) {
@@ -75,6 +71,11 @@ void setupDio() {
   ));
 }
 
+int formatNumber(String doubleString) {
+  double doubleValue = double.parse(doubleString); // String을 double로 변환
+  return doubleValue.toInt(); // double을 int로 변환
+}
+
 //오늘 날짜 출력
 String getCurrentDateAsString() {
   // 현재 날짜와 시간을 가져옴
@@ -84,8 +85,8 @@ String getCurrentDateAsString() {
   String formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
   return formattedDate;
-
 }
+
 //오늘 날짜 출력
 String getCurrentDateAsStringkr() {
   // 현재 날짜와 시간을 가져옴
@@ -95,14 +96,14 @@ String getCurrentDateAsStringkr() {
   String formattedDate = DateFormat('yyyy년 MM월 dd일').format(now);
 
   return formattedDate;
-
 }
+
 //이번 주 날짜 출력 int 넣으면 그 날의 date(yyyy-mm-dd)출력 > 하단 getTodayWeekday()참고
 String getDateOfWeek(int day) {
   // 현재 날짜와 시간을 가져옴
   DateTime now = DateTime.now();
   // 입력된 day가 유효한 요일인지 확인
-  int difference = (day+1) - now.weekday;
+  int difference = (day + 1) - now.weekday;
 
   // 현재 날짜에서 차이만큼 더하거나 뺌
   DateTime targetDay = now.add(Duration(days: difference));
@@ -111,7 +112,6 @@ String getDateOfWeek(int day) {
   String formattedDate = DateFormat('yyyy-MM-dd').format(targetDay);
   return formattedDate;
 }
-
 
 //String(yyyy-mm-dd) 넣으면 년도와 월을 List<int>로 반환
 List<int> getYearAndMonth(String date) {
@@ -150,11 +150,12 @@ List<String> getMondaysForNextWeeks() {
     String formattedMonday = DateFormat('MM월 dd일').format(monday);
     mondays.add(formattedMonday);
   }
-  mondays.removeAt(0);  //이번주 선택불가하게 함
+  mondays.removeAt(0); //이번주 선택불가하게 함
   return mondays;
 }
+
 //Moose에서 받은 데이터를 2024-06-27T07:30:00 오전 7시 30분 형태로 변환
-String formattMooseDate(String dateTimeString){
+String formattMooseDate(String dateTimeString) {
   DateTime dateTime = DateTime.parse(dateTimeString);
 
   //시간 구하기
@@ -167,11 +168,9 @@ String formattMooseDate(String dateTimeString){
   return '$period $hour시 ${minute}분';
 }
 
-
 String extractLastTwoChars(String input) {
   return input.substring(input.length - 2);
 }
-
 
 double getWidthRatioFromScreenSize(BuildContext context, double percentage) {
   double screenWidth = MediaQuery.of(context).size.width;
@@ -186,16 +185,13 @@ double getHeightRatioFromScreenSize(BuildContext context, double percentage) {
   return containerWidth;
 }
 
-
-
 //메인화면 도넛차트(util.dart)
 class PieModel {
   final int count;
   final Color color;
   final double thickness; // 추가된 두께 속성
 
-  PieModel( {required this.count, required this.color,required  this.thickness});
-
+  PieModel({required this.count, required this.color, required this.thickness});
 }
 
 //페이지 이동 함수(context, 이동할 페이지)
@@ -207,7 +203,7 @@ void NvgToNxtPage(BuildContext context, Widget nextPage) {
 }
 
 //페이지 이동 함수 - 애니메이션 적용(context, 이동할 페이지)
-void NvgToNxtPageSlide(BuildContext context, Widget nextPage){
+void NvgToNxtPageSlide(BuildContext context, Widget nextPage) {
   Navigator.push(
     context,
     PageRouteBuilder(
@@ -218,7 +214,8 @@ void NvgToNxtPageSlide(BuildContext context, Widget nextPage){
         const end = Offset.zero;
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -241,9 +238,8 @@ var repeattimeBoolList_Str = [
   "오후간식"
 ];
 
-
-String getIconNm(trackIconIdx){
-  String trackIconNm="";
+String getIconNm(trackIconIdx) {
+  String trackIconNm = "";
   switch (trackIconIdx) {
     case 0:
       trackIconNm = "Melting face";
@@ -272,7 +268,7 @@ String getIconNm(trackIconIdx){
   return trackIconNm;
 }
 
-String formatNumberWithComma(int number) {
+String formatNumberWithComma(double number) {
   // 숫자를 문자열로 변환
   String numberString = number.toString();
 
@@ -299,6 +295,7 @@ String formatNumberWithComma(int number) {
 
   return buffer.toString();
 }
+
 void bottomSheetType300(BuildContext context, Widget wg) {
   showModalBottomSheet(
       context: context,
@@ -362,45 +359,28 @@ void bottomSheetType90per(BuildContext context, Widget wg) {
             ),
             padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
             width: getWidthRatioFromScreenSize(context, 1),
-            height: getHeightRatioFromScreenSize(context,0.96),
+            height: getHeightRatioFromScreenSize(context, 0.96),
             child: wg);
       }).then((_) {
     Navigator.pop(context);
   });
 }
 
-
 //오늘 월화수목금토일 int 출력 (요일)
 int getTodayWeekday() {
   DateTime now = DateTime.now(); // 현재 날짜와 시간 가져오기
-  List<String> weekdays = [
-    '월',
-    '화',
-    '수',
-    '목',
-    '금',
-    '토',
-    '일'
-  ];
+  List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
 
   return now.weekday - 1;
 }
+
 //오늘 월화수목금토일 String 출력
 String getTodayWeekdayStr() {
   DateTime now = DateTime.now(); // 현재 날짜와 시간 가져오기
-  List<String> weekdays = [
-    '월',
-    '화',
-    '수',
-    '목',
-    '금',
-    '토',
-    '일'
-  ];
+  List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
 
   return weekdays[now.weekday - 1];
 }
-
 
 //식단 기록
 String getNowTime() {
@@ -408,11 +388,6 @@ String getNowTime() {
   String formattedTime = DateFormat('hh : mm a').format(now);
   return formattedTime;
 }
-
-
-
-
-
 
 Future<void> simpleAlert(String text) async {
   Get.defaultDialog(
@@ -429,30 +404,24 @@ Future<void> simpleAlert(String text) async {
           onPressed: () {
             Get.back(); // 다이얼로그 닫기
           },
-          style: ElevatedButton
-              .styleFrom(
+          style: ElevatedButton.styleFrom(
             minimumSize: Size(70, 40),
-            backgroundColor:
-            Color(0xffCBFF89),
+            backgroundColor: priColor1BAF79,
             elevation: 0,
             shadowColor: Colors.black,
-            shape:
-            RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius
-                  .circular(5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(55),
             ),
           ),
-          child: Text('닫기', style: Text14BlackBold),
+          child: Text('닫기', style: Text16BoldWhite),
         ),
       ],
     ),
     barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
     backgroundColor: Colors.white, // 다이얼로그 배경색
-    radius: 10, // 모서리 둥글기
+    radius: 30, // 모서리 둥글기
   );
 }
-
 
 Future<void> simpleAlert2Pop(String text) async {
   Get.defaultDialog(
@@ -469,18 +438,13 @@ Future<void> simpleAlert2Pop(String text) async {
           onPressed: () {
             Get.back(); // 다이얼로그 닫기
           },
-          style: ElevatedButton
-              .styleFrom(
+          style: ElevatedButton.styleFrom(
             minimumSize: Size(70, 40),
-            backgroundColor:
-            Color(0xffCBFF89),
+            backgroundColor: Color(0xffCBFF89),
             elevation: 0,
             shadowColor: Colors.black,
-            shape:
-            RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius
-                  .circular(5),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
             ),
           ),
           child: Text('닫기', style: Text14BlackBold),
@@ -493,11 +457,10 @@ Future<void> simpleAlert2Pop(String text) async {
   );
 }
 
-
-
 void popWithSlideAnimation(BuildContext context, int cnt) {
   Navigator.of(context).push(PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => Container(), // 빈 페이지를 사용하여 애니메이션만 적용
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        Container(), // 빈 페이지를 사용하여 애니메이션만 적용
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       // 반대 슬라이드 애니메이션
       const begin = Offset.zero;
@@ -516,8 +479,30 @@ void popWithSlideAnimation(BuildContext context, int cnt) {
 
   // 실제로 pop을 호출하여 페이지를 뒤로 이동
   Future.delayed(Duration(milliseconds: 100), () {
-    for(int a = 0; a < cnt ; a++){
+    for (int a = 0; a < cnt; a++) {
       Navigator.pop(context);
     }
   });
+}
+
+String? extractIdFromUrl(String url, {String pattern = 'temp/'}) {
+  try {
+    // 패턴의 위치를 찾습니다
+    final patternIndex = url.indexOf(pattern);
+    if (patternIndex == -1) return null;
+
+    // 패턴 이후부터 시작
+    final startIndex = patternIndex + pattern.length;
+
+    // ? 또는 문자열 끝까지를 찾습니다
+    final endIndex = url.indexOf('?', startIndex);
+
+    // ? 가 없는 경우 문자열 끝까지, 있는 경우 ? 이전까지
+    return endIndex == -1
+        ? url.substring(startIndex)
+        : url.substring(startIndex, endIndex);
+  } catch (e) {
+    print('URL 파싱 에러: $e');
+    return null;
+  }
 }

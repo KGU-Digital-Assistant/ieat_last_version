@@ -206,6 +206,7 @@ class _HomeboardCalender_SfState extends State<HomeboardCalender_Sf> {
                             onDaySelected: (selectedDay,focusedDay){
                               String formateSelectedDay = DateFormat('yyyy-MM-dd').format(selectedDay);
                               calenderDaily_Get(context,formateSelectedDay);
+
                             },
                             calendarBuilders: CalendarBuilders(
                               defaultBuilder: (context, day, focusedDay) {
@@ -305,10 +306,10 @@ class _HomeboardCalender_SfState extends State<HomeboardCalender_Sf> {
                                         alignment: AlignmentDirectional(1, 0),
                                         child: Padding(
                                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                          child: Consumer<HomeSave>(
+                                          child: Consumer<CalenderSelectedProvider>(
                                             builder: (context, pv, child) {
                                               return Text(
-                                                  '${dInfo['health']['burnCalorie']}',
+                                                  '${dInfo['health']['nowCalorie']??0.0.floor()}',
                                                   style: TextStyle(
                                                     color: mainBlack,
                                                     fontFamily: 'Readex Pro',
@@ -370,7 +371,7 @@ class _HomeboardCalender_SfState extends State<HomeboardCalender_Sf> {
                                         child: Padding(
                                             padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                                             child: Text(
-                                                '${dInfo['health']['burnCalorie']}',
+                                                '${dInfo['health']['burnCalorie'].floor()}',
                                                 style: TextStyle(
                                                   color: mainBlack,
                                                   fontFamily: 'Readex Pro',
@@ -430,7 +431,7 @@ class _HomeboardCalender_SfState extends State<HomeboardCalender_Sf> {
                                         child: Padding(
                                             padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                                             child: Text(
-                                                '${dInfo['health']['Weight']}',
+                                                '${dInfo['health']['Weight'].floor()}',
                                                 style: TextStyle(
                                                   color: mainBlack,
                                                   fontFamily: 'Readex Pro',

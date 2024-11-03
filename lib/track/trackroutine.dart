@@ -35,9 +35,9 @@ class _RoutineDetailState extends State<RoutineDetail> {
   int selectedHour = 0;
   int selectedMinute = 0;
   int selectedA = 0; //0 : 오전, 1 : 오후
-
+  TextEditingController routine_GoalKcal_Controller = TextEditingController();
   List<dynamic> selectedDate = ["", ""];
-
+  final FocusNode textFieldFocusNode = FocusNode();
   @override
   void initState() {
     // TODO: implement initState
@@ -89,7 +89,13 @@ class _RoutineDetailState extends State<RoutineDetail> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text('${selectedDate[0]}주차 ${selectedDate[1]}요일',
+                  pv.oneRoutineInfo['repeat']
+                  ?Text('매주 ${pv.oneRoutineInfo['weekday']}요일',
+                      style: TextStyle(
+                          color: mainBlack,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600))
+                  :Text('${selectedDate[0]}주차 ${pv.oneRoutineInfo['weekday']}요일',
                       style: TextStyle(
                           color: mainBlack,
                           fontSize: 14,
@@ -297,8 +303,10 @@ class _RoutineDetailState extends State<RoutineDetail> {
                     onPressed: () {
                       // bottomHide(context);
                       Get.defaultDialog(
+                        title: "요일 선택",
+                        titleStyle: Text20BoldBlack,
                         content: SizedBox(
-                            height: 300,
+                            height: 400,
                             width: MediaQuery.sizeOf(context).width,
                             child: Container(
                               padding: EdgeInsets.all(15),
@@ -311,12 +319,13 @@ class _RoutineDetailState extends State<RoutineDetail> {
                                           7,
                                               (idx) => ElevatedButton(
                                               onPressed: () {
-
-                                              }, child: Text('${timeList[idx]}'))),
+                                                Navigator.pop(context);
+                                                pv.setRoutineWeekDay('${fomatDay(idx)}');
+                                              }, child: Text('${fomatDay(idx)}'))),
                                     );
                                   }),
                             )),
-                        barrierDismissible: false, // 바깥 영역 클릭 시 닫히지 않도록 설정
+                        barrierDismissible: true, // 바깥 영역 클릭 시 닫히지 않도록 설정
                         backgroundColor: Colors.white, // 다이얼로그 배경색
                         radius: 10, // 모서리 둥글기
                       );
@@ -389,7 +398,33 @@ class _RoutineDetailState extends State<RoutineDetail> {
                   ElevatedButton(
                     onPressed: () {
                       // bottomHide(context);
-                      // bottomSheetType500(context, todayWeight());
+                      Get.defaultDialog(
+                        title: "시간대 선택",
+                        titleStyle: Text14BlackBold,
+                        content: SizedBox(
+                            height: 400,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              child:
+                              Consumer<OneRoutineDetailInfoProvider>(
+                                  builder: (context, pv, child) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: List.generate(
+                                          7,
+                                              (idx) => ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                pv.setRoutineTime('${timeList[idx]}');
+                                              }, child: Text('${timeList[idx]}'))),
+                                    );
+                                  }),
+                            )),
+                        barrierDismissible: true, // 바깥 영역 클릭 시 닫히지 않도록 설정
+                        backgroundColor: Colors.white, // 다이얼로그 배경색
+                        radius: 10, // 모서리 둥글기
+                      );
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
@@ -455,83 +490,97 @@ class _RoutineDetailState extends State<RoutineDetail> {
                     ),
                   ), //시간대
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      // bottomHide(context);
-                      // bottomSheetType500(context, todayWeight());
-                    },
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      ),
-                      minimumSize: MaterialStateProperty.all<Size>(
-                        Size(MediaQuery.sizeOf(context).width, 45),
-                      ),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        ColorMainBack,
-                      ),
-                      elevation: MaterialStateProperty.all<double>(0),
-                      shadowColor: MaterialStateProperty.all<Color>(
-                        Colors.black,
-                      ),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          side: BorderSide(
-                            color: colorMainBolder,
-                            width: 1, // 테두리 두께
-                          ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width,
+                    height: 55,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    decoration: BoxDecoration(
+                      color: ColorMainBack,
+                      borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                    color: colorMainBolder,
+                    width: 1,
+                  ),
+                    ),
+                    child :Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(0, 0),
+                          child: Text('반복',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: mainBlack,
+                                fontSize: 16,
+                                letterSpacing: 0.0,
+                                fontWeight: FontWeight.bold,
+                              )),
                         ),
-                      ),
-                      overlayColor: MaterialStateProperty.all<Color>(
-                        Colors.transparent,
-                      ),
+                        Spacer(),
+                        Align(
+                          alignment: AlignmentDirectional(1, 0),
+                          child: Padding(
+                              padding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                              child: Consumer<RoutinListProvider>(
+                                builder: (context, pv, child) {
+                                  return Text('',
+                                      style: TextStyle(
+                                        color: mainBlack,
+                                        fontSize: 21,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.bold,
+                                      ));
+                                },
+                              )),
+                        ),
+                      ],
                     ),
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      height: 55,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0, 0),
-                            child: Text('반복',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: mainBlack,
-                                  fontSize: 16,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: AlignmentDirectional(1, 0),
-                            child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                child: Consumer<RoutinListProvider>(
-                                  builder: (context, pv, child) {
-                                    return Text('',
-                                        style: TextStyle(
-                                          color: mainBlack,
-                                          fontSize: 21,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.bold,
-                                        ));
-                                  },
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ), //반복
+                  ),
                   SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // bottomHide(context);
-                      // bottomSheetType500(context, todayBurnCalorie());
+                      bottomHide(context);
+                      bottomSheetType300(context, Container(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Text('목표 칼로리 설정',style: Text20BoldBlack,),
+                            Image.asset(
+                              'assets/test/text_burnkcalIcon.png',
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.sizeOf(context).width*0.2,
+                              child: TextField(
+                                focusNode: textFieldFocusNode, // TextField에 FocusNode 연결
+                                textAlign: TextAlign.center,
+                                controller: routine_GoalKcal_Controller,
+                                decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey), // 기본 언더라인 색상
+                                  ),
+                                  hintText: pv.oneRoutineInfo['calorie'] != null
+                                      ? pv.oneRoutineInfo['calorie'].toString()
+                                      : '칼로리를 입력하세요',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey, // 힌트 텍스트 색상
+                                    fontSize: 25, // 힌트 텍스트 크기
+                                    fontWeight: FontWeight.bold, // 힌트 텍스트 두께
+                                  ),
+                                  border: InputBorder.none, // 모든 테두리 제거
+                                ),
+                                onChanged: (value){
+                                  pv.setGoalKcal(routine_GoalKcal_Controller.text);
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                            )
+                          ],
+                        ),
+                      ));
                     },
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(

@@ -23,7 +23,7 @@ import '../styleutil.dart';
 
 /**
  * 모든 함수가 있지는 않음(track.dart에서 본 파일로 옮기는 작업 필요)
- * startTrack_POST : 트랙 시작
+ *  : 트랙 시작
  * routineListup_GET  : 주차, 요일 넘기면 해당 날짜의 루틴 리스트업
  *
  */
@@ -37,8 +37,7 @@ Future<void> startTrack_POST(BuildContext context, int tid) async {
   print(pv.monday);
   String funcname = 'startTrack_POST';
   print('$funcname - 요청시작');
-  String uri = '$url/track/group/start_track/$tid/${pv.monday}';
-  setupDio();
+  String uri = '$url/track//$tid/${pv.monday}';
   setupDio();
   try {
     final response = await dio.request(
@@ -157,55 +156,6 @@ Future<void> deleteOneTrack(BuildContext context) async {
 
 
 
-
-
-
-
-Future<void> trackStart(BuildContext context, int tid) async {
-  List<bool> res = [false, false, false, false, false, false, false, false];
-
-  try {
-
-    var response1 = await oneTrackInfo_GET(context, tid);
-    res[0] = response1.statusCode == 200 || response1.statusCode == 204; // 성공 상태 코드 체크
-
-    var response2 = await calenderInfo_GET(context, tid);
-    res[1] = response2.statusCode == 200 || response2.statusCode == 204;
-
-    var response3 = await trackNmDDay_GET(context);
-    res[2] = response3.statusCode == 200 || response3.statusCode == 204;
-
-    var response4 = await mealDayCalorieToday_GET(context);
-    res[3] = response4.statusCode == 200 || response4.statusCode == 204;
-
-    var response5 = await dateWeek_GET(context, tid);
-    res[4] = response5.statusCode == 200 || response5.statusCode == 204;
-
-    var response6 = await trackRoutineList_GET(context, tid);
-    res[5] = response6.statusCode == 200 || response6.statusCode == 204;
-
-    var response7 = await routineGetWeek_GET(context, tid);
-    res[6] = response7.statusCode == 200 || response7.statusCode == 204;
-
-    var response8 = await allTrackListup_GET(context);
-    res[7] = response8.statusCode == 200 || response8.statusCode == 204;
-
-    print(res);
-    // 모든 요청이 성공했는지 확인
-    if (res.every((element) => element == true)) {
-      bottomSheetType500(context, suc500_1(context));
-
-      // getStart(); // 모든 API 호출 성공 시 getStart() 함수 호출
-    } else {
-      // 실패한 경우, 각 API 호출 결과를 로그로 남기거나 처리
-      print('Some requests failed: $res');
-    }
-  } catch (e) {
-    bottomSheetType500(context, fail500_1(context));
-  }
-}
-
-
 Future<diodart.Response> oneTrackInfo_GET(BuildContext context, int tid) async {
   // final pv = Provider.of<HomeSave>(context, listen: false);
 
@@ -289,251 +239,46 @@ Future<diodart.Response> calenderInfo_GET(BuildContext context, int tid) async {
   }
 }
 
-Future<diodart.Response> trackNmDDay_GET(BuildContext context) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'trackNmDDay_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/track/group/get/$today/name_dday',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> mealDayCalorieToday_GET(BuildContext context) async {
-  String? tk = await getTk();
-  print("tk : $tk");
-  String funNm = 'mealDayCalorieToday_GET';
-  print('$funNm - 요청시작');
-  String uri = '$url/meal_day/get/calorie_today';
-  try {
-    final response = await dio.get(
-      uri,
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-    // final data = jsonDecode(response.data);
-    print(response.data);
-    // if (response.statusCode == 200) {
-    //   final res = response.data;
-    //   if (res.length == 0) {}
-    // } else if (response.statusCode == 404) {
-    //   //기록된 내역이 없음
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> dateWeek_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'dateWeek_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  try {
-    final response = await dio.get(
-      '$url/track/name/date',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> trackRoutineList_GET(BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'trackRoutineList_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-  try {
-    final response = await dio.get('$url/track/routine/list/$tid',
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'Authorization': 'Bearer $tk',
-          },
-          validateStatus: (status) {
-            print('${status}');
-            return status != null && status < 500; // 상태 확인을 명확하게
-          },
-        ),
-        queryParameters: {
-          'week ': 1,
-          'weekday ': "월",
-        });
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    //   print(res);
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> routineGetWeek_GET( BuildContext context, int tid) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'routineGetWeek_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/clear/routine/get_week',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
-
-Future<diodart.Response> dailyTargetCalorie_GET( BuildContext context) async {
-  // final pv = Provider.of<HomeSave>(context, listen: false);
-
-  String funNm = 'dailyTargetCalorie_GET';
-  print('$funNm - 요청시작');
-
-  String? tk = await getTk();
-
-  try {
-    final response = await dio.get(
-      '$url/clear/routine/get_week',
-      options: Options(
-        headers: {
-          'accept': 'application/json',
-          'Authorization': 'Bearer $tk',
-        },
-        validateStatus: (status) {
-          print('${status}');
-          return status != null && status < 500; // 상태 확인을 명확하게
-        },
-      ),
-    );
-
-    final res = response.data;
-    print(res);
-    // if (response.statusCode == 200) {
-    // } else if (response.statusCode == 404) {
-    //   bottomSheetType500(context,fail500_1(context));
-    // } else {
-    //   print(' $funNm Error(statusCode): ${response.statusCode}');
-    //   bottomSheetType500(context,fail500_1(context));
-    // }
-    return response.data;
-  } catch (e) {
-// 오류 처리
-    print('$funNm Error: $e');
-    return diodart.Response(
-        requestOptions: RequestOptions(path: ''), statusCode: 500);
-  }
-}
+// Future<diodart.Response> routineGetWeek_GET( BuildContext context, int tid) async {
+//   // final pv = Provider.of<HomeSave>(context, listen: false);
+//
+//   String funNm = 'routineGetWeek_GET';
+//   print('$funNm - 요청시작');
+//
+//   String? tk = await getTk();
+//
+//   try {
+//     final response = await dio.get(
+//       '$url/clear/routine/get_week',
+//       options: Options(
+//         headers: {
+//           'accept': 'application/json',
+//           'Authorization': 'Bearer $tk',
+//         },
+//         validateStatus: (status) {
+//           print('${status}');
+//           return status != null && status < 500; // 상태 확인을 명확하게
+//         },
+//       ),
+//     );
+//
+//     final res = response.data;
+//     print(res);
+//     // if (response.statusCode == 200) {
+//     // } else if (response.statusCode == 404) {
+//     //   bottomSheetType500(context,fail500_1(context));
+//     // } else {
+//     //   print(' $funNm Error(statusCode): ${response.statusCode}');
+//     //   bottomSheetType500(context,fail500_1(context));
+//     // }
+//     return response.data;
+//   } catch (e) {
+// // 오류 처리
+//     print('$funNm Error: $e');
+//     return diodart.Response(
+//         requestOptions: RequestOptions(path: ''), statusCode: 500);
+//   }
+// }
 
 Future<diodart.Response> allTrackListup_GET(BuildContext context) async {
   //[{track_id: 1, name: 새로운 식단 트랙, create_time: 2024-09-14T00:37:46.923792, using: false}]

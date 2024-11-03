@@ -112,7 +112,6 @@ class HomeSaveTabModel with ChangeNotifier {
   }
 }
 
-enum HomeType { homeSave, homeBoardCalender, homeBoardTrack }
 
 class HomeboardTabModel with ChangeNotifier {
   int _currentIndex = 0;
@@ -192,27 +191,27 @@ class HomeSave with ChangeNotifier {
   };
 
   // todaySubData의 value =[기록 수치,계획 수치]
-  var todayMainData = <String, List<dynamic>>{
-    "calorie": [0, 0], //[기록, 계획]
-    "carbonate": [0, 300],
-    "protein": [0, 65],
-    "fat": [0, 60]
+  Map<String,dynamic> todayMainData = {
+    "carb": 0.0,
+    "protein": 0.0,
+    "fat": 0.0,
+    "gb_carb": 0.0,
+    "gb_protein": 0.0,
+    "gb_fat": 0.0
   };
-  var todayWeightCalories = <String, int>{
-    "takeCalorie": 0,
-    "burnCalorie": 0,
-    "weight": 0
+
+  var todayWeightCalories = <String, dynamic>{
+    "goalCalorie": 0.0,
+    "todayCalorie": 0.0,
+    "nowCalorie": 0.0,
+    "burnCalorie": 0.0,
+    "weight": 0.0
   };
   var todaySaveMeal = <String, dynamic>{
     "saveCnt": 0,
-    "saveList": [
-      ["img", "06 : 03"],
-      ["img", "06 : 03"],
-      ["img", "06 : 03"],
-      ["img", "06 : 03"]
-    ],
+    "saveList": [],  //음식 리스트
   };
-  var todayRoutineList = [
+  List<dynamic> todayRoutineList = [
     ["mealtime", "savetime", "routineNm", true],
     ["mealtime", "savetime", "routineNm", true],
     ["mealtime", "savetime", "routineNm", true],
@@ -241,6 +240,11 @@ class HomeSave with ChangeNotifier {
     _trackNmDDay['name'] = data['name'];
     _trackNmDDay['dday'] = data['dday'];
     _trackNmDDay['tid'] = data['track_id'];
+    if(data['track_id'] == -1){
+      _isTracking = false;
+    }else{
+      _isTracking = true;
+    }
     notifyListeners();
   }
 
@@ -261,48 +265,46 @@ class HomeSave with ChangeNotifier {
     notifyListeners();
   }
 
-  void setBurnCalorie(int data) {
+  void setBurnCalorie(dynamic data) {
     todayWeightCalories['burnCalorie'] = data;
     notifyListeners();
   } //초기데이터
 
-  void setWeight(int data) {
+  void setWeight(dynamic data) {
     todayWeightCalories['weight'] = data;
     notifyListeners();
   } //초기데이터
-}
+  void setGoalcalorie(dynamic data) {
+    todayWeightCalories['goalcalorie'] = data;
+    notifyListeners();
+  } //초기데이터
+  void setTodayCalorie(dynamic data) {
+    todayWeightCalories['todayCalorie'] = data;
+    notifyListeners();
+  } //초기데이터
+  void setNowCalorie(dynamic data) {
+    todayWeightCalories['nowCalorie'] = data;
+    notifyListeners();
+  } //초기데이터
+  void setSelectedDateRoutineList(List<dynamic> data) {
+    todayRoutineList = data;
+    notifyListeners();
+  }
+  void setSaveList(List<dynamic> data){
+  todaySaveMeal['saveList'] = data;
+  print(data);
+  notifyListeners();
+  }
 
-class HomeBoardCalender with ChangeNotifier {
-  String selectedDay = "0000-00-00"; //함수에서 변형
 
-  var monthlySummary = <String, List<int>>{
-    "savedays": [0, 0],
-    "obeyRoutines": [0, 0],
-    "averageDailyCalorie": [0, 0],
-  };
-  var monthlyCalender = []; //api출력 데이터 확인하기
 
-  var selectedDayTrackInfo = ["-", 0]; //트랙명, 일 차
-  var selectedDayWeightCalories = <String, int>{
-    "takeKacl": 0,
-    "burnKacl": 0,
-    "weight": 0
-  };
-  var selectedDayRoutineList = [
-    ["savetime", "routineNm", true],
-    ["savetime", "routineNm", true],
-    ["savetime", "routineNm", true],
-    ["savetime", "routineNm", true],
-    ["savetime", "routineNm", true],
-  ]; //cnt에 따라서 height 길이 변환
-  var selectedDaySaveMeal = <String, List<dynamic>>{
-    "saveList": [
-      ["img", "06 : 03"],
-      ["img", "06 : 03"],
-      ["img", "06 : 03"],
-      ["img", "06 : 03"]
-    ]
-  };
+
+
+//오늘 영양소(탄단지)
+  void setTodayNutir(Map<String,dynamic> data) {
+    todayMainData = data;
+    notifyListeners();
+  }
 }
 
 class UserTodayTrack with ChangeNotifier {
@@ -777,10 +779,10 @@ class CalenderSelectedProvider with ChangeNotifier {
         "TCountingDay": 0 //몇 일차
       }, //트랙명
       "health": {
-        "totalCalorie": 0, //이 날의 칼로리
-        "goalCalorie": 0, //목표 칼로리
-        "saveCalorie": 0, //섭취 칼로리
-        "burnCalorie": 0, //소모 칼로리
+        "totalCalorie": 0.0, //이 날의 칼로리
+        "goalCalorie": 0.0, //목표 칼로리
+        "nowCalorie": 0.0, //섭취 칼로리
+        "burnCalorie": 0.0, //소모 칼로리
         "Weight": 0, //몸무게
       },
       "routine": {
@@ -876,20 +878,20 @@ class CalenderSelectedProvider with ChangeNotifier {
 //[일별데이터] : 건강정보
   void setHealth(Map<String, dynamic> data) {
     _dailyInfo['health']['totalCalorie'] =
-        data['todaycalorie'] == null ? 0 : data['todaycalorie'];
+        data['todaycalorie'] == null ? 0.0 : data['todaycalorie'];
     _dailyInfo['health']['goalCalorie'] =
-        data['goalcalorie'] == null ? 0 : data['goalcalorie'];
-    _dailyInfo['health']['saveCalorie'] =
-        data['nowcalorie'] == null ? 0 : data['nowcalorie'];
+        data['goalcalorie'] == null ? 0.0 : data['goalcalorie'];
+    _dailyInfo['health']['nowCalorie'] =
+        data['nowcalorie'] == null ? 0.0 : data['nowcalorie'];
     _dailyInfo['health']['burnCalorie'] =
-        data['burncalorie'] == null ? 0 : data['burncalorie'];
+        data['burncalorie'] == null ? 0.0 : data['burncalorie'];
     _dailyInfo['health']['Weight'] =
-        data['weight'] == null ? 0 : data['weight'];
+        data['weight'] == null ? 0.0 : data['weight'];
     notifyListeners();
   }
 
 //[일별데이터] : 식단 기록 리스트
-  void setSave(List<Map<String, String>> data) {
+  void setSave(List<dynamic> data) {
     _dailyInfo['save'] = data;
     notifyListeners();
   }
@@ -906,9 +908,9 @@ class OneRoutineDetailInfoProvider with ChangeNotifier {
     "clock": "01:00:00.975Z",
     "weekday": "월",
     "time": "아침",
-    "calorie": 100,
-    "repeat": true,
-    "alarm": true
+    "calorie": 0,
+    "repeat": false,
+    "alarm": false
   };
 
   String get pageType => _pageType;
@@ -947,9 +949,9 @@ class OneRoutineDetailInfoProvider with ChangeNotifier {
       "clock": "01:00:00.975Z",
       "weekday": "월",
       "time": "아침",
-      "calorie": 100,
-      "repeat": true,
-      "alarm": true
+      "calorie": 0,
+      "repeat": false,
+      "alarm": false
     };
     _pageType = "생성";
     notifyListeners();
@@ -982,7 +984,18 @@ class OneRoutineDetailInfoProvider with ChangeNotifier {
     print(_oneRoutineInfo['clock']);
     notifyListeners();
   }
-
+  //[루틴 수정] 요일 설정
+  void setRoutineWeekDay(String data) {
+    _oneRoutineInfo['weekday'] = data;
+    notifyListeners();
+    print("요일 provider 세팅 : ${ _oneRoutineInfo['weekday']}");
+  }
+  //[루틴 수정] 시간대 설정
+  void setRoutineTime(String data) {
+    _oneRoutineInfo['time'] = data;
+    notifyListeners();
+    print("시간대 provider 세팅 : ${ _oneRoutineInfo['time']}");
+  }
   //[루틴 수정] 반복 설정
   void setRoutineRepeat(bool data) {
     _oneRoutineInfo['repeat'] = data;
@@ -1068,6 +1081,16 @@ class OneFoodDetail with ChangeNotifier {
 
   //provider에 데이터 세팅
   void setInfo(Map<String,dynamic> data){
+    print(data);
+    print(data['food_info']['kcal']);
+    //{file_path: temp/2_2024-10-29-192107,
+    // food_info: {is_success: true, name: 흑미밥,
+    // weight: 200.00, kcal: 318.00, carb: 70.29,
+    // sugar: 0.00, fat: 0.39, protein: 5.44,
+    // calcium: 6.30, p: 98.60, salt: 4.50,
+    // mg: 112.90, irom: 0, zinc: 1.29, chol: 1.35,
+    // trans: 0.00, labels: [01012006, 14012001]},
+    // image_url: https://bXFLwA5t1Fjk9ZD%3D}
     _foodInfo = data;
     notifyListeners();
   }

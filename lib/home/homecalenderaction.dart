@@ -270,6 +270,7 @@ Future<void> calendertotal_GET(BuildContext context, String selectedDay) async {
   } catch (e) {
 // 오류 처리
     print('$funNm Error: $e');
+    print('$funNm Error: $e');
   }
 }
 
@@ -278,35 +279,38 @@ Future<void> calendertotal_GET(BuildContext context, String selectedDay) async {
 Future<void> calenderDaily_Get(BuildContext context,String selectedDay) async {
   final pv = Provider.of<CalenderSelectedProvider>(context, listen: false);
   pv.setSelectedDay(selectedDay);
-  List<bool> res = [false, false, false, false];
-
-  try {
-
-    //처음에 404가,404가,200,404가 정상임(데이터 없어서 404)
-    var response1 = await trackTitle_GET(context,selectedDay);
-    if (response1.statusCode == 200 || response1.statusCode == 204) res[0] = true;
-
-    var response2 = await health_SeletedDay_GET(context,selectedDay);
-    if (response2.statusCode == 200 || response2.statusCode == 204) res[1] = true;
-
-    var response3 = await routine_SelectdDay_GET(context, selectedDay);
-    if (response3.statusCode == 200 || response3.statusCode == 204) res[2] = true;
-
-    var response4 = await save_SelectdDay_GET(context,selectedDay);
-    if (response4.statusCode == 200 || response4.statusCode == 204) res[3] = true;
+  // List<bool> res = [false, false, false, false];
+  c_mealDayCalorieToday_GET(context);
+  c_saveList_SelectdDay_GET(context,selectedDay);
 
 
-    print(res);
-    // 모든 요청이 성공했는지 확인
-    // if (res.every((element) => element == true)) {
-    //   // bottomSheetType500(context, suc500_1(context));
-    // } else {
-    //   print('calenderGet - Some requests failed: $res');
-    //   // bottomSheetType500(context, fail500_1(context));
-    // }
-  } catch (e) {
-    bottomSheetType500(context, fail500_1(context));
-  }
+  // try {
+  //
+  //   //처음에 404가,404가,200,404가 정상임(데이터 없어서 404)
+  //   // var response1 = await trackTitle_GET(context,selectedDay);
+  //   // if (response1.statusCode == 200 || response1.statusCode == 204) res[0] = true;
+  //   //
+  //   // var response2 = await health_SeletedDay_GET(context,selectedDay);
+  //   // if (response2.statusCode == 200 || response2.statusCode == 204) res[1] = true;
+  //   //
+  //   // var response3 = await routine_SelectdDay_GET(context, selectedDay);
+  //   // if (response3.statusCode == 200 || response3.statusCode == 204) res[2] = true;
+  //   //
+  //   // var response4 = await save_SelectdDay_GET(context,selectedDay);
+  //   // if (response4.statusCode == 200 || response4.statusCode == 204) res[3] = true;
+  //   //
+  //
+  //   print(res);
+  //   // 모든 요청이 성공했는지 확인
+  //   // if (res.every((element) => element == true)) {
+  //   //   // bottomSheetType500(context, suc500_1(context));
+  //   // } else {
+  //   //   print('calenderGet - Some requests failed: $res');
+  //   //   // bottomSheetType500(context, fail500_1(context));
+  //   // }
+  // } catch (e) {
+  //   bottomSheetType500(context, fail500_1(context));
+  // }
 }
 //[일별데이터] : 트랙명, 몇 일차
 Future<diodart.Response> trackTitle_GET(BuildContext context, String selectedDay) async {
@@ -509,3 +513,105 @@ String dailyDateFormat(String inputDate) {
 }
 
 
+
+
+Future<void> c_mealDayCalorieToday_GET(BuildContext context) async {
+  String? tk = await getTk();
+  print("tk : $tk");
+  String funNm = 'mealDayCalorieToday_GET';
+  print('$funNm - 요청시작');
+  String uri = '$url/meal_day/get/calorie_today/$today';
+  try {
+    final response = await dio.get(
+      uri,
+      options: Options(
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer $tk',
+        },
+        validateStatus: (status) {
+          print('${status}');
+          return status != null && status < 500; // 상태 확인을 명확하게
+        },
+      ),
+    );
+    // final data = jsonDecode(response.data);
+    print(response.data);
+    //
+    // Response body
+    // Download
+    // {
+    //   "todaycalorie": 729.62,
+    //   "goalcalorie": 0,
+    //   "nowcalorie": 729.62,
+    //   "burncalorie": 0,
+    //   "weight": 0
+    // }
+    if (response.statusCode == 200) {
+      Map<String, dynamic> res = response.data;
+      final hpv = Provider.of<CalenderSelectedProvider>(context, listen: false);
+      hpv.setHealth(res);
+    } else {
+      print('$funNm Error(statusCode): ${response.statusCode}');
+    }
+    return response.data;
+  } catch (e) {
+// 오류 처리
+    print('$funNm Error: $e');
+  }
+}
+Future<void> c_saveList_SelectdDay_GET(BuildContext context,String selectedDay) async {
+
+  String funNm = 'save_SelectdDay_GET';
+  String? tk = await getTk();
+
+  try {
+    final response = await dio.get(
+      '$url/meal_day/get/mealhour_today/$today',
+      options: Options(
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer $tk',
+        },
+        validateStatus: (status) {
+          print('$funNm : ${status}');
+          return status != null && status < 500; // 상태 확인을 명확하게
+        },
+      ),
+    );
+
+    final res = response.data;
+    print("$funNm : $res");
+
+    if (response.statusCode == 200) {
+      var data = Map<String, dynamic>.from(res);
+      //{
+      //   "mealday": [
+      //     {
+      //       "date": "20:31",
+      //       "picture": "https://storage.googleapis.com/ieat-76bd6.appspot.com/meal/2_2024-11-03-202902?Expires=1730646751&GoogleAccessId=firebase-adminsdk-eigep%40ieat-76bd6.iam.gserviceaccount.com&Signature=usXiV94%2BYRokFzwL8aEDsgAgpNGmHre4%2B5ZqVzlnz0Td6pwejZwJT%2Fl2usdq7pNExjDGDlSEs77zP7CyaB529JAH%2BwiHZmpNL0spjl3WSzg6JxkQaH%2FKnY0xLx96lQYulb%2FoFW5DzLU6ZPSIDMZzTKcAO3nTkCLj2vgB14d69Ux9OvbKvpvs7i1TxZuJDSV6%2BXaEvWNuCHdkIT7Lpl4ODe%2BGIAZepv8KAA1HY6JHH%2BIxF%2FpRfgK8fmmYPsS4VvHk4b4MgXYc9TcD8AEpy1nEcR6rug8Q0U78p9lzyrDK9GC%2FisbYaaouHDikbgmzwwyw65Zgy6Wcev7vR99lqC5WIA%3D%3D"
+      //     },
+      //     {
+      //       "date": "22:22",
+      //       "picture": "https://storage.googleapis.com/ieat-76bd6.appspot.com/meal/2_2024-11-03-222248?Expires=1730646751&GoogleAccessId=firebase-adminsdk-eigep%40ieat-76bd6.iam.gserviceaccount.com&Signature=Aek4MsJ%2FhDa625Jgf669LWLpHLGmJ46P4%2FFCKw8FMOBoCWnzaXzsRyNuZGI3byG9GjN3LvJNjtlmqZnEAj0n3tG5BrBoiD0e%2BbXvx8mHh2ePwHIQ7Fi4DfmzPJniQ3I7cH4Q5%2B0DgqTyAITd%2FAE1NfooU5mVLmgf2kivlldbZfAq7Uk%2BhG68tXQUlP9JrfMQJ5H%2FM92ZbW72vxaEAaOeogANwwJqXNv74Zo5bit%2Bs6xQ51u1WnveIAclCUmjkrv23ofejgf3dSL74zhAH3Lz4zTqJTB96NHCr45oFruN9L0rFDfY2BbrEtuE7iq9O9PNOV%2Fwu8ELjK5cuvdjAIQi6A%3D%3D"
+      //     },
+      //     {
+      //       "date": "22:24",
+      //       "picture": "https://storage.googleapis.com/ieat-76bd6.appspot.com/meal/2_2024-11-03-222441?Expires=1730646751&GoogleAccessId=firebase-adminsdk-eigep%40ieat-76bd6.iam.gserviceaccount.com&Signature=FXzeMzCk2lAdhyBC3TLy59zgR38G9LGaB0ae46%2BVtgtvsv9rJY012SdYQt1%2BgasUyebb0uTUAgKq2PBOp5KJxmWn0CCQy5F169CWeHBeV0VyNp7zD8d2cVo8PFko%2B2WO0h1dPEr1PIaeuGFx5yrCEWlUQDylbXqJI%2F2EWfNm8rywKIiEfASIXT9seb5p5OPXFGsUIrl3Uo8oma2ZuA8n2Ij%2FXbjasRd%2B21nJNBuPiqSbF5Epqut7%2B4V9JvHIdqRTMGWNDX6zkyDq8%2BXnWMRUOXLGjSRYuI%2BMb1Ud760hNRaGfmuLh8orz38kRFrQCA%2BHDmOnMslZHH6a1NqOFciUXA%3D%3D"
+      //     }
+      //   ]
+      // }
+
+      final pv = Provider.of<CalenderSelectedProvider>(context,listen: false);
+      pv.setSave(data['mealday']);
+
+    } else if (response.statusCode == 404) {
+
+    } else {
+
+    }
+  } catch (e) {
+// 오류 처리
+    print('$funNm Error: $e');
+  }
+}

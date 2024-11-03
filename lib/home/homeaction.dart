@@ -8,8 +8,7 @@ import 'package:ieat/constants.dart';
 import 'package:provider/provider.dart';
 import '../provider.dart';
 import '../styleutil.dart';
-
-
+import 'homemainaction.dart';
 
 /**
  * updateBurncalorie_PATCH : 소모 칼로리 저장
@@ -21,13 +20,14 @@ import '../styleutil.dart';
  * fomatDay() : 인덱스 값에 따라서 요일 출력  => return 월,화 수 등
  * */
 
-Future<void> updateBurncalorie_PATCH(BuildContext context,int selectedBurnCalorieValue) async {
+Future<void> updateBurncalorie_PATCH(
+    BuildContext context, double selectedBurnCalorieValue) async {
   String funNm = "updateBurncalorie_PATCH";
   String? tk = await getTk();
   print('$funNm - 요청시작');
 
   final pv = Provider.of<HomeSave>(context, listen: false);
-  int burncalorie = selectedBurnCalorieValue;
+  double burncalorie = selectedBurnCalorieValue;
   print("$burncalorie");
   String uri = '$url/meal_day/update/burncaloire/$today/$burncalorie';
   try {
@@ -45,6 +45,7 @@ Future<void> updateBurncalorie_PATCH(BuildContext context,int selectedBurnCalori
     );
     if (response.statusCode == 204 || response.statusCode == 200) {
       pv.setBurnCalorie(burncalorie);
+      await mealDayCalorieToday_GET(context);
       print(pv.todayWeightCalories["burnCalorie"]);
       bottomSheetType500(context, suc500_1(context));
     } else {
@@ -57,13 +58,15 @@ Future<void> updateBurncalorie_PATCH(BuildContext context,int selectedBurnCalori
     print('$funNm Error : $e');
   }
 }
-Future<void> updateWeght_PATCH(BuildContext context, int selectedWeghtValue) async {
+
+Future<void> updateWeght_PATCH(
+    BuildContext context, double selectedWeghtValue) async {
   String funNm = "updateBurncalorie_PATCH";
   String? tk = await getTk();
   print('$funNm - 요청시작');
 
   final pv = Provider.of<HomeSave>(context, listen: false);
-  int weight = selectedWeghtValue;
+  double weight = selectedWeghtValue;
   String uri = '$url/meal_day/update/weight/$today/$weight';
   try {
     final response = await dio.patch(
@@ -92,12 +95,10 @@ Future<void> updateWeght_PATCH(BuildContext context, int selectedWeghtValue) asy
   }
 }
 
-
 String formatDay(int idx) {
-  const days = ['월', '화', '수', '목', '금', '토','일'];
+  const days = ['월', '화', '수', '목', '금', '토', '일'];
   return days[idx];
 }
-
 
 //시간 String으로 넘겼을 때 14시 이렇게 반환
 String extractHour(String time) {
@@ -105,14 +106,3 @@ String extractHour(String time) {
   String hour = time.substring(0, 2);
   return hour;
 }
-
-
-
-
-
-
-
-
-
-
-

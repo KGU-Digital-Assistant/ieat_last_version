@@ -99,7 +99,7 @@ class _StartTrack_SfState extends State<StartTrack_Sf> {
                           listen: false);
                       _selectedMonday = mondays[index];
                       print(_selectedMonday);
-                      trackStartDayPickProvider.setMonday(index);
+                      trackStartDayPickProvider.setMonday(index+1);
                       setState(() {
                         _selectedMondayStr = mondayString[index];
                       });

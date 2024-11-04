@@ -72,7 +72,7 @@ dependencies:
   animated_segmented_tab_control: ^2.0.0
   image_picker: ^1.0.0  # mime와 버전 충돌로 downgrade
   file_picker: ^8.1.2
-  firebase_core: ^3.6.0
+#  firebase_core: ^3.6.0
   table_calendar: ^3.0.9
   cupertino_icons: ^1.0.6
   camera: ^0.11.0+2
